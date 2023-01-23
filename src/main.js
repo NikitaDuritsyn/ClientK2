@@ -6,6 +6,11 @@ import store from './store'
 import Toaster from "@meforma/vue-toaster";
 import { API } from "@/api";
 
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+import "bootstrap"
+import "bootstrap/dist/css/bootstrap.min.css"
+
+
 const app = createApp(App)
 
 app.config.globalProperties.$api = API
@@ -13,4 +18,5 @@ app.config.globalProperties.$api = API
 app.use(store)
 app.use(router)
 app.use(Toaster)
+
 app.mount('#app')
