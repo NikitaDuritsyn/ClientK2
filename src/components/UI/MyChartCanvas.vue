@@ -4,11 +4,11 @@
             <div class="time" v-for="time in timeArray">{{ time }}</div>
         </div>
         <div ref="canvas_container" class="canvas_container">
-            <div class="currentLineTime" :style="{ left: 2940 * 2 + setTimeCurrent * 2 - 1 + 'px' }"></div>
+            <div class="currentLineTime" :style="{ left: 2940 + setTimeCurrent + 'px' }"></div>
             <canvas ref="canvasChart" class="canvas"></canvas>
             <div v-for="(item, index) in bookingsArray" :key="index">
                 <div class="booking" @click="$refs.modal.open()"
-                    :style="{ width: item.timeLine + 'px', height: 'calc((100%)/6)', top: `calc((100%)/6*${item.room})`, left: item.time + 120 + 'px' }">
+                    :style="{ width: item.timeLine + 'px', height: 'calc((100%)/6)', top: `calc((100%)/6*${item.room})`, left: item.time + 60 + 'px' }">
                     <strong>
                         {{ item.day }}
                         {{ item.client.name }}: {{ item.client.peopleCount }} чел.
@@ -16,7 +16,7 @@
                 </div>
             </div>
         </div>
-        <div class="dateLine" :style="{ width: 1440 * 2 * this.days + 'px' }">
+        <div class="dateLine" :style="{ width: 1440 * this.days + 'px' }">
             <div class="date" v-for="(date, index) in days">
                 <div
                     v-if="today.toLocaleDateString() === new Date(new Date().setDate(new Date().getDate() + index - 2)).toLocaleDateString()">
@@ -68,7 +68,7 @@ export default {
             canv: null,
             ctx: null,
             bookingsArray: [
-                { day: new Date(), time: 120, timeLine: 120, room: 0, client: { name: 'Тимофей', peopleCount: 6 } },
+                { day: new Date(), time: 60, timeLine: 120, room: 0, client: { name: 'Тимофей', peopleCount: 6 } },
                 { day: "Тут будет Дата", time: 120, timeLine: 120, room: 1, client: { name: 'Филип', peopleCount: 2 } },
                 { day: "Тут будет Дата", time: 60, timeLine: 30, room: 2, client: { name: 'Александр', peopleCount: 10 } },
                 { day: "Тут будет Дата", time: 840, timeLine: 180, room: 3, client: { name: 'Леонардо', peopleCount: 20 } },
@@ -84,13 +84,10 @@ export default {
     },
     methods: {
         setCanvasChartBlock(days) {
-            const stepX = 120 // 1px 1 min
-            // const stepX = 60 // 1px 1 min
+            const stepX = 60 // 1px 1 min
             let rooms = 6
             // let days = 2
-            // const contentWidth = 24 * 60 * days + 60
-            const contentWidth = 24 * 120 * days + 120
-
+            const contentWidth = 24 * 60 * days + 60
             this.$refs.canvas_container.style.width = contentWidth + 'px'
             const canv = this.$refs.canvasChart
             const ctx = canv.getContext('2d')
@@ -104,11 +101,11 @@ export default {
 
             // ctx.strokeStyle = 'rgb(40, 40, 40)';
             // ctx.fillStyle = 'black'
-            ctx.setLineDash([3, 7]);
+            ctx.setLineDash([5, 2]);
 
             // const grafHeight = this.$refs.canvas_container.offsetHeight - 20
             const grafHeight = this.$refs.canvas_container.offsetHeight
-            let x = 120
+            let x = 60
             let y = 0
             for (let i = 0; i < days; i++) {
                 let count = 0
@@ -119,7 +116,7 @@ export default {
                         ctx.strokeStyle = 'rgb(100, 100, 100)';
                     }
                     ctx.beginPath();
-                    ctx.lineWidth = Number(1);
+                    ctx.lineWidth = 2;
 
                     // if (count < 10) {
                     //     ctx.fillText(`0${count}:00`, x - 12, 10);
@@ -155,7 +152,7 @@ export default {
             this.today = new Date()
         },
         functionScrollToDay() {
-            this.$refs.scrollToDay.scrollTo(2810 * 2 + Number(this.today.getHours()) * 120 + Number(this.today.getMinutes() * 2), 0)
+            this.$refs.scrollToDay.scrollTo(2810 + Number(this.today.getHours()) * 60 + Number(this.today.getMinutes()), 0)
         },
         setTimeLine() {
             for (let i = 0; i < this.days - 1; i++) {
@@ -204,16 +201,15 @@ export default {
     position: absolute;
     top: 0;
     height: 100%;
-    width: 2px;
+    width: 1px;
     background-color: rgb(255, 0, 0);
-
 }
 
 .dateLine {
     display: flex;
     font-size: 15px;
     height: 30px;
-    margin: 0 0 0 120px;
+    margin: 0 0 0 60px;
 }
 
 .date {
@@ -223,7 +219,7 @@ export default {
     font-size: 15px;
     color: rgb(175, 175, 175);
     font-weight: 600;
-    width: calc(120px*24);
+    width: 1440px;
     height: 100%;
     background-color: rgb(59, 59, 59);
     border: 1px solid black;
@@ -235,7 +231,7 @@ export default {
     justify-content: center;
     align-items: center;
     width: 0;
-    padding: 0px 0px 0px 120px;
+    padding: 0px 0px 0px 60px;
 }
 
 .timeLine:first-child {
