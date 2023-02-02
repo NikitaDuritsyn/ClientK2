@@ -1,5 +1,7 @@
 <template>
-
+    <div>
+        Поиск
+    </div>
 </template>
 
 <script>

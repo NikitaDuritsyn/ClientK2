@@ -1,7 +1,8 @@
 <template>
-  <div class="admin_panel" :style="{ height: getRealVh + 'px' }">
+  <div class="admin_panel" :style="{ height: windowVH + 'px' }">
     <div class="row h-50 m-0">
       <!-- Тут график с его доп функционалом -->
+      <BookingChart />
     </div>
     <div class="row h-50 m-0">
       <!-- Тут главное меню-->
@@ -12,16 +13,16 @@
 </template>
 
 <script>
+import BookingChart from '@/components/AdminPanelComponents/BookingChart.vue';
 import MainMenu from '@/components/AdminPanelComponents/MainMenu.vue';
 
 export default {
   name: 'admin-panel',
-  components: { MainMenu },
+  components: { MainMenu, BookingChart },
   data() {
     return {
       clientsArray: [],
       windowVH: window.innerHeight,
-
     }
   },
   computed: {
@@ -47,7 +48,7 @@ export default {
 </script>
 <style scoped>
 .admin_panel {
-  background-color: rgb(20, 20, 20);
+  background-color: rgb(30, 30, 30);
   color: rgb(175, 175, 175);
 }
 </style>

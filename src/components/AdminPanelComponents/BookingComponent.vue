@@ -1,5 +1,7 @@
 <template>
-
+    <div>
+        Бронь
+    </div>
 </template>
 
 <script>

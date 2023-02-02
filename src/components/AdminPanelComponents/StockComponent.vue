@@ -1,5 +1,7 @@
 <template>
-
+    <div>
+        Склад
+    </div>
 </template>
 
 <script>

@@ -1,5 +1,7 @@
 <template>
-
+    <div>
+        Касса
+    </div>
 </template>
 
 <script>
