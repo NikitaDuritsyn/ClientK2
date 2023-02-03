@@ -16,6 +16,11 @@
 import BookingChart from '@/components/AdminPanelComponents/BookingChart.vue';
 import MainMenu from '@/components/AdminPanelComponents/MainMenu.vue';
 
+// РЕАЛИЗОВАТЬ ФУНКЦИЮ, КОТОРАЯ БУДЕТ БРАТЬ БРОНИ И ПЕРЕДАВАТЬ ИХ В CHART(график) 
+// Каждые 00:00 часов запрос должен быть 2 даты назад и 10 дат вперед
+// В БД СОЗДАТЬ СУЩНОСТЬ Bookings (id клиента, Дата, время начала, время конца(если нет то еще идет), длительность)
+
+
 export default {
   name: 'admin-panel',
   components: { MainMenu, BookingChart },
@@ -31,6 +36,9 @@ export default {
     }
   },
   methods: {
+    updateHeight() {
+      this.windowVH = window.innerHeight;
+    },
     getClientsAdwas() {
       const vm = this;
       vm.$api.getClients()
@@ -43,6 +51,12 @@ export default {
   },
   mounted() {
     this.getClientsAdwas()
+  },
+  created() {
+    window.addEventListener('resize', this.updateHeight);
+  },
+  beforeUnmount() {
+    removeEventListener('resize', this.updateHeight)
   }
 }
 </script>

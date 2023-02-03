@@ -1,7 +1,7 @@
 <template>
     <div class="booking_chart">
         <!-- <BarChart /> -->
-        <MyChartCanvas :days="Number(4)"/>
+        <MyChartCanvas :days="Number(12)"/>
     </div>
 </template>
 

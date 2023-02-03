@@ -8,7 +8,7 @@
             <canvas ref="canvasChart" class="canvas"></canvas>
             <div v-for="(item, index) in bookingsArray" :key="index">
                 <div class="booking" @click="$refs.modal.open()"
-                    :style="{ width: item.timeLine + 'px', height: 'calc((100%)/6)', top: `calc((100%)/6*${item.room})`, left: item.time + 60 + 'px' }">
+                    :style="{ width: item.timeLine + 'px', height: 'calc((100%)/6)', top: `calc((100%)/6*${item.room})`, left: 1440 * item.day + item.time + 60 + 'px' }">
                     <strong>
                         {{ item.day }}
                         {{ item.client.name }}: {{ item.client.peopleCount }} чел.
@@ -23,8 +23,6 @@
                     Сегодня:_
                 </div>
                 {{ new Date(new Date().setDate(new Date().getDate() + index - 2)).toLocaleDateString() }}
-                <!-- {{ hoursMinutesSeconds }} -->
-                <!-- {{ setTimeCurrent }} -->
             </div>
         </div>
     </div>
@@ -64,16 +62,15 @@ export default {
                 "23:00",
             ],
             today: new Date(),
-            // hoursMinutesSeconds: new Date().getHours() + '.' + new Date().getMinutes() + '.' + new Date().getSeconds(),
             canv: null,
             ctx: null,
             bookingsArray: [
-                { day: new Date(), time: 60, timeLine: 120, room: 0, client: { name: 'Тимофей', peopleCount: 6 } },
-                { day: "Тут будет Дата", time: 120, timeLine: 120, room: 1, client: { name: 'Филип', peopleCount: 2 } },
-                { day: "Тут будет Дата", time: 60, timeLine: 30, room: 2, client: { name: 'Александр', peopleCount: 10 } },
-                { day: "Тут будет Дата", time: 840, timeLine: 180, room: 3, client: { name: 'Леонардо', peopleCount: 20 } },
-                { day: "Тут будет Дата", time: 360, timeLine: 120, room: 4, client: { name: 'Акакий', peopleCount: 3 } },
-                { day: "Тут будет Дата", time: 660, timeLine: 120, room: 5, client: { name: 'Сергей', peopleCount: 4 } },
+                { day: 2, time: 14 * 60, timeLine: 120, room: 0, client: { name: 'Тимофей', peopleCount: 6 } },
+                { day: 1, time: 16 * 60 + 15, timeLine: 120, room: 1, client: { name: 'Филип', peopleCount: 2 } },
+                { day: 2, time: 12 * 60 + 30, timeLine: 30, room: 2, client: { name: 'Александр', peopleCount: 10 } }, // присылать index дня
+                { day: 0, time: 0 * 60, timeLine: 180, room: 3, client: { name: 'Леонардо', peopleCount: 20 } },
+                { day: 0, time: 16 * 60, timeLine: 120, room: 4, client: { name: 'Акакий', peopleCount: 3 } },
+                { day: 0, time: 0, timeLine: 120, room: 5, client: { name: 'Сергей', peopleCount: 4 } },
             ]
         };
     },
@@ -84,9 +81,8 @@ export default {
     },
     methods: {
         setCanvasChartBlock(days) {
-            const stepX = 60 // 1px 1 min
+            const stepX = 60 // 1 min = 1px
             let rooms = 6
-            // let days = 2
             const contentWidth = 24 * 60 * days + 60
             this.$refs.canvas_container.style.width = contentWidth + 'px'
             const canv = this.$refs.canvasChart
@@ -98,12 +94,7 @@ export default {
                 canv.width = canv.clientWidth
                 canv.height = canv.clientHeight
             }
-
-            // ctx.strokeStyle = 'rgb(40, 40, 40)';
-            // ctx.fillStyle = 'black'
-            ctx.setLineDash([5, 2]);
-
-            // const grafHeight = this.$refs.canvas_container.offsetHeight - 20
+            ctx.setLineDash([3, 6]);
             const grafHeight = this.$refs.canvas_container.offsetHeight
             let x = 60
             let y = 0
@@ -116,14 +107,7 @@ export default {
                         ctx.strokeStyle = 'rgb(100, 100, 100)';
                     }
                     ctx.beginPath();
-                    ctx.lineWidth = 2;
-
-                    // if (count < 10) {
-                    //     ctx.fillText(`0${count}:00`, x - 12, 10);
-                    // } else {
-                    //     ctx.fillText(`${count}:00`, x - 12, 10);
-                    // }
-
+                    ctx.lineWidth = Number(1);
                     ctx.moveTo(x, y);
                     ctx.lineTo(x, canv.height);
                     x = x + stepX
@@ -131,8 +115,6 @@ export default {
                     ctx.stroke();
                 }
             }
-
-
             const stepY = grafHeight / 6
             let count2 = 0
             y = stepY - 0
@@ -146,7 +128,6 @@ export default {
                 count2 = count2 + 1
                 ctx.stroke();
             }
-
         },
         setToday() {
             this.today = new Date()
@@ -262,9 +243,6 @@ export default {
     width: 100%;
 }
 
-.canvas {
-    /* padding-top: 20px; */
-}
 
 .canvas_container {
     position: relative;
