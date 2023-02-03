@@ -7,7 +7,7 @@
 
 <script>
 import BarChart from '../UI/BarChart.vue';
-import MyChartCanvas from '@/components/UI/MyChartCanvas.vue';
+import MyChartCanvas from '@/components/AdminPanelComponents/chart/BookingsChart.vue';
 
 export default {
     name: "booking-chart",

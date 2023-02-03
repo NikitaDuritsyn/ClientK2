@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import MyModal from './MyModal.vue';
+import MyModal from '../../UI/MyModal.vue';
 
 export default {
     name: "my-chart-canvas",
