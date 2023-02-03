@@ -7,11 +7,14 @@
             <div class="currentLineTime" :style="{ left: 2940 + setTimeCurrent + 'px' }"></div>
             <canvas ref="canvasChart" class="canvas"></canvas>
             <div v-for="(item, index) in bookingsArray" :key="index">
-                <div class="booking" @click="$refs.modal.open()"
+
+                <!-- Сделать компонент booking + сделать компонент для модалки -->
+                
+                <div class="booking" @click="$refs.booking_modal.open()"
                     :style="{ width: item.timeLine + 'px', height: 'calc((100%)/6)', top: `calc((100%)/6*${item.room})`, left: 1440 * item.day + item.time + 60 + 'px' }">
                     <strong>
                         {{ item.day }}
-                        {{ item.client.name }}: {{ item.client.peopleCount }} чел.
+                        {{ item.clients[0].name }}: {{ item.clients[0].peopleCount }} чел.
                     </strong>
                 </div>
             </div>
@@ -26,13 +29,19 @@
             </div>
         </div>
     </div>
+
+    <MyModal ref="booking_modal">
+        <bookingSettings/>
+    </MyModal>
 </template>
 
 <script>
+import MyModal from './MyModal.vue';
+
 export default {
     name: "my-chart-canvas",
     props: ["days"],
-    components: {},
+    components: { MyModal },
     data() {
         return {
             timeArray: [
@@ -65,12 +74,12 @@ export default {
             canv: null,
             ctx: null,
             bookingsArray: [
-                { day: 2, time: 14 * 60, timeLine: 120, room: 0, client: { name: 'Тимофей', peopleCount: 6 } },
-                { day: 1, time: 16 * 60 + 15, timeLine: 120, room: 1, client: { name: 'Филип', peopleCount: 2 } },
-                { day: 2, time: 12 * 60 + 30, timeLine: 30, room: 2, client: { name: 'Александр', peopleCount: 10 } }, // присылать index дня
-                { day: 0, time: 0 * 60, timeLine: 180, room: 3, client: { name: 'Леонардо', peopleCount: 20 } },
-                { day: 0, time: 16 * 60, timeLine: 120, room: 4, client: { name: 'Акакий', peopleCount: 3 } },
-                { day: 0, time: 0, timeLine: 120, room: 5, client: { name: 'Сергей', peopleCount: 4 } },
+                { day: 2, time: 14 * 60, timeLine: 120, room: 0, clients: [{ name: 'Тимофей', peopleCount: 6 }] },
+                { day: 2, time: 14 * 60 + 15, timeLine: 120, room: 1, clients: [{ name: 'Филип', peopleCount: 2 }] },
+                { day: 2, time: 12 * 60 + 30, timeLine: 30, room: 2, clients: [{ name: 'Александр', peopleCount: 10 }] }, // присылать index дня
+                { day: 0, time: 0 * 60, timeLine: 180, room: 3, clients: [{ name: 'Леонардо', peopleCount: 20 }] },
+                { day: 11, time: 16 * 60, timeLine: 120, room: 4, clients: [{ name: 'Акакий', peopleCount: 3 }] },
+                { day: 0, time: 0, timeLine: 120, room: 5, clients: [{ name: 'Сергей', peopleCount: 4 }] },
             ]
         };
     },
@@ -239,7 +248,7 @@ export default {
 }
 
 .MyChartCanvas {
-    padding: 30px;
+    padding: 10px 10px 0 10px;
     width: 100%;
 }
 

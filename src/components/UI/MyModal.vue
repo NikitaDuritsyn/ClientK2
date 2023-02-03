@@ -8,7 +8,7 @@
             style=" top: 0.3rem;right: 1rem; z-index: 150"
             @click="close"
         >
-          <a><i class="bi bi-x"></i></a>
+          <a><i class="bi bi-x">X</i></a>
         </div>
         <div class="pt-4">
           <slot></slot>
@@ -58,7 +58,7 @@ export default {
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 0.5rem;
+  /* padding: 0.5rem; */
   align-items: center;
   z-index: 1100;
   height: 100%;
@@ -68,14 +68,15 @@ export default {
 
 .window {
   position: relative;
-  background: #33347E;
-  border-radius: 1rem;
-  box-shadow: 2px 4px 8px rgb(0 0 0 / 20%);
-  max-width: max-content;
+  background: rgb(50, 50, 50);
+  height: 100%;
+  /* border-radius: 1rem; */
+  /* box-shadow: 2px 4px 8px rgb(0 0 0 / 20%); */
+  /* max-width: max-content; */
   /*margin-left: auto;*/
   /*margin-right: auto;*/
-  padding: 0.75rem;
-  margin: 1.75rem auto;
+  /* padding: 0.75rem; */
+  /* margin: 1.75rem auto; */
 }
 
 .window-content{

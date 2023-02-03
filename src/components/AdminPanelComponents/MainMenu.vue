@@ -9,6 +9,10 @@
                 <MyButton :cls="'darknessButton'" class="my_button">Расчет</MyButton>
             </div>
         </div>
+        <div class="class_setting">
+            <slot></slot>
+            asd
+        </div>
     </div>
 </template>
 <script>
@@ -27,18 +31,31 @@ export default {
 </script>
 
 <style scoped>
+.main_menu{
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.class_setting{
+    height: 100%;
+    background-color: rgb(63, 63, 63);
+}
 .my_button {
     margin: 5px;
 }
 
 .overflow-scroll {
+    height: calc(50px + 10px);
     -ms-overflow-style: none;
     /* IE и Edge */
     scrollbar-width: none;
+    /* scrollbar-height: none; */
     /* Firefox */
 }
 
 .overflow-scroll::-webkit-scrollbar {
+    height: 0px;
     display: none;
 }
 </style>
