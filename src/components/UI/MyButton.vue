@@ -27,6 +27,7 @@ export default {
       default: 'pink',
       validator: value => {
         return [
+          'btn_second',
           'pink',
           'hollow',
           'blue',
@@ -191,6 +192,24 @@ export default {
 }
 
 .darknessButton:focus {
+  border-color: rgb(0, 255, 255);
+}
+
+.btn_second {
+  background-color: black;
+  border: 1px solid white;
+  padding: 3px 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  min-width: 50px;
+  text-align: center;
+}
+
+.btn_second:focus {
+  border-color: rgb(0, 99, 136);
+}
+
+.btn_second:hover {
   border-color: rgb(0, 255, 255);
 }
 </style>

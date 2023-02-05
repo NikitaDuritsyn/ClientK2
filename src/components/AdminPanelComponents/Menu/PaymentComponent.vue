@@ -8,6 +8,7 @@
 export default {
     name: 'payment-component',
     data() {
+        return {}
     },
     methods: {
     },

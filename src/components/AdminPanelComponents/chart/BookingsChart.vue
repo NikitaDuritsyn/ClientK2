@@ -7,16 +7,7 @@
             <div class="currentLineTime" :style="{ left: 2940 + setTimeCurrent + 'px' }"></div>
             <canvas ref="canvasChart" class="canvas"></canvas>
             <div v-for="(item, index) in bookingsArray" :key="index">
-
-                <!-- Сделать компонент booking + сделать компонент для модалки -->
-                
-                <div class="booking" @click="$refs.booking_modal.open()"
-                    :style="{ width: item.timeLine + 'px', height: 'calc((100%)/6)', top: `calc((100%)/6*${item.room})`, left: 1440 * item.day + item.time + 60 + 'px' }">
-                    <strong>
-                        {{ item.day }}
-                        {{ item.clients[0].name }}: {{ item.clients[0].peopleCount }} чел.
-                    </strong>
-                </div>
+                <Booking :booking="item" />
             </div>
         </div>
         <div class="dateLine" :style="{ width: 1440 * this.days + 'px' }">
@@ -29,19 +20,15 @@
             </div>
         </div>
     </div>
-
-    <MyModal ref="booking_modal">
-        <bookingSettings/>
-    </MyModal>
 </template>
 
 <script>
 import MyModal from '../../UI/MyModal.vue';
-
+import Booking from '../chart/Booking.vue'
 export default {
     name: "my-chart-canvas",
     props: ["days"],
-    components: { MyModal },
+    components: { MyModal, Booking },
     data() {
         return {
             timeArray: [
@@ -74,12 +61,26 @@ export default {
             canv: null,
             ctx: null,
             bookingsArray: [
-                { day: 2, time: 14 * 60, timeLine: 120, room: 0, clients: [{ name: 'Тимофей', peopleCount: 6 }] },
-                { day: 2, time: 14 * 60 + 15, timeLine: 120, room: 1, clients: [{ name: 'Филип', peopleCount: 2 }] },
-                { day: 2, time: 12 * 60 + 30, timeLine: 30, room: 2, clients: [{ name: 'Александр', peopleCount: 10 }] }, // присылать index дня
-                { day: 0, time: 0 * 60, timeLine: 180, room: 3, clients: [{ name: 'Леонардо', peopleCount: 20 }] },
-                { day: 11, time: 16 * 60, timeLine: 120, room: 4, clients: [{ name: 'Акакий', peopleCount: 3 }] },
-                { day: 0, time: 0, timeLine: 120, room: 5, clients: [{ name: 'Сергей', peopleCount: 4 }] },
+                {
+                    index_day: 2, time: 17 * 60, timeLine: 120, room: 0, clients: [
+                        { id: 1, name: 'Тимофей', number_phone: '+79085060871' },
+                        { id: 2, name: 'Валя', number_phone: '+79085060871' },
+                        { id: 3, name: 'Илья', number_phone: '+79085060871' },
+                        { id: 4, name: 'Cтепа', number_phone: '+79085060871' },
+                        { id: 5, name: 'Илья', number_phone: '+79085060871' },
+                        { id: 6, name: 'Илья', number_phone: '+79085060871' },
+                        { id: 7, name: 'Илья', number_phone: '+79085060871' },
+                        { id: 8, name: 'Илья', number_phone: '+79085060871' },
+                        { id: 9, name: 'Илья', number_phone: '+79085060871' },
+                        { id: 10, name: 'Илья', number_phone: '+79085060871' },
+                    ],
+                    peopleCount: 3
+                },
+                { index_day: 2, time: 18 * 60 + 15, timeLine: 120, room: 1, clients: [{ id: 11, name: 'Филип' }], peopleCount: 2 },
+                { index_day: 2, time: 19 * 60 + 30, timeLine: 30, room: 2, clients: [{ id: 12, name: 'Александр' }], peopleCount: 10 }, // присылать index дня
+                { index_day: 0, time: 0 * 60, timeLine: 180, room: 3, clients: [{ id: 13, name: 'Леонардо' }], peopleCount: 20 },
+                { index_day: 11, time: 16 * 60, timeLine: 120, room: 4, clients: [{ id: 14, name: 'Акакий' }], peopleCount: 3 },
+                { index_day: 0, time: 0, timeLine: 120, room: 5, clients: [{ id: 15, name: 'Сергей' }], peopleCount: 4 },
             ]
         };
     },
@@ -193,6 +194,7 @@ export default {
     height: 100%;
     width: 1px;
     background-color: rgb(255, 0, 0);
+    z-index: 100;
 }
 
 .dateLine {
@@ -211,7 +213,7 @@ export default {
     font-weight: 600;
     width: 1440px;
     height: 100%;
-    background-color: rgb(59, 59, 59);
+    background-color: rgb(20, 20, 20);
     border: 1px solid black;
     box-sizing: border-box;
 }
@@ -235,17 +237,6 @@ export default {
     height: 30px;
 }
 
-.booking {
-    overflow: hidden;
-    background-color: rgb(100, 212, 205);
-    position: absolute;
-    box-sizing: border-box;
-    border: 1px solid black;
-    color: black;
-    display: flex;
-    align-items: center;
-    font-size: 12px;
-}
 
 .MyChartCanvas {
     padding: 10px 10px 0 10px;

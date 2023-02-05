@@ -8,6 +8,7 @@
 export default {
     name: 'checkout-component',
     data() {
+        return {}
     },
     methods: {
     },
