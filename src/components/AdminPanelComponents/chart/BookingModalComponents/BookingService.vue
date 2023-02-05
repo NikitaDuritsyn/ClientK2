@@ -1,13 +1,13 @@
 <template>
     <div class="service_container">
         <div class="sevices">
-            тариф
-            усогуи
-            усогуи
-            усогуи
-            усогуи
-            усогуи
-            усогуи
+            <div class="text">Тариф</div>
+            <div>Услуги</div>
+            <div>Услуги</div>
+            <div>Услуги</div>
+            <div>Услуги</div>
+            <div>Услуги</div>
+            <div>Услуги</div>
         </div>
         <div class="results">
             <div class="text">
@@ -22,7 +22,7 @@ export default {
     name: 'booking-service',
     data() {
         return {
-            
+
         }
     },
     methods: {
@@ -34,13 +34,23 @@ export default {
 </script>
 
 <style scoped>
-.sevices{
+.sevices {
+    overflow: scroll;
     height: 100%;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
-.results{
+
+.sevices::-webkit-scrollbar {
+    height: 0px;
+    display: none;
+}
+
+.results {
     border-top: 1px solid red;
 }
-.service_container{
+
+.service_container {
     display: flex;
     flex-direction: column;
     height: 100%;
