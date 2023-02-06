@@ -42,7 +42,7 @@ export default {
     },
     methods: {},
     mounted() {
-        this.$emit('selected', { select_status: this.status_switch, client_id: this.client.id })
+        this.$emit('selected', { select_status: this.status_switch, client: this.client })
     },
     components: { Switch }
 }

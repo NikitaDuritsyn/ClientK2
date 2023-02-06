@@ -5,9 +5,10 @@
             <div class="close_btn" @click="$emit('close')"></div>
         </div>
         <div class="clients">
-            <BookingClientsList :clients_lsit="booking.clients" />
+            <BookingClientsList @clients-selected="setSelectedClients" :clients_lsit="booking.clients" />
         </div>
         <div class="time_line">
+            <!-- ТУТ Я КАК ПОНЯЛ ВСЕГДА ОБЩЕЕ ПО ВЫБРАННЫМ КЛИЕНТАМ -->
             <BookingTimeLine :booking="booking" />
         </div>
         <div class="services">
@@ -31,9 +32,15 @@ export default {
     props: ["booking"],
     components: { BookingClientsList, BookingTimeLine, BookingService, BookingPayment, BookingDateRoom },
     data() {
-        return {};
+        return {
+            selectedClients: []
+        };
     },
-    methods: {},
+    methods: {
+        setSelectedClients(value) {
+            this.selectedClients = value
+        },
+    },
     mounted() { },
 }
 </script>
@@ -57,6 +64,7 @@ export default {
 
 .head_line_container {
     display: flex;
+    justify-content: space-between;
     flex-wrap: nowrap;
     padding: 0 0 5px 0;
     height: 30px;
@@ -74,7 +82,7 @@ export default {
 
 .services {
     padding: 5px 0;
-    height: 150px;
+    /* height: 150px; */
 }
 
 .payment {

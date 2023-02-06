@@ -1,8 +1,7 @@
 <template>
     <div class="clients_list_container">
-        <!-- {{ setSelectedAll }} -->
         <div class="clients_block">
-            <div v-for="client in clientList">
+            <div v-for="client in clients_lsit">
                 <Client ref="client" :select_all="setSelectedAll" :client="client" @selected="setSelectedArr"
                     @selected-or="updateSelectedArr" />
             </div>
@@ -30,12 +29,20 @@ export default {
     props: ["clients_lsit"],
     data() {
         return {
-            clientList: this.clients_lsit,
+            // clientList: this.clients_lsit,
             selected_counter: this.clients_lsit.length,
             select_all: true,
             setSelected: []
         };
     },
+    // watch: {
+    //     "setSelected": {
+    //         handler(value) {
+    //             console.log(value);
+    //             this.$emit('clients-selected', value)
+    //         }
+    //     }
+    // },
     methods: {
         logMassage() {
             console.log('Окно добавления пользователя');
@@ -46,7 +53,7 @@ export default {
         updateSelectedArr(value) {
             for (let i = 0; i < this.setSelected.length; i++) {
                 const element = this.setSelected[i];
-                if (element.client_id === value.client_id) {
+                if (element.client.id === value.client_id) {
                     element.select_status = value.select_status
                 }
             }
@@ -68,6 +75,7 @@ export default {
                         }
                     }
                 }
+                this.emmitSelectedClients(this.setSelected)
                 return { selected_counter: this.selected_counter, select_all: this.select_all }
             } else {
                 let count_selected = 0
@@ -83,8 +91,19 @@ export default {
                 } else {
                     this.select_all = false
                 }
+                this.emmitSelectedClients(this.setSelected)
                 return { selected_counter: this.selected_counter, select_all: this.select_all }
             }
+        },
+        emmitSelectedClients() {
+            let selected_clients = []
+            for (let i = 0; i < this.setSelected.length; i++) {
+                const element = this.setSelected[i];
+                if (element.select_status === true) {
+                    selected_clients.push(element.client)
+                }
+            }
+            this.$emit('clients-selected', selected_clients)
         }
     },
     computed: {

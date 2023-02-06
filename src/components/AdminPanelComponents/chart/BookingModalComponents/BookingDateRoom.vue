@@ -56,6 +56,7 @@ export default {
 .dateRoom_container {
     height: 100%;
     width: 100%;
+    max-width: 400px;
     display: flex;
     justify-content: space-between;
     width: 100%;

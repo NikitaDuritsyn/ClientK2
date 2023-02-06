@@ -1,6 +1,6 @@
 <template>
     <div>
-        Бронь
+        Форма добавления брони
     </div>
 </template>
 
