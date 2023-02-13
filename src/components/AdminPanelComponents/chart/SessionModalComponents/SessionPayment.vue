@@ -5,7 +5,7 @@
 
 <script>
 export default {
-    name: 'booking-payment',
+    name: 'session-payment',
     data() {
         return {
             

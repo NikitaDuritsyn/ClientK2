@@ -1,36 +1,36 @@
 <template>
-    <div class="booking_modal">
+    <div class="session_modal">
         <div class="head_line_container">
-            <BookingDateRoom :index_day="booking.index_day" :index_room="booking.room" />
+            <SessionDateRoom :index_day="session.index_day" :index_room="session.room" />
             <div class="close_btn" @click="$emit('close')"></div>
         </div>
         <div class="clients">
-            <BookingClientsList @clients-selected="setSelectedClients" :clients_lsit="booking.clients" />
+            <SessionClientsList @clients-selected="setSelectedClients" :clients_lsit="session.clients" />
         </div>
         <div class="time_line">
             <!-- ТУТ Я КАК ПОНЯЛ ВСЕГДА ОБЩЕЕ ПО ВЫБРАННЫМ КЛИЕНТАМ -->
-            <BookingTimeLine :booking="booking" />
+            <SessionTimeLine :session="session" />
         </div>
         <div class="services">
-            <BookingService />
+            <SessionService />
         </div>
         <div class="payment">
-            <BookingPayment />
+            <SessionPayment />
         </div>
     </div>
 </template>
 
 <script>
-import BookingClientsList from './BookingModalComponents/BookingClientsList.vue';
-import BookingDateRoom from './BookingModalComponents/BookingDateRoom.vue';
-import BookingPayment from './BookingModalComponents/BookingPayment.vue';
-import BookingService from './BookingModalComponents/BookingService.vue';
-import BookingTimeLine from './BookingModalComponents/BookingTimeLine.vue';
+import SessionClientsList from './SessionModalComponents/SessionClientsList.vue';
+import SessionDateRoom from './SessionModalComponents/SessionDateRoom.vue';
+import SessionPayment from './SessionModalComponents/SessionPayment.vue';
+import SessionService from './SessionModalComponents/SessionService.vue';
+import SessionTimeLine from './SessionModalComponents/SessionTimeLine.vue';
 
 export default {
-    name: "booking-modal-vue",
-    props: ["booking"],
-    components: { BookingClientsList, BookingTimeLine, BookingService, BookingPayment, BookingDateRoom },
+    name: "session-modal-vue",
+    props: ["session"],
+    components: { SessionClientsList, SessionTimeLine, SessionService, SessionPayment, SessionDateRoom },
     data() {
         return {
             selectedClients: []

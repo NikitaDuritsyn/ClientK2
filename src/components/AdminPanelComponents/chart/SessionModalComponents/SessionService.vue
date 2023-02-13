@@ -28,7 +28,7 @@ import MySelect from '@/components/UI/MySelect.vue';
 import MyMultiSelect from '@/components/UI/MyMultiSelect.vue';
 
 export default {
-    name: "booking-service",
+    name: "session-service",
     components: { MySelect, MyMultiSelect },
     data() {
         return {

@@ -6,8 +6,8 @@
         <div ref="canvas_container" class="canvas_container">
             <div class="currentLineTime" :style="{ left: 2940 + setTimeCurrent + 'px' }"></div>
             <canvas ref="canvasChart" class="canvas"></canvas>
-            <div v-for="(item, index) in bookingsArray" :key="index">
-                <Booking :booking="item" />
+            <div v-for="(item, index) in sessionsArray" :key="index">
+                <Session :session="item" />
             </div>
         </div>
         <div class="dateLine" :style="{ width: 1440 * this.days + 'px' }">
@@ -24,11 +24,11 @@
 
 <script>
 import MyModal from '../../UI/MyModal.vue';
-import Booking from '../chart/Booking.vue'
+import Session from './Session.vue'
 export default {
     name: "my-chart-canvas",
     props: ["days"],
-    components: { MyModal, Booking },
+    components: { MyModal, Session },
     data() {
         return {
             timeArray: [
@@ -60,7 +60,7 @@ export default {
             today: new Date(),
             canv: null,
             ctx: null,
-            bookingsArray: [
+            sessionsArray: [
                 {
                     index_day: 2, time: 17 * 60, timeLine: 120, room: 0, clients: [
                         { id: 1, name: 'Тимофей', number_phone: '+79085060871' },

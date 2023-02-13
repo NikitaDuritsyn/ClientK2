@@ -12,7 +12,7 @@
 
 <script>
 export default {
-    name: 'booking-date-room',
+    name: 'session-date-room',
     props: ['index_day', 'index_room'],
     data() {
         return {

@@ -2,7 +2,7 @@
   <div class="admin_panel" :style="{ height: windowVH + 'px' }">
     <div class="row h-50 m-0">
       <!-- Тут график с его доп функционалом -->
-      <BookingChartView />
+      <SessionChartView />
     </div>
     <div class="row h-50 m-0">
       <!-- Тут главное меню-->
@@ -13,16 +13,16 @@
 </template>
 
 <script>
-import BookingChartView from '@/components/AdminPanelComponents/BookingChartView.vue';
+import SessionChartView from '@/components/AdminPanelComponents/SessionChartView.vue';
 import MainMenu from '@/components/AdminPanelComponents/MainMenu.vue';
 
 // РЕАЛИЗОВАТЬ ФУНКЦИЮ, КОТОРАЯ БУДЕТ БРАТЬ БРОНИ И ПЕРЕДАВАТЬ ИХ В CHART(график) 
 // Каждые 00:00 часов запрос должен быть 2 даты назад и 10 дат вперед
-// В БД СОЗДАТЬ СУЩНОСТЬ Bookings (id клиента, Дата, время начала, время конца(если нет то еще идет), длительность)
+// В БД СОЗДАТЬ СУЩНОСТЬ Sessions (id клиента, Дата, время начала, время конца(если нет то еще идет), длительность)
 
 export default {
   name: 'admin-panel',
-  components: { MainMenu, BookingChartView },
+  components: { MainMenu, SessionChartView },
   data() {
     return {
       clientsArray: [],

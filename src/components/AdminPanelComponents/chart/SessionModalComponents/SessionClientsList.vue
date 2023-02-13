@@ -25,7 +25,7 @@ import Switch from '@/components/UI/Switch.vue';
 import Client from './Client.vue';
 
 export default {
-    name: "booking-clients-list",
+    name: "session-clients-list",
     props: ["clients_lsit"],
     data() {
         return {

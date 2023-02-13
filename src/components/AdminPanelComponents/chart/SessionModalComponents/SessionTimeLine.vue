@@ -9,7 +9,7 @@
                 </div>
             </div>
         </div>
-        <!-- {{ booking }} -->
+        <!-- {{ session }} -->
         <div class="row h-50 m-0 p-0">
             <div class="d-flex align-items-center col-6 m-0">Время окончания:</div>
             <div class="d-flex align-items-center col-6 m-0">
@@ -25,13 +25,13 @@
 <script>
 import MyButton from '@/components/UI/MyButton.vue'
 export default {
-    name: 'booking-time-line',
+    name: 'session-time-line',
     components: { MyButton },
-    props: ['booking'],
+    props: ['session'],
     data() {
         return {
-            start_time: this.booking?.start_time || '__:__',
-            end_time: this.booking?.end_time || '__:__',
+            start_time: this.session?.start_time || '__:__',
+            end_time: this.session?.end_time || '__:__',
 
         }
     },
