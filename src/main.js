@@ -6,10 +6,10 @@ import store from './store'
 import Toaster from "@meforma/vue-toaster";
 import { API } from "@/api";
 
+import 'bootstrap-icons/font/bootstrap-icons.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-import "bootstrap"
 import "bootstrap/dist/css/bootstrap.min.css"
-
+import "bootstrap"
 
 const app = createApp(App)
 

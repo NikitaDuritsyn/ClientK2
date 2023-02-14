@@ -25,7 +25,6 @@ export default {
   components: { MainMenu, SessionChartView },
   data() {
     return {
-      clientsArray: [],
       windowVH: Number(window.innerHeight) - 1,
     }
   },
@@ -33,19 +32,8 @@ export default {
     updateHeight() {
       this.windowVH = window.innerHeight;
     },
-    getClientsAdwas() {
-      const vm = this;
-      vm.$api.getClients()
-        .then(data => {
-          console.log(data);
-          vm.clientsArray = data
-        })
-        .catch(err => console.error(err))
-    },
   },
-  mounted() {
-    this.getClientsAdwas()
-  },
+  mounted() { },
   created() {
     window.addEventListener('resize', this.updateHeight);
   },

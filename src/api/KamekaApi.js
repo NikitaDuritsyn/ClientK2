@@ -1,10 +1,22 @@
 import BaseApi from './BaseApi'
 
 class KamekaApi extends BaseApi {
+    
     getClients() {
         let url = `/api/get_clients`
         return this._request({
-            method: 'get',
+            url: url
+        })
+    }
+    getRooms() {
+        let url = `/api/get_rooms`
+        return this._request({
+            url: url
+        })
+    }
+    getSessions(){
+        let url = `/api/get_sessions`
+        return this._request({
             url: url
         })
     }

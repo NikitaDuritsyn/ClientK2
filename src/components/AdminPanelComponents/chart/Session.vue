@@ -1,8 +1,8 @@
 <template>
     <div class="session" @click="$refs.session_modal.open()" :style="{ 
     width: session.timeLine + 'px', 
-    height: 'calc((100%)/6)', 
-    top: `calc((100%)/6*${session.room})`, 
+    height: `calc((100%)/${rooms})`, 
+    top: `calc((100%)/${rooms}*${session.room})`, 
     left: 1440 * session.index_day + session.time + 60 + 'px' }">
         <strong>
             {{ session.index_day }}
@@ -20,9 +20,10 @@ import SessionModal from './SessionModal.vue';
 
 export default {
     name: "session-vue",
-    props: ["session"],
+    props: ["session", "rooms"],
     data() {
-        return {}
+        return {
+        }
     },
     methods: {},
     mounted() {

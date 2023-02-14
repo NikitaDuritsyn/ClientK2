@@ -1,62 +1,46 @@
 <template>
-    <div ref="scrollToDay" class="MyChartCanvas overflow-scroll">
-        <div class="timeLine">
-            <div class="time" v-for="time in timeArray">{{ time }}</div>
+    <div class="w-100 h-100 position-relative d-flex align-items-center">
+        <div :style="{ height: this.chartHeight + 'px' }" class="clue">
+            <ClueRoomsComponent />
         </div>
-        <div ref="canvas_container" class="canvas_container">
-            <div class="currentLineTime" :style="{ left: 2940 + setTimeCurrent + 'px' }"></div>
-            <canvas ref="canvasChart" class="canvas"></canvas>
-            <div v-for="(item, index) in sessionsArray" :key="index">
-                <Session :session="item" />
+        <div ref="scrollToDay" class="MyChartCanvas overflow-scroll">
+            <div class="timeLine">
+                <div class="time" v-for="time in timeArray">{{ time }}</div>
             </div>
-        </div>
-        <div class="dateLine" :style="{ width: 1440 * this.days + 'px' }">
-            <div class="date" v-for="(date, index) in days">
-                <div
-                    v-if="today.toLocaleDateString() === new Date(new Date().setDate(new Date().getDate() + index - 2)).toLocaleDateString()">
-                    Сегодня:_
+            <div ref="canvas_container" class="canvas_container">
+                <div class="currentLineTime" :style="{ left: 2940 + setTimeCurrent + 'px' }"></div>
+                <canvas ref="canvasChart" class="canvas"></canvas>
+                <div v-for="(item, index) in sessionsArray" :key="index">
+                    <Session :rooms="this.$store.state.rooms.length" :session="item" />
                 </div>
-                {{ new Date(new Date().setDate(new Date().getDate() + index - 2)).toLocaleDateString() }}
+            </div>
+            <div class="dateLine" :style="{ width: 1440 * this.days + 'px' }">
+                <div class="date" v-for="(date, index) in days">
+                    <div
+                        v-if="today.toLocaleDateString() === new Date(new Date().setDate(new Date().getDate() + index - 2)).toLocaleDateString()">
+                        Сегодня:_
+                    </div>
+                    {{ new Date(new Date().setDate(new Date().getDate() + index - 2)).toLocaleDateString() }}
+                </div>
             </div>
         </div>
     </div>
+
 </template>
 
 <script>
 import MyModal from '../../UI/MyModal.vue';
+import ClueRoomsComponent from './clueRoomsComponent.vue';
 import Session from './Session.vue'
 export default {
     name: "my-chart-canvas",
     props: ["days"],
-    components: { MyModal, Session },
+    components: { MyModal, Session, ClueRoomsComponent },
     data() {
         return {
-            timeArray: [
-                "00:00",
-                "01:00",
-                "02:00",
-                "03:00",
-                "04:00",
-                "05:00",
-                "06:00",
-                "07:00",
-                "08:00",
-                "09:00",
-                "10:00",
-                "11:00",
-                "12:00",
-                "13:00",
-                "14:00",
-                "15:00",
-                "16:00",
-                "17:00",
-                "18:00",
-                "19:00",
-                "20:00",
-                "21:00",
-                "22:00",
-                "23:00",
-            ],
+            chartHeight: null,
+            rooms: 6,
+            timeArray: ["00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00",],
             today: new Date(),
             canv: null,
             ctx: null,
@@ -87,12 +71,12 @@ export default {
     computed: {
         setTimeCurrent() {
             return Number(this.today.getHours()) * 60 + Number(this.today.getMinutes())
-        }
+        },
     },
     methods: {
+        //СДЕЛАТЬ Запрос на получение СЕССИЙ В Текущие дни
         setCanvasChartBlock(days) {
             const stepX = 60 // 1 min = 1px
-            let rooms = 6
             const contentWidth = 24 * 60 * days + 60
             this.$refs.canvas_container.style.width = contentWidth + 'px'
             const canv = this.$refs.canvasChart
@@ -106,6 +90,7 @@ export default {
             }
             ctx.setLineDash([3, 6]);
             const grafHeight = this.$refs.canvas_container.offsetHeight
+            this.chartHeight = grafHeight
             let x = 60
             let y = 0
             for (let i = 0; i < days; i++) {
@@ -125,11 +110,11 @@ export default {
                     ctx.stroke();
                 }
             }
-            const stepY = grafHeight / 6
+            const stepY = grafHeight / this.$store.state.rooms.length
             let count2 = 0
             y = stepY - 0
             x = 0
-            while (count2 < rooms) {
+            while (count2 < this.$store.state.rooms.length) {
                 ctx.lineWidth = 1;
                 ctx.fillText(`${count2}`, x, y - 4);
                 ctx.moveTo(x, y);
@@ -147,32 +132,7 @@ export default {
         },
         setTimeLine() {
             for (let i = 0; i < this.days - 1; i++) {
-                this.timeArray.push(
-                    "00:00",
-                    "01:00",
-                    "02:00",
-                    "03:00",
-                    "04:00",
-                    "05:00",
-                    "06:00",
-                    "07:00",
-                    "08:00",
-                    "09:00",
-                    "10:00",
-                    "11:00",
-                    "12:00",
-                    "13:00",
-                    "14:00",
-                    "15:00",
-                    "16:00",
-                    "17:00",
-                    "18:00",
-                    "19:00",
-                    "20:00",
-                    "21:00",
-                    "22:00",
-                    "23:00",
-                )
+                this.timeArray.push("00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00",)
             }
         }
     },
@@ -237,20 +197,22 @@ export default {
     height: 30px;
 }
 
-
 .MyChartCanvas {
-    padding: 10px 10px 0 10px;
+    position: absolute;
     width: 100%;
+    height: 100%;
 }
 
+.clue {
+    position: absolute;
+    z-index: 101;
+}
 
 .canvas_container {
     position: relative;
     image-rendering: pixelated;
     background-color: transparent;
     height: calc(100% - 60px);
-    /* height: calc(100% - 20px); */
-    /* height: 100%; */
 }
 
 .MyChartCanvas {
