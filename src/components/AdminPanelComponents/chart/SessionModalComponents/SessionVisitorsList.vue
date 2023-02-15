@@ -1,16 +1,16 @@
 <template>
-    <div class="clients_list_container">
-        <div class="clients_block">
-            <div v-for="client in clients_lsit">
-                <Client ref="client" :select_all="setSelectedAll" :client="client" @selected="setSelectedArr"
+    <div class="visitors_list_container">
+        <div class="visitors_block">
+            <div v-for="visitor in visitors_lsit">
+                <Visitor ref="visitor" :select_all="setSelectedAll" :visitor="visitor" @selected="setSelectedArr"
                     @selected-or="updateSelectedArr" />
             </div>
         </div>
-        <div class="all_clients">
+        <div class="all_visitors">
             <Switch @click="updateSelectedAll('click')" v-model:modelValue="select_all" />
             <div class="d-flex justify-content-between align-items-center w-100">
                 <div class="selected_counter">
-                    Все ( {{ selected_counter }} из {{ clients_lsit.length }} )
+                    Все ( {{ selected_counter }} из {{ visitors_lsit.length }} )
                 </div>
                 <MyButton :cls="'btn_second'">ДОБАВИТЬ</MyButton>
             </div>
@@ -22,27 +22,19 @@
 <script>
 import MyButton from '@/components/UI/MyButton.vue';
 import Switch from '@/components/UI/Switch.vue';
-import Client from './Client.vue';
+import Visitor from './Visitor.vue';
 
 export default {
-    name: "session-clients-list",
-    props: ["clients_lsit"],
+    name: "session-visitors-list",
+    props: ["visitors_lsit"],
+    components: { Switch, Visitor, MyButton },
     data() {
         return {
-            // clientList: this.clients_lsit,
-            selected_counter: this.clients_lsit.length,
+            selected_counter: this.visitors_lsit.length,
             select_all: true,
             setSelected: []
         };
     },
-    // watch: {
-    //     "setSelected": {
-    //         handler(value) {
-    //             console.log(value);
-    //             this.$emit('clients-selected', value)
-    //         }
-    //     }
-    // },
     methods: {
         logMassage() {
             console.log('Окно добавления пользователя');
@@ -53,7 +45,7 @@ export default {
         updateSelectedArr(value) {
             for (let i = 0; i < this.setSelected.length; i++) {
                 const element = this.setSelected[i];
-                if (element.client.id === value.client_id) {
+                if (element.visitor.id === value.visitor_id) {
                     element.select_status = value.select_status
                 }
             }
@@ -75,7 +67,7 @@ export default {
                         }
                     }
                 }
-                this.emmitSelectedClients(this.setSelected)
+                this.emmitSelectedVisitors(this.setSelected)
                 return { selected_counter: this.selected_counter, select_all: this.select_all }
             } else {
                 let count_selected = 0
@@ -91,19 +83,19 @@ export default {
                 } else {
                     this.select_all = false
                 }
-                this.emmitSelectedClients(this.setSelected)
+                this.emmitSelectedVisitors(this.setSelected)
                 return { selected_counter: this.selected_counter, select_all: this.select_all }
             }
         },
-        emmitSelectedClients() {
-            let selected_clients = []
+        emmitSelectedVisitors() {
+            let selected_visitors = []
             for (let i = 0; i < this.setSelected.length; i++) {
                 const element = this.setSelected[i];
                 if (element.select_status === true) {
-                    selected_clients.push(element.client)
+                    selected_visitors.push(element.visitor)
                 }
             }
-            this.$emit('clients-selected', selected_clients)
+            this.$emit('visitors-selected', selected_visitors)
         }
     },
     computed: {
@@ -113,12 +105,11 @@ export default {
     },
     mounted() {
     },
-    components: { Switch, Client, MyButton }
 }
 </script>
 
 <style scoped>
-.all_clients {
+.all_visitors {
     display: flex;
     font-size: 16px;
     align-items: center;
@@ -130,15 +121,7 @@ export default {
     margin: 0 10px;
 }
 
-/* .add_new_btn {
-    border: 1px solid rgb(0, 255, 238);
-    padding: 5px;
-    font-size: 14px;
-    cursor: pointer;
-    border-radius: 5px;
-} */
-
-.clients_list_container {
+.visitors_list_container {
     display: flex;
     flex-direction: column;
     border: 1px solid whitesmoke;
@@ -147,7 +130,7 @@ export default {
     border-radius: 5px;
 }
 
-.clients_block {
+.visitors_block {
     overflow: scroll;
     height: 100%;
     width: 100%;
@@ -158,7 +141,7 @@ export default {
     justify-content: space-between;
 }
 
-.clients_block::-webkit-scrollbar {
+.visitors_block::-webkit-scrollbar {
     height: 0px;
     display: none;
 }

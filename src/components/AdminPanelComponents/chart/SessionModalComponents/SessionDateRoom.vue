@@ -1,11 +1,12 @@
 <template>
     <div class="dateRoom_container">
         <div class="d-flex">
-            Дата:<div class="date_room_text">{{ new Date(new Date().setDate(new Date().getDate() + index_day - 2)).toLocaleDateString()}}
+            <!-- // new Date(date).toLocaleDateString() -->
+            Дата:<div class="date_room_text">{{ new Date(date).toISOString().split('T')[0] }}
             </div>
         </div>
         <div class="d-flex">Комната:
-            <div class="date_room_text">{{ room }}</div>
+            <div class="date_room_text">{{ room.name }}</div>
         </div>
     </div>
 </template>
@@ -13,7 +14,7 @@
 <script>
 export default {
     name: 'session-date-room',
-    props: ['index_day', 'index_room'],
+    props: ['date', 'room_id'],
     data() {
         return {
             room: "",
@@ -21,27 +22,10 @@ export default {
     },
     methods: {
         setRoom() {
-            switch (this.index_room) {
-                case 0:
-                    this.room = "Окно в небо 1";
-                    break;
-                case 1:
-                    this.room = "Окно в небо 2";
-                    break;
-                case 2:
-                    this.room = "Светлая";
-                    break;
-                case 3:
-                    this.room = "Мягкая";
-                    break;
-                case 4:
-                    this.room = "Кинозал";
-                    break;
-                case 5:
-                    this.room = "Кальянка";
-                    break;
-                default:
-                    break;
+            for (let i = 0; i < this.$store.state.rooms.length; i++) {
+                if (this.$store.state.rooms[i].id === this.room_id) {
+                    this.room = this.$store.state.rooms[i];
+                }
             }
         }
     },
@@ -61,6 +45,7 @@ export default {
     justify-content: space-between;
     width: 100%;
 }
+
 .date_room_text {
     display: flex;
     justify-content: center;

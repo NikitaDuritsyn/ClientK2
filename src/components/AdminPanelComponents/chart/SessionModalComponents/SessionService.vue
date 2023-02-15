@@ -3,7 +3,7 @@
         <div class="sevices_block">
             <div class="tariff">
                 <div class="text">Тариф:</div>
-                <MySelect v-model:modelValue="tariff" :options="tariffs"></MySelect>
+                <MySelect v-model:modelValue="tariff" :options="$store.state.tariffs"></MySelect>
             </div>
             <div class="sevices">
                 <div class="d-flex flex-column">
@@ -42,11 +42,11 @@ export default {
                 { id: 5, title: 'Приставка', price: 23150 },
             ],
             services_selected: [],
-            tariffs: [
-                { id: 0, title: 'По времени', tariff: 'пока хз что тут' },
-                { id: 0, title: 'По часу', tariff: 'пока хз что тут' },
-                { id: 0, title: 'На весь день', tariff: 'пока хз что тут' },
-            ],
+            // tariffs: [
+            //     { id: 0, title: 'По времени', tariff: 'пока хз что тут' },
+            //     { id: 0, title: 'По часу', tariff: 'пока хз что тут' },
+            //     { id: 0, title: 'На весь день', tariff: 'пока хз что тут' },
+            // ],
         };
     },
     methods: {},

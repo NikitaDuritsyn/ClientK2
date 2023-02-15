@@ -1,7 +1,7 @@
 <template>
     <div class="select-wrap">
         <select ref="select" @change="update" :value="modelValue" :disabled="this.disabled">
-            <option v-for="(option, index) in options" :key="index" :value="option.id">{{ option.title }}</option>
+            <option v-for="(option, index) in options" :key="index" :value="option.id">{{ option.name }}</option>
         </select>
     </div>
 </template>

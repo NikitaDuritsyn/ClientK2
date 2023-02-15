@@ -11,7 +11,7 @@
                 <div class="currentLineTime" :style="{ left: 2940 + setTimeCurrent + 'px' }"></div>
                 <canvas ref="canvasChart" class="canvas"></canvas>
                 <div v-for="(item, index) in sessionsArray" :key="index">
-                    <Session :rooms="this.$store.state.rooms.length" :session="item" />
+                    <Session :rooms="$store.state.rooms.length" :session="item" />
                 </div>
             </div>
             <div class="dateLine" :style="{ width: 1440 * this.days + 'px' }">
@@ -39,33 +39,11 @@ export default {
     data() {
         return {
             chartHeight: null,
-            rooms: 6,
             timeArray: ["00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00",],
             today: new Date(),
             canv: null,
             ctx: null,
-            sessionsArray: [
-                {
-                    index_day: 2, time: 17 * 60, timeLine: 120, room: 0, clients: [
-                        { id: 1, name: 'Тимофей', number_phone: '+79085060871' },
-                        { id: 2, name: 'Валя', number_phone: '+79085060871' },
-                        { id: 3, name: 'Илья', number_phone: '+79085060871' },
-                        { id: 4, name: 'Cтепа', number_phone: '+79085060871' },
-                        { id: 5, name: 'Илья', number_phone: '+79085060871' },
-                        { id: 6, name: 'Илья', number_phone: '+79085060871' },
-                        { id: 7, name: 'Илья', number_phone: '+79085060871' },
-                        { id: 8, name: 'Илья', number_phone: '+79085060871' },
-                        { id: 9, name: 'Илья', number_phone: '+79085060871' },
-                        { id: 10, name: 'Илья', number_phone: '+79085060871' },
-                    ],
-                    peopleCount: 3
-                },
-                { index_day: 2, time: 18 * 60 + 15, timeLine: 120, room: 1, clients: [{ id: 11, name: 'Филип' }], peopleCount: 2 },
-                { index_day: 2, time: 19 * 60 + 30, timeLine: 30, room: 2, clients: [{ id: 12, name: 'Александр' }], peopleCount: 10 }, // присылать index дня
-                { index_day: 0, time: 0 * 60, timeLine: 180, room: 3, clients: [{ id: 13, name: 'Леонардо' }], peopleCount: 20 },
-                { index_day: 11, time: 16 * 60, timeLine: 120, room: 4, clients: [{ id: 14, name: 'Акакий' }], peopleCount: 3 },
-                { index_day: 0, time: 0, timeLine: 120, room: 5, clients: [{ id: 15, name: 'Сергей' }], peopleCount: 4 },
-            ]
+            sessionsArray: []
         };
     },
     computed: {
@@ -74,6 +52,21 @@ export default {
         },
     },
     methods: {
+        getSessions() {
+            this.$api.getSessionsByDays(this.days).then((data) => {
+                this.sessionsArray = data
+                for (let i = 0; i < this.sessionsArray.length; i++) {
+                    let session = this.sessionsArray[i];
+                    for (let j = 0; j < this.$store.state.rooms.length; j++) {
+                        const room = this.$store.state.rooms[j];
+                        if (session.room_id === room.id) {
+                            session.index_room = j
+                        }
+                    }
+                }
+                // console.log(this.sessionsArray);
+            })
+        },
         //СДЕЛАТЬ Запрос на получение СЕССИЙ В Текущие дни
         setCanvasChartBlock(days) {
             const stepX = 60 // 1 min = 1px
@@ -143,6 +136,7 @@ export default {
             this.setToday()
         }, 1000);
         this.functionScrollToDay();
+        this.getSessions()
     }
 }
 </script>

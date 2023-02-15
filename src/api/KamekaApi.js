@@ -1,7 +1,7 @@
 import BaseApi from './BaseApi'
 
 class KamekaApi extends BaseApi {
-    
+
     getClients() {
         let url = `/api/get_clients`
         return this._request({
@@ -14,8 +14,20 @@ class KamekaApi extends BaseApi {
             url: url
         })
     }
-    getSessions(){
+    getSessions() {
         let url = `/api/get_sessions`
+        return this._request({
+            url: url
+        })
+    }
+    getSessionsByDays(days) {
+        let url = `/api/get_sessions/${days}`
+        return this._request({
+            url: url
+        })
+    }
+    getTarrifs() {
+        let url = `/api/get_tariffs`
         return this._request({
             url: url
         })

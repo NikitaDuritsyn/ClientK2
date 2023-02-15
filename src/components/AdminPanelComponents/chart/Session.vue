@@ -1,12 +1,12 @@
 <template>
     <div class="session" @click="$refs.session_modal.open()" :style="{ 
-    width: session.timeLine + 'px', 
-    height: `calc((100%)/${rooms})`, 
-    top: `calc((100%)/${rooms}*${session.room})`, 
-    left: 1440 * session.index_day + session.time + 60 + 'px' }">
+    width: session.timeline + 'px', 
+    height: `calc((100%)/${Number(rooms)})`, 
+    top: `calc((100%)/${Number(rooms)}*${session.index_room})`, 
+    left: 1440 * session.index_day + session.time_booking + 60 + 'px' }">
+        <!-- ВМЕСТО ROOM ID ДОЛЖЕН быть ИНДЕКС КОМНАТЫ -->
         <strong>
-            {{ session.index_day }}
-            {{ session.clients[0].name }}: {{ session.peopleCount }} чел.
+            {{ session.room_id }}
         </strong>
     </div>
     <MyModal ref="session_modal">
@@ -22,11 +22,11 @@ export default {
     name: "session-vue",
     props: ["session", "rooms"],
     data() {
-        return {
-        }
+        return {}
     },
     methods: {},
     mounted() {
+        // console.log(this.session);
     },
     components: { MyModal, SessionModal }
 }

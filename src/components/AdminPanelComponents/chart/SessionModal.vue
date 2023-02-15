@@ -1,11 +1,11 @@
 <template>
     <div class="session_modal">
         <div class="head_line_container">
-            <SessionDateRoom :index_day="session.index_day" :index_room="session.room" />
+            <SessionDateRoom :date="session.date" :room_id="session.room_id" />
             <div class="close_btn" @click="$emit('close')"></div>
         </div>
-        <div class="clients">
-            <SessionClientsList @clients-selected="setSelectedClients" :clients_lsit="session.clients" />
+        <div class="visitors">
+            <SessionVisitorsList @visitors-selected="setSelectedVisitors" :visitors_lsit="session.visitors" />
         </div>
         <div class="time_line">
             <!-- ТУТ Я КАК ПОНЯЛ ВСЕГДА ОБЩЕЕ ПО ВЫБРАННЫМ КЛИЕНТАМ -->
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import SessionClientsList from './SessionModalComponents/SessionClientsList.vue';
+import SessionVisitorsList from './SessionModalComponents/SessionVisitorsList.vue';
 import SessionDateRoom from './SessionModalComponents/SessionDateRoom.vue';
 import SessionPayment from './SessionModalComponents/SessionPayment.vue';
 import SessionService from './SessionModalComponents/SessionService.vue';
@@ -30,15 +30,15 @@ import SessionTimeLine from './SessionModalComponents/SessionTimeLine.vue';
 export default {
     name: "session-modal-vue",
     props: ["session"],
-    components: { SessionClientsList, SessionTimeLine, SessionService, SessionPayment, SessionDateRoom },
+    components: { SessionVisitorsList, SessionTimeLine, SessionService, SessionPayment, SessionDateRoom },
     data() {
         return {
-            selectedClients: []
+            selectedVisitors: []
         };
     },
     methods: {
-        setSelectedClients(value) {
-            this.selectedClients = value
+        setSelectedVisitors(value) {
+            this.selectedVisitors = value
         },
     },
     mounted() { },
@@ -70,7 +70,7 @@ export default {
     height: 30px;
 }
 
-.clients {
+.visitors {
     padding: 5px 0;
     height: 250px;
 }

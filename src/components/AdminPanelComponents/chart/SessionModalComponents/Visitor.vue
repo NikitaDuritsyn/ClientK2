@@ -1,12 +1,12 @@
 <template>
-    <div class="client_container">
+    <div class="visitor_container">
         <Switch v-model:modelValue="status_switch" />
-        <div class="client">
+        <div class="visitor">
             <div>
-                {{ client.name }}
+                {{ visitor.name }}
             </div>
             <div>
-                {{ client.number_phone }}
+                {{ visitor?.number_phone }}
             </div>
         </div>
     </div>
@@ -17,8 +17,8 @@
 import Switch from '@/components/UI/Switch.vue';
 
 export default {
-    name: "client-vue",
-    props: ["client", 'select_all'],
+    name: "visitor-vue",
+    props: ["visitor", 'select_all'],
     data() {
         return {
             status_switch: true
@@ -36,25 +36,25 @@ export default {
         },
         "status_switch": {
             handler(value) {
-                this.$emit('selectedOr', { select_status: value, client_id: this.client.id })
+                this.$emit('selectedOr', { select_status: value, visitor_id: this.visitor.id })
             }
         }
     },
     methods: {},
     mounted() {
-        this.$emit('selected', { select_status: this.status_switch, client: this.client })
+        this.$emit('selected', { select_status: this.status_switch, visitor: this.visitor })
     },
     components: { Switch }
 }
 </script>
 
 <style scoped>
-.client_container {
+.visitor_container {
     display: flex;
     padding: 5px 10px;
 }
 
-.client {
+.visitor {
     display: flex;
     width: 100%;
     align-items: center;

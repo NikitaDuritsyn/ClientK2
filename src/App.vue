@@ -13,7 +13,8 @@ export default {
     return {}
   },
   mounted() {
-      this.$store.dispatch('GET_ROOMS')
+      this.$store.dispatch('GET_ROOMS');
+      this.$store.dispatch('GET_TARIFFS');
   }
 }
 </script>
