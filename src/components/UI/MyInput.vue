@@ -1,24 +1,10 @@
 <template>
-  <div class="wrapInput position-relative">
-    <label class="position-absolute" v-show="label" ref="labelEl">{{ label }}</label>
-    <div class="position-relative" ref="divEl">
-      <div class="nameBorderTopRight" :style="{width: topRight}"></div>
-      <div class="nameBorderTopLeft" :style="{width: topLeft}"></div>
-      <input
-          ref="input"
-          :type="type"
-          :maxlength="maxlength"
-          :max="type==='number'&& max ? max : undefined"
-          :autocomplete="autocomplete"
-          :placeholder=placeholder
-          :pattern="pattern"
-          @input="updateInput"
-          :value="modelValue"
-          :data-tel-input="phoneInput?true:undefined"
-      >
-    </div>
-  </div>
-
+  <div class="wrapInput">
+    <label v-show="label">{{ label }}</label>
+    <input ref="input" :type="type" :maxlength="maxlength" :max="type === 'number' && max ? max : undefined"
+      :autocomplete="autocomplete" :placeholder=placeholder :pattern="pattern" @input="updateInput" :value="modelValue"
+      :data-tel-input="phoneInput ? true : undefined">
+</div>
 </template>
 
 <script>
@@ -39,7 +25,7 @@ export default {
       type: String,
       default: "text"
     },
-    max:{
+    max: {
       type: String,
       default: undefined
     },
@@ -51,7 +37,7 @@ export default {
       type: String,
       default: undefined
     },
-    pattern:{
+    pattern: {
       type: String,
       default: undefined
     },
@@ -73,103 +59,59 @@ export default {
     }
   },
 
-  data:() =>({
-      input: '',
-      topRight: '250px',
-      topLeft: '150px'
+  data: () => ({
+    input: '',
+    topRight: '250px',
+    topLeft: '150px'
   }),
   methods: {
-    handleBorders: function() {
-      this.topRight = this.$refs.divEl.clientWidth*0.90 - this.$refs.labelEl.clientWidth + 'px'
-      this.topLeft = this.$refs.divEl.clientWidth*0.08 + 'px'
-    },
     updateInput(event) {
       this.$emit('update:modelValue', event.target.value)
     },
-    focus(){
+    focus() {
       this.$refs.input.focus()
     }
   },
-  mounted() {
-    this.$nextTick(()=>{
-        this.handleBorders()
-    })
-    window.addEventListener('resize', this.handleBorders)
-    window.addEventListener('scroll', this.handleBorders)
-    window.addEventListener('click', this.handleBorders)
-  },
-  unmounted() {
-    window.removeEventListener('resize', this.handleBorders)
-    window.removeEventListener('scroll', this.handleBorders)
-    window.removeEventListener('click', this.handleBorders)
-  }
 }
 </script>
 
 <style scoped>
-.inputHeader {
-  align-items: center;
-  position: relative;
-}
 input {
-  position: relative;
+  font-size: 16px;
+  background: transparent;
+  border-radius: 5px;
+  border: 1px solid #fff;
+  width: 100%;
+  color: #fff;
+  padding: 5px;
+}
+
+.wrapInput {
+  margin: auto;
+  padding: 10px 0;
+  max-width: 28rem;
+}
+
+input:active,
+:hover,
+:focus {
+  outline: 0;
+  outline-offset: 0;
+}
+
+input::placeholder,
+input::-webkit-input-placeholder {
+  color: #fff;
+}
+
+label {
+  color: rgb(0, 255, 0) !important;
   font-family: Montserrat;
   font-style: normal;
   font-weight: 500;
   font-size: 0.875rem;
   line-height: 1.25rem;
-  background: transparent;
-  border-radius: 1.25rem;
-  border: 0.094rem solid #fff;
-  border-top: none;
-  align-items: center;
-  width: 100%;
-  color: #fff;
-  padding: 1rem 1.875rem;
-  z-index: 2;
-}
-input:autofill,
-input:-internal-autofill-selected,
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus {
-  color: #fff !important;
-  background: transparent !important;
-  border: 0.094rem solid #fff !important;
-}
-.nameBorderTopRight {
-  position: absolute;
-  border-top: 0.094rem solid #fff;
-  /*border-right: 0.094rem solid #fff;*/
-  height: 100%;
-  border-top-right-radius: 1.25rem;
-  border-bottom-right-radius: 1.25rem;
-  right: 0;
-  z-index: 0;
-}
-.nameBorderTopLeft {
-  min-width: 1.2rem;
-  position: absolute;
-  border-top: 0.094rem solid #fff;
-  /*border-left: 0.094rem solid #fff;*/
-  height: 100%;
-  border-top-left-radius: 1.25rem;
-  border-bottom-left-radius: 1.25rem;
-  left: 0;
-}
-.wrapInput {
-  margin: 0 auto 1.75rem;
-  max-width: 28rem;
-}
-input:active, :hover, :focus {
-  outline: 0;
-  outline-offset: 0;
-}
-input::placeholder,
-input::-webkit-input-placeholder {
-  color: #fff;
-}
-label {
+  text-transform: uppercase;
   display: flex;
   line-height: 1.25rem;
   color: #fff;
@@ -179,11 +121,5 @@ label {
   top: -1rem;
   left: 1.5rem;
   text-transform: uppercase;
-  padding: 0.375rem 0.625rem;
-}
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
 }
 </style>

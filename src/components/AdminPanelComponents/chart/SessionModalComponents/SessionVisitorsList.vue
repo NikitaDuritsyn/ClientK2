@@ -6,28 +6,35 @@
                     @selected-or="updateSelectedArr" />
             </div>
         </div>
-        <div class="all_visitors">
-            <Switch @click="updateSelectedAll('click')" v-model:modelValue="select_all" />
+        <div class="select_menu">
             <div class="d-flex justify-content-between align-items-center w-100">
-                <div class="selected_counter">
-                    Все ( {{ selected_counter }} из {{ visitors_lsit.length }} )
+                <div v-if="mode != 'createBooking'" class="d-flex align-items-center">
+                    <Switch @click="updateSelectedAll('click')" v-model:modelValue="select_all" />
+                    <div class="select_counter">
+                        Все ( {{ selected_counter }} из {{ visitors_lsit.length }} )
+                    </div>
                 </div>
-                <MyButton :cls="'btn_second'">ДОБАВИТЬ</MyButton>
+                <MyButton :cls="'btn_second'" @click="$refs.create_visitor.open()">ДОБАВИТЬ</MyButton>
             </div>
         </div>
-    </div>
 
+        <MyModal :mode-flex-center="true" ref="create_visitor">
+            <CreateVisitor @visitor-created="updateVisitorList" :session-id="sessionId" :mode="mode" @close="$refs.create_visitor.close()" />
+        </MyModal>
+</div>
 </template>
 
 <script>
 import MyButton from '@/components/UI/MyButton.vue';
+import MyModal from '@/components/UI/MyModal.vue';
 import Switch from '@/components/UI/Switch.vue';
+import CreateVisitor from './CreateVisitor.vue';
 import Visitor from './Visitor.vue';
 
 export default {
     name: "session-visitors-list",
-    props: ["visitors_lsit"],
-    components: { Switch, Visitor, MyButton },
+    props: ["visitors_lsit", 'mode', 'sessionId'],
+    components: { Switch, Visitor, MyButton, MyModal, CreateVisitor },
     data() {
         return {
             selected_counter: this.visitors_lsit.length,
@@ -36,6 +43,10 @@ export default {
         };
     },
     methods: {
+        updateVisitorList(visitor){
+            console.log(visitor);
+            this.$emit('updateVisitorList')
+        },
         logMassage() {
             console.log('Окно добавления пользователя');
         },
@@ -109,16 +120,16 @@ export default {
 </script>
 
 <style scoped>
-.all_visitors {
+.select_counter {
+    margin: 0 10px;
+}
+
+.select_menu {
     display: flex;
     font-size: 16px;
     align-items: center;
     padding: 5px 10px;
     border-top: 1px solid rgb(0, 255, 255);
-}
-
-.selected_counter {
-    margin: 0 10px;
 }
 
 .visitors_list_container {
@@ -138,7 +149,7 @@ export default {
     scrollbar-width: none;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-around;
 }
 
 .visitors_block::-webkit-scrollbar {

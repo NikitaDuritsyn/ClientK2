@@ -11,6 +11,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap"
 
+
 const app = createApp(App)
 
 app.config.globalProperties.$api = API

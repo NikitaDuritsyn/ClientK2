@@ -2,13 +2,13 @@
     <div class="dateRoom_container">
         <div class="d-flex">
             <!-- // new Date(date).toLocaleDateString() -->
-            Дата:<div class="date_room_text">{{ new Date(date).toISOString().split('T')[0] }}
+            Дата:<div class="date_room_text">{{ new Date(date).toLocaleDateString() }}
             </div>
         </div>
         <div class="d-flex">Комната:
             <div class="date_room_text">{{ room.name }}</div>
         </div>
-    </div>
+</div>
 </template>
 
 <script>

@@ -2,7 +2,7 @@
     <div class="select-wrap">
         <select ref="select" @change="update" v-model="modelVal" :disabled="this.disabled" multiple>
             <option v-for="(option, index) in options" :key="index" :value="option.id">
-                {{ option.title }} - {{ option?.price }}
+                {{ option.name }} - {{ option?.price }}
             </option>
         </select>
     </div>

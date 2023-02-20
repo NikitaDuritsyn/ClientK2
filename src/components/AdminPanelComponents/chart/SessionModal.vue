@@ -1,23 +1,35 @@
 <template>
     <div class="session_modal">
         <div class="head_line_container">
-            <SessionDateRoom :date="session.date" :room_id="session.room_id" />
+            <SessionDateRoom v-if="mode !== 'createBooking'" :date="session.date" :room_id="session.room_id" />
+            <SessionDateRoom v-if="mode === 'createBooking'" :date="bookingDay" :room_id="room.id" />
             <div class="close_btn" @click="$emit('close')"></div>
         </div>
-        <div class="visitors">
-            <SessionVisitorsList @visitors-selected="setSelectedVisitors" :visitors_lsit="session.visitors" />
+        <div v-if="mode === 'createBooking'" class="time_picker">
+            <!-- :hour-range="[10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]" -->
+            <div class="text_name">
+                Время:
+            </div>
+            <vue-timepicker v-model="simpleStringValue" :minute-interval="15"></vue-timepicker>
         </div>
-        <div class="time_line">
+        <div class="visitors">
+            <SessionVisitorsList :mode="mode" @update-visitor-list="$emit('update')" @visitors-selected="setSelectedVisitors" :visitors_lsit="session.visitors"
+                :session-id="session.id" />
+        </div>
+        <div v-if="mode !== 'createBooking'" class="time_line">
             <!-- ТУТ Я КАК ПОНЯЛ ВСЕГДА ОБЩЕЕ ПО ВЫБРАННЫМ КЛИЕНТАМ -->
             <SessionTimeLine :session="session" />
         </div>
-        <div class="services">
+        <div v-if="mode !== 'createBooking'" class="services">
             <SessionService />
         </div>
-        <div class="payment">
+        <div v-if="mode !== 'createBooking'" class="payment">
             <SessionPayment />
         </div>
-    </div>
+        <div class="d-flex justify-content-end">
+            <MyButton v-if="mode === 'createBooking'" :cls="'btn_second'">Сохранить</MyButton>
+        </div>
+</div>
 </template>
 
 <script>
@@ -26,26 +38,82 @@ import SessionDateRoom from './SessionModalComponents/SessionDateRoom.vue';
 import SessionPayment from './SessionModalComponents/SessionPayment.vue';
 import SessionService from './SessionModalComponents/SessionService.vue';
 import SessionTimeLine from './SessionModalComponents/SessionTimeLine.vue';
+import VueTimepicker from 'vue3-timepicker'
+import 'vue3-timepicker/dist/VueTimepicker.css'
+import MyButton from '@/components/UI/MyButton.vue';
 
 export default {
     name: "session-modal-vue",
-    props: ["session"],
-    components: { SessionVisitorsList, SessionTimeLine, SessionService, SessionPayment, SessionDateRoom },
+    components: { VueTimepicker, SessionVisitorsList, SessionTimeLine, SessionService, SessionPayment, SessionDateRoom, MyButton },
+    props: {
+        session: {
+            type: Object,
+            default: { visitors: [] }
+        },
+        mode: {
+            type: String,
+            default: ''
+        },
+        bookingDay: {
+            default: new Date()
+        },
+        room: {},
+        bookingHours: {
+            default: null
+        },
+        bookingMinutes: {
+            default: null
+        },
+    },
     data() {
         return {
-            selectedVisitors: []
+            selectedVisitors: [],
+            simpleStringValue: ''
         };
     },
     methods: {
+        updateSessions(){
+            console.log('updateSessions');
+            this.$emit('updateSessions');
+        },
         setSelectedVisitors(value) {
             this.selectedVisitors = value
         },
+        setSimpleStringValue() {
+            if (this.bookingHours < 10) {
+                if (this.bookingMinutes < 10) {
+                    this.simpleStringValue = `0${this.bookingHours}:0${this.bookingMinutes}`
+                } else {
+                    this.simpleStringValue = `0${this.bookingHours}:${this.bookingMinutes}`
+                }
+            } else {
+                if (this.bookingMinutes < 10) {
+                    this.simpleStringValue = `${this.bookingHours}:0${this.bookingMinutes}`
+                } else {
+                    this.simpleStringValue = `${this.bookingHours}:${this.bookingMinutes}`
+                }
+            }
+        }
     },
-    mounted() { },
+    mounted() {
+        this.setSimpleStringValue()
+    },
 }
 </script>
 
 <style scoped>
+.text_name {
+    font-size: 16px;
+    padding: 0 10px 0 0;
+}
+
+.time_picker {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+}
+
 .close_btn {
     display: flex;
     justify-content: center;
@@ -82,7 +150,6 @@ export default {
 
 .services {
     padding: 5px 0;
-    /* height: 150px; */
 }
 
 .payment {

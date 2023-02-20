@@ -1,9 +1,12 @@
 <template>
-    <div class="select-wrap">
-        <select ref="select" @change="update" :value="modelValue" :disabled="this.disabled">
-            <option v-for="(option, index) in options" :key="index" :value="option.id">{{ option.name }}</option>
-        </select>
-    </div>
+    <div>
+        <div class="select-wrap">
+            <label v-show="label">{{ label }}</label>
+            <select ref="select" @change="update" :value="modelValue" :disabled="this.disabled">
+                <option v-for="(option, index) in options" :key="index" :value="option.id">{{ option.name }}</option>
+            </select>
+        </div>
+</div>
 </template>
     
 <script>
@@ -17,11 +20,15 @@ export default {
         modelValue: {},
         placeholder: {},
         options: {},
-        label: {},
+        label: {
+            type: String,
+            default: "",
+            required: false
+        },
     },
     methods: {
         update() {
-            this.$emit('update:modelValue', this.$refs.select.value)
+            this.$emit('update:modelValue', Number(this.$refs.select.value))
         }
     }
 }
@@ -46,24 +53,15 @@ label {
     top: -1rem;
     left: 1.5rem;
     text-transform: uppercase;
-    /* padding: 0.375rem 0.625rem; */
 }
 
 .select-wrap {
-    /* height: 3.125rem; */
-    border-radius: 5px;
-    border: 1px solid #fff;
-    padding: 5px 10px;
+    margin: auto;
     width: 100%;
+    max-width: 28rem;
 }
 
-/* .select-wrap select:focus-visible, */
-/* .select-wrap select:hover {
-    outline: -webkit-focus-ring-color auto 1px;
-} */
-
 select:focus-visible {
-    border: none;
     outline: none;
 }
 
@@ -72,22 +70,24 @@ select {
     font-style: normal;
     font-weight: 500;
     font-size: 0.875rem;
-    line-height: 1.25rem;
     background: transparent;
     width: 100%;
     color: #fff;
     width: 100%;
     height: 100%;
+    min-height: 35px;
     background: none;
     border: none;
+    border: 1px solid white;
+    border-radius: 5px;
+    width: 100%;
 }
 
 option {
     font-family: 'Montserrat';
     font-style: normal;
     font-weight: 500;
-    font-size: 0.875rem;
-    background-color: none !important;
-    color: black;
+    font-size: 1rem;
+    color: #000000;
 }
 </style>

@@ -26,6 +26,7 @@
 <script>
 import MySelect from '@/components/UI/MySelect.vue';
 import MyMultiSelect from '@/components/UI/MyMultiSelect.vue';
+import { mapState } from 'vuex';
 
 export default {
     name: "session-service",
@@ -33,26 +34,12 @@ export default {
     data() {
         return {
             tariff: '',
-            services: [
-                { id: 0, title: 'Кальян', price: 500 },
-                { id: 1, title: 'Алкоголь', price: 400 },
-                { id: 2, title: 'Приставка', price: 250 },
-                { id: 3, title: 'Приставка', price: 400 },
-                { id: 4, title: 'Приставка', price: 2350 },
-                { id: 5, title: 'Приставка', price: 23150 },
-            ],
             services_selected: [],
-            // tariffs: [
-            //     { id: 0, title: 'По времени', tariff: 'пока хз что тут' },
-            //     { id: 0, title: 'По часу', tariff: 'пока хз что тут' },
-            //     { id: 0, title: 'На весь день', tariff: 'пока хз что тут' },
-            // ],
         };
     },
+    computed: mapState(['services']),
     methods: {},
     mounted() {
-        //Вызвать запрос на получение услуг
-        //Вызвать запрос на получение тарифов
         //придумать как считать итог (спросить уточнить у САШИ и как лучше сделать данный функционал)
     },
 }

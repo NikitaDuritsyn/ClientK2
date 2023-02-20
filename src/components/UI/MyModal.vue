@@ -1,21 +1,23 @@
 <template>
   <transition name="fade">
-    <div class="popup-modal" v-if="isVisible" @click.self="close()">
-      <div class="window position-relative">
-        <div class="window-content">
-          <!-- <div class="head_modal_line"> -->
-          <!-- <div @click="close" class="close_button"></div> -->
-          <!-- </div> -->
+    <div class="popup-modal" :class="{ 'popup-modal-center': modeFlexCenter }" v-if="isVisible"
+      @click.stop.pervent.self="close()">
+      <div class="window">
           <slot></slot>
-        </div>
       </div>
     </div>
-  </transition>
+</transition>
 </template>
 
 <script>
 export default {
   name: 'MyModal',
+  props: {
+    modeFlexCenter: {
+      type: Boolean,
+      default: false
+    },
+  },
   data: () => ({
     isVisible: false,
     isVoted: false
@@ -25,7 +27,6 @@ export default {
       this.isVisible = true
       this.isVoted = true
     },
-
     close() {
       this.isVisible = false
     },
@@ -38,6 +39,14 @@ export default {
   height: 0px;
   display: none;
 }
+
+.popup-modal-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
 .popup-modal {
   overflow: scroll;
   -ms-overflow-style: none;
@@ -48,22 +57,17 @@ export default {
   bottom: 0;
   left: 0;
   right: 0;
-  align-items: center;
   z-index: 1100;
   height: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
 }
 
 .window {
-  margin: auto;
   background: rgb(20, 20, 20);
   max-width: 600px;
-}
-
-.window-content {
-  height: 100%;
-  padding: 10px 5px 10px 5px;
-
+  width: 100%;
+  border-radius: 10px;
+  margin: auto;
+  border: 1px solid rgb(0, 255, 0);
+  padding: 10px;
 }
 </style>

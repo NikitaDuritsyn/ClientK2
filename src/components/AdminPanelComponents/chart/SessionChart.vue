@@ -1,5 +1,6 @@
 <template>
     <div class="w-100 h-100 position-relative d-flex align-items-center">
+
         <div :style="{ height: this.chartHeight + 'px' }" class="clue">
             <ClueRoomsComponent />
         </div>
@@ -7,11 +8,11 @@
             <div class="timeLine">
                 <div class="time" v-for="time in timeArray">{{ time }}</div>
             </div>
-            <div ref="canvas_container" class="canvas_container">
+            <div ref="canvas_container" class="canvas_container" @click="mouseСhipped">
                 <div class="currentLineTime" :style="{ left: 2940 + setTimeCurrent + 'px' }"></div>
                 <canvas ref="canvasChart" class="canvas"></canvas>
                 <div v-for="(item, index) in sessionsArray" :key="index">
-                    <Session :rooms="$store.state.rooms.length" :session="item" />
+                    <Session :rooms="rooms" :session="item" />
                 </div>
             </div>
             <div class="dateLine" :style="{ width: 1440 * this.days + 'px' }">
@@ -24,18 +25,23 @@
                 </div>
             </div>
         </div>
-    </div>
-
+        <MyModal :mode-flex-center="true" ref="booking_create">
+            <SessionModal @update="getSessions" @close="$refs.booking_create.close()" :mode="'createBooking'" :booking-day="bookingDay"
+                :room="bookingRoom" :bookingHours="bookingHours" :bookingMinutes="bookingMinutes" />
+        </MyModal>
+</div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import MyModal from '../../UI/MyModal.vue';
 import ClueRoomsComponent from './clueRoomsComponent.vue';
 import Session from './Session.vue'
+import SessionModal from './SessionModal.vue';
 export default {
     name: "my-chart-canvas",
     props: ["days"],
-    components: { MyModal, Session, ClueRoomsComponent },
+    components: { MyModal, Session, ClueRoomsComponent, SessionModal },
     data() {
         return {
             chartHeight: null,
@@ -43,22 +49,63 @@ export default {
             today: new Date(),
             canv: null,
             ctx: null,
-            sessionsArray: []
+            sessionsArray: [],
+            bookingDay: new Date(),
+            bookingRoom: null,
+            bookingHours: null,
+            bookingMinutes: null,
         };
     },
     computed: {
         setTimeCurrent() {
             return Number(this.today.getHours()) * 60 + Number(this.today.getMinutes())
         },
+        ...mapState(['rooms'])
+    },
+    watch: {
+        rooms(value) {
+            if (value) {
+                this.setCanvasChartBlock()
+                this.getSessions()
+            }
+        },
     },
     methods: {
+        mouseСhipped(event) {
+            const vm = this
+            const currentMinutesToday = new Date().getHours() * 60 + new Date().getMinutes()
+            let indexDay = (event.layerX - 60) / ((vm.$refs.canvas_container.offsetWidth - 60) / vm.days) - 2
+            let indexRoom = event.layerY / ((vm.$refs.canvas_container.offsetHeight) / vm.rooms.length)
+            vm.bookingDay = new Date()
+            vm.bookingHours = null
+            vm.bookingMinutes = null
+            if (indexDay > 0 && currentMinutesToday < (((indexDay * 1440) / 60) * 60)) {
+                if (indexRoom > vm.rooms.length) {
+                    indexRoom = indexRoom - 1
+                }
+                for (let i = 0; i < vm.rooms.length; i++) {
+                    if (Math.floor(indexRoom) === i) {
+                        vm.bookingRoom = vm.rooms[i]
+                    }
+                }
+                vm.bookingHours = Math.floor((indexDay * 1440) / 60 - (Math.floor(indexDay) * 24))
+                vm.bookingMinutes = Math.floor(((indexDay * 1440) % 60 / 60) * 60)
+                vm.bookingDay.setDate(vm.bookingDay.getDate() + Math.floor(indexDay));
+                vm.$refs.booking_create.open()
+            }
+
+            // console.log('indexDay: ', Math.floor(indexDay), 'indexRoom: ', Math.floor(indexRoom));
+            // console.log('bookingHours: ', Math.floor(vm.bookingHours), 'bookingMinutes: ', (Math.floor(vm.bookingMinutes)));
+
+        },
         getSessions() {
+            console.log('UPDATED');
             this.$api.getSessionsByDays(this.days).then((data) => {
                 this.sessionsArray = data
                 for (let i = 0; i < this.sessionsArray.length; i++) {
                     let session = this.sessionsArray[i];
-                    for (let j = 0; j < this.$store.state.rooms.length; j++) {
-                        const room = this.$store.state.rooms[j];
+                    for (let j = 0; j < this.rooms.length; j++) {
+                        const room = this.rooms[j];
                         if (session.room_id === room.id) {
                             session.index_room = j
                         }
@@ -67,7 +114,6 @@ export default {
                 // console.log(this.sessionsArray);
             })
         },
-        //СДЕЛАТЬ Запрос на получение СЕССИЙ В Текущие дни
         setCanvasChartBlock(days) {
             const stepX = 60 // 1 min = 1px
             const contentWidth = 24 * 60 * days + 60
@@ -103,11 +149,11 @@ export default {
                     ctx.stroke();
                 }
             }
-            const stepY = grafHeight / this.$store.state.rooms.length
+            const stepY = grafHeight / this.rooms.length
             let count2 = 0
             y = stepY - 0
             x = 0
-            while (count2 < this.$store.state.rooms.length) {
+            while (count2 < this.rooms.length) {
                 ctx.lineWidth = 1;
                 ctx.fillText(`${count2}`, x, y - 4);
                 ctx.moveTo(x, y);
