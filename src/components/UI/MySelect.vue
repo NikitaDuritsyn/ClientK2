@@ -1,12 +1,10 @@
 <template>
-    <div>
-        <div class="select-wrap">
-            <label v-show="label">{{ label }}</label>
-            <select ref="select" @change="update" :value="modelValue" :disabled="this.disabled">
-                <option v-for="(option, index) in options" :key="index" :value="option.id">{{ option.name }}</option>
-            </select>
-        </div>
-</div>
+    <div class="select-wrap">
+        <label v-show="label">{{ label }}</label>
+        <select ref="select" @change="update" :value="modelValue" :disabled="this.disabled">
+            <option v-for="(option, index) in options" :key="index" :value="option.id">{{ option.name }}</option>
+        </select>
+    </div>
 </template>
     
 <script>
@@ -56,7 +54,6 @@ label {
 }
 
 .select-wrap {
-    margin: auto;
     width: 100%;
     max-width: 28rem;
 }

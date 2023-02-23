@@ -1,8 +1,9 @@
 <template>
     <div class="visitors_list_container">
         <div class="visitors_block">
-            <div v-for="visitor in visitors_lsit">
-                <Visitor ref="visitor" :select_all="setSelectedAll" :visitor="visitor" @selected="setSelectedArr"
+            <div v-for="(visitor, index) in visitors_lsit">
+                <Visitor @delete-visitor="deleteVisitorByIndex" :visitor-index="index" :mode="mode" ref="visitor"
+                    :select_all="setSelectedAll" :visitor="visitor" @selected="setSelectedArr"
                     @selected-or="updateSelectedArr" />
             </div>
         </div>
@@ -19,22 +20,23 @@
         </div>
 
         <MyModal :mode-flex-center="true" ref="create_visitor">
-            <CreateVisitor @visitor-created="updateVisitorList" :session-id="sessionId" :mode="mode" @close="$refs.create_visitor.close()" />
+            <VisitorForm @visitor-created="updateVisitorList" :session-id="sessionId" :mode="mode"
+                @close="$refs.create_visitor.close()" />
         </MyModal>
-</div>
+    </div>
 </template>
 
 <script>
 import MyButton from '@/components/UI/MyButton.vue';
 import MyModal from '@/components/UI/MyModal.vue';
 import Switch from '@/components/UI/Switch.vue';
-import CreateVisitor from './CreateVisitor.vue';
+import VisitorForm from './VisitorForm.vue';
 import Visitor from './Visitor.vue';
 
 export default {
     name: "session-visitors-list",
     props: ["visitors_lsit", 'mode', 'sessionId'],
-    components: { Switch, Visitor, MyButton, MyModal, CreateVisitor },
+    components: { Switch, Visitor, MyButton, MyModal, VisitorForm },
     data() {
         return {
             selected_counter: this.visitors_lsit.length,
@@ -43,9 +45,17 @@ export default {
         };
     },
     methods: {
-        updateVisitorList(visitor){
-            console.log(visitor);
-            this.$emit('updateVisitorList')
+        deleteVisitorByIndex(visitor_index) {
+            if (this.mode === 'createBooking') {
+                this.$emit('deleteVisitorByIndex', visitor_index)
+            }
+        },
+        updateVisitorList(visitor) {
+            if (this.mode !== 'createBooking') {
+                this.$emit('updateVisitorList')
+            } else {
+                this.$emit('updateVisitorList', visitor)
+            }
         },
         logMassage() {
             console.log('Окно добавления пользователя');

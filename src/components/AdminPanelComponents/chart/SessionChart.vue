@@ -26,10 +26,10 @@
             </div>
         </div>
         <MyModal :mode-flex-center="true" ref="booking_create">
-            <SessionModal @update="getSessions" @close="$refs.booking_create.close()" :mode="'createBooking'" :booking-day="bookingDay"
-                :room="bookingRoom" :bookingHours="bookingHours" :bookingMinutes="bookingMinutes" />
+            <SessionModal @bookingCreated="getSessions" @close="$refs.booking_create.close()" :mode="'createBooking'"
+                :booking-day="bookingDay" :room="bookingRoom" />
         </MyModal>
-</div>
+    </div>
 </template>
 
 <script>
@@ -52,8 +52,6 @@ export default {
             sessionsArray: [],
             bookingDay: new Date(),
             bookingRoom: null,
-            bookingHours: null,
-            bookingMinutes: null,
         };
     },
     computed: {
@@ -77,8 +75,6 @@ export default {
             let indexDay = (event.layerX - 60) / ((vm.$refs.canvas_container.offsetWidth - 60) / vm.days) - 2
             let indexRoom = event.layerY / ((vm.$refs.canvas_container.offsetHeight) / vm.rooms.length)
             vm.bookingDay = new Date()
-            vm.bookingHours = null
-            vm.bookingMinutes = null
             if (indexDay > 0 && currentMinutesToday < (((indexDay * 1440) / 60) * 60)) {
                 if (indexRoom > vm.rooms.length) {
                     indexRoom = indexRoom - 1
@@ -88,30 +84,26 @@ export default {
                         vm.bookingRoom = vm.rooms[i]
                     }
                 }
-                vm.bookingHours = Math.floor((indexDay * 1440) / 60 - (Math.floor(indexDay) * 24))
-                vm.bookingMinutes = Math.floor(((indexDay * 1440) % 60 / 60) * 60)
+                let bookingHours = Math.floor((indexDay * 1440) / 60 - (Math.floor(indexDay) * 24))
+                let bookingMinutes = Math.floor(((indexDay * 1440) % 60 / 60) * 60)
                 vm.bookingDay.setDate(vm.bookingDay.getDate() + Math.floor(indexDay));
+                vm.bookingDay.setHours(bookingHours, bookingMinutes, 0, 0)
                 vm.$refs.booking_create.open()
             }
-
-            // console.log('indexDay: ', Math.floor(indexDay), 'indexRoom: ', Math.floor(indexRoom));
-            // console.log('bookingHours: ', Math.floor(vm.bookingHours), 'bookingMinutes: ', (Math.floor(vm.bookingMinutes)));
-
         },
         getSessions() {
-            console.log('UPDATED');
-            this.$api.getSessionsByDays(this.days).then((data) => {
-                this.sessionsArray = data
-                for (let i = 0; i < this.sessionsArray.length; i++) {
-                    let session = this.sessionsArray[i];
-                    for (let j = 0; j < this.rooms.length; j++) {
-                        const room = this.rooms[j];
+            const vm = this
+            vm.$api.getSessionsByDays(vm.days).then((data) => {
+                vm.sessionsArray = data
+                for (let i = 0; i < vm.sessionsArray.length; i++) {
+                    let session = vm.sessionsArray[i];
+                    for (let j = 0; j < vm.rooms.length; j++) {
+                        const room = vm.rooms[j];
                         if (session.room_id === room.id) {
                             session.index_room = j
                         }
                     }
                 }
-                // console.log(this.sessionsArray);
             })
         },
         setCanvasChartBlock(days) {

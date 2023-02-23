@@ -4,7 +4,7 @@
     <input ref="input" :type="type" :maxlength="maxlength" :max="type === 'number' && max ? max : undefined"
       :autocomplete="autocomplete" :placeholder=placeholder :pattern="pattern" @input="updateInput" :value="modelValue"
       :data-tel-input="phoneInput ? true : undefined">
-</div>
+  </div>
 </template>
 
 <script>
@@ -46,7 +46,6 @@ export default {
       default: false
     },
     modelValue: {
-      type: String,
       required: true
     },
     withIcon: {
@@ -66,7 +65,11 @@ export default {
   }),
   methods: {
     updateInput(event) {
-      this.$emit('update:modelValue', event.target.value)
+      if (this.type != 'number' || this.type == '') {
+        this.$emit('update:modelValue', event.target.value)
+      } else if (this.type === 'number') {
+        this.$emit('update:modelValue', Number(event.target.value))
+      }
     },
     focus() {
       this.$refs.input.focus()
@@ -87,7 +90,6 @@ input {
 }
 
 .wrapInput {
-  margin: auto;
   padding: 10px 0;
   max-width: 28rem;
 }

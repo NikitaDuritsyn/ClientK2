@@ -12,9 +12,19 @@
             </div>
             <vue-timepicker v-model="simpleStringValue" :minute-interval="15"></vue-timepicker>
         </div>
+        <div v-if="mode === 'createBooking'" class="time_picker">
+            <div class="text_name">
+                Продолжительность:
+            </div>
+            <vue-timepicker v-model="durationTime" :minute-interval="30"></vue-timepicker>
+        </div>
+        <div class="d-flex" v-if="mode === 'createBooking'">
+            <MyInput :type="'number'" v-model:modelValue="session.estimate_visitors_num" :label="'Количество гостей:'" />
+        </div>
         <div class="visitors">
-            <SessionVisitorsList :mode="mode" @update-visitor-list="$emit('update')" @visitors-selected="setSelectedVisitors" :visitors_lsit="session.visitors"
-                :session-id="session.id" />
+            <SessionVisitorsList @delete-visitor-by-index="deleteVisitorByIndex" :mode="mode"
+                @update-visitor-list="setVisitorsBySession" @visitors-selected="setSelectedVisitors"
+                :visitors_lsit="visitors" :session-id="session.id" />
         </div>
         <div v-if="mode !== 'createBooking'" class="time_line">
             <!-- ТУТ Я КАК ПОНЯЛ ВСЕГДА ОБЩЕЕ ПО ВЫБРАННЫМ КЛИЕНТАМ -->
@@ -27,9 +37,9 @@
             <SessionPayment />
         </div>
         <div class="d-flex justify-content-end">
-            <MyButton v-if="mode === 'createBooking'" :cls="'btn_second'">Сохранить</MyButton>
+            <MyButton v-if="mode === 'createBooking'" :cls="'btn_second'" @click="createBooking">Сохранить</MyButton>
         </div>
-</div>
+    </div>
 </template>
 
 <script>
@@ -41,14 +51,15 @@ import SessionTimeLine from './SessionModalComponents/SessionTimeLine.vue';
 import VueTimepicker from 'vue3-timepicker'
 import 'vue3-timepicker/dist/VueTimepicker.css'
 import MyButton from '@/components/UI/MyButton.vue';
+import MyInput from '@/components/UI/MyInput.vue';
 
 export default {
     name: "session-modal-vue",
-    components: { VueTimepicker, SessionVisitorsList, SessionTimeLine, SessionService, SessionPayment, SessionDateRoom, MyButton },
+    components: { VueTimepicker, SessionVisitorsList, SessionTimeLine, SessionService, SessionPayment, SessionDateRoom, MyButton, MyInput },
     props: {
         session: {
             type: Object,
-            default: { visitors: [] }
+            default: {}
         },
         mode: {
             type: String,
@@ -58,45 +69,65 @@ export default {
             default: new Date()
         },
         room: {},
-        bookingHours: {
-            default: null
-        },
-        bookingMinutes: {
-            default: null
-        },
     },
     data() {
         return {
             selectedVisitors: [],
-            simpleStringValue: ''
+            simpleStringValue: '',
+            durationTime: '00:30',
+            visitors: []
         };
     },
     methods: {
-        updateSessions(){
-            console.log('updateSessions');
-            this.$emit('updateSessions');
+        deleteVisitorByIndex(visitor_index) {
+            // console.log(visitor_index);
+            // console.log(this.visitors[visitor_index]);
+            if (visitor_index > -1) {
+                this.visitors.splice(visitor_index, 1);
+            }
+        },
+        createBooking() {
+            const vm = this
+            const dateBooking = new Date(new Date(vm.bookingDay).setHours(vm.simpleStringValue.slice(0, 2), vm.simpleStringValue.slice(-2), 0, 0))
+            const session = {
+                date: dateBooking,
+                // time_booking: vm.simpleStringValue, // Короче это поле больше не нужно 
+                timeLine: Number(vm.durationTime.slice(0, 2)) * 60 + Number(vm.durationTime.slice(-2)), //
+                room_id: vm.room.id,
+                start_time: '', // Сделать полем датой и просто переводить toLocaleTimeString
+                end_time: '', // Сделать полем датой и просто переводить toLocaleTimeString
+                status: 0,
+                visitors: vm.visitors
+            }
+            console.log(session);
+            vm.$api.createBookingSession(session).then(() => {
+                console.log('$emit:bookingCreated');
+                this.$emit('bookingCreated')
+                this.$emit('close')
+            })
+        },
+        setVisitorsBySession(visitor) {
+            const vm = this
+            if (vm.mode !== 'createBooking') {
+                vm.$api.getVisitorsBySession(vm.session.id).then((data) => {
+                    vm.visitors = data
+                })
+            } else {
+                if (visitor) {
+                    vm.visitors.push(visitor)
+                }
+            }
         },
         setSelectedVisitors(value) {
             this.selectedVisitors = value
         },
         setSimpleStringValue() {
-            if (this.bookingHours < 10) {
-                if (this.bookingMinutes < 10) {
-                    this.simpleStringValue = `0${this.bookingHours}:0${this.bookingMinutes}`
-                } else {
-                    this.simpleStringValue = `0${this.bookingHours}:${this.bookingMinutes}`
-                }
-            } else {
-                if (this.bookingMinutes < 10) {
-                    this.simpleStringValue = `${this.bookingHours}:0${this.bookingMinutes}`
-                } else {
-                    this.simpleStringValue = `${this.bookingHours}:${this.bookingMinutes}`
-                }
-            }
+            this.simpleStringValue = this.bookingDay.toLocaleTimeString()
         }
     },
     mounted() {
         this.setSimpleStringValue()
+        this.setVisitorsBySession()
     },
 }
 </script>
