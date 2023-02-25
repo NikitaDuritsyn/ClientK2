@@ -2,7 +2,7 @@
     <div class="select-wrap">
         <label v-show="label">{{ label }}</label>
         <select ref="select" @change="update" :value="modelValue" :disabled="this.disabled">
-            <option v-for="(option, index) in options" :key="index" :value="option.id">{{ option.name }}</option>
+            <option v-for="(option, index) in options" :key="index" :value="option.id">{{ option.title }}</option>
         </select>
     </div>
 </template>

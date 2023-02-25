@@ -1,15 +1,13 @@
 <template>
-    <div class="session" @click.stop.prevent="$refs.session_modal.open()" :style="{ 
-        width: session.timeline + 'px', 
-        height: `calc((100%)/${Number(rooms.length)})`, 
-        top: `calc((100%)/${Number(rooms.length)}*${session.index_room})`, 
-        left: 1440 * session.index_day + session.time_booking + 60 + 'px',
-        backgroundColor: `${roomColor}`
+    <div v-for="room in session.roomsByIndex" class="session" @click.stop.prevent="$refs.session_modal.open()" :style="{
+        width: session.estimate_session_duration + 'px',
+        height: `calc((100%)/${Number(roomsNumber)})`,
+        top: `calc((100%)/${Number(roomsNumber)}*${room.index})`,
+        left: 1440 * session.index_day + new Date(session.booked_date).getHours() * 60 + new Date(session.booked_date).getMinutes() + 60 + 'px',
+        backgroundColor: `${room.color_room}`
     }">
-        <!-- backgroundColor: setRoomColor -->
-        <!-- ВМЕСТО ROOM ID ДОЛЖЕН быть ИНДЕКС КОМНАТЫ -->
         <strong>
-            {{ session.visitors.length }}
+            {{ session.estimate_visitors_num }}
         </strong>
     </div>
     <MyModal ref="session_modal">
@@ -23,27 +21,9 @@ import SessionModal from './SessionModal.vue';
 
 export default {
     name: "session-vue",
-    props: ["session", "rooms", ""],
+    props: ["session", "roomsNumber"],
     data() {
-        return {
-            roomColor: ''
-        }
-    },
-    watch: {
-        "rooms": {
-            handler(value) {
-                console.log(value);
-            }
-        }
-    },
-    methods: {},
-    mounted() {
-        for (let i = 0; i < this.rooms.length; i++) {
-            const element = this.rooms[i];
-            if (this.session.room_id === element.id) {
-                this.roomColor = element.color
-            }
-        }
+        return {}
     },
     components: { MyModal, SessionModal }
 }

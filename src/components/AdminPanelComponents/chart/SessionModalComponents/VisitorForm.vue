@@ -59,17 +59,22 @@ export default {
                 this.visitor.status = 0
                 this.$api.createVisitor(this.visitor, this.sessionId).then((data) => {
                     this.$emit('visitorCreated')
+                    this.visitor = null
                     this.$emit('close')
                 })
             } else {
+                console.log(this.mode);
                 console.log(this.visitor);
                 this.$emit('visitorCreated', this.visitor)
+                this.visitor = null
                 this.$emit('close')
             }
 
         }
     },
     mounted() {
+        console.log(this.visitorObject);
+        console.log(this.visitor);
         this.glb.phoneInputFormatter()
     }
 }

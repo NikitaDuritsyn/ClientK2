@@ -9,10 +9,14 @@
                 <div class="time" v-for="time in timeArray">{{ time }}</div>
             </div>
             <div ref="canvas_container" class="canvas_container" @click="mouseСhipped">
-                <div class="currentLineTime" :style="{ left: 2940 + setTimeCurrent + 'px' }"></div>
+                <div class="currentLineTime" :style="{ left: 2940 + setTimeCurrent + 'px' }">
+                    <div class="current_time">
+                        {{ today.toLocaleTimeString() }}
+                    </div>
+                </div>
                 <canvas ref="canvasChart" class="canvas"></canvas>
                 <div v-for="(item, index) in sessionsArray" :key="index">
-                    <Session :rooms="rooms" :session="item" />
+                    <Session :rooms-number="rooms.length" :session="item" />
                 </div>
             </div>
             <div class="dateLine" :style="{ width: 1440 * this.days + 'px' }">
@@ -97,10 +101,16 @@ export default {
                 vm.sessionsArray = data
                 for (let i = 0; i < vm.sessionsArray.length; i++) {
                     let session = vm.sessionsArray[i];
+                    session.roomsByIndex = [];
                     for (let j = 0; j < vm.rooms.length; j++) {
                         const room = vm.rooms[j];
-                        if (session.room_id === room.id) {
-                            session.index_room = j
+                        for (let g = 0; g < session.session_rooms.length; g++) {
+                            const room_id = session.session_rooms[g].room_id;
+                            if (room_id === room.id) {
+                                session.roomsByIndex.push({ index: j, color_room: room.color })
+
+                            }
+
                         }
                     }
                 }
@@ -180,8 +190,14 @@ export default {
 </script>
 
 <style scoped>
+.current_time {
+    padding: 0 2px;
+}
+
 .currentLineTime {
     position: absolute;
+    display: flex;
+    align-items: end;
     top: 0;
     height: 100%;
     width: 1px;

@@ -1,30 +1,38 @@
 <template>
-    <div class="dateRoom_container">
+    <div class="d-flex justify-content-between align-items-center w-100">
         <div class="d-flex">
             <!-- // new Date(date).toLocaleDateString() -->
-            Дата:<div class="date_room_text">{{ new Date(date).toLocaleDateString() }}
+            Дата:
+            <div>
+                <div class="date_room_text">{{ new Date(date).toLocaleDateString() }}
+                </div>
             </div>
         </div>
-        <div class="d-flex">Комната:
-            <div class="date_room_text">{{ room.name }}</div>
+        <div class="d-flex  align-items-center m-auto">
+            Комнаты:
+            <div>
+                <div v-for="room in rooms" :key="room.id" class="date_room_text mt-2">{{ room.title }}</div>
+            </div>
         </div>
-</div>
+    </div>
 </template>
 
 <script>
 export default {
     name: 'session-date-room',
-    props: ['date', 'room_id'],
+    props: ['date', 'sessionRooms'],
     data() {
         return {
-            room: "",
+            rooms: [],
         }
     },
     methods: {
         setRoom() {
             for (let i = 0; i < this.$store.state.rooms.length; i++) {
-                if (this.$store.state.rooms[i].id === this.room_id) {
-                    this.room = this.$store.state.rooms[i];
+                for (let j = 0; j < this.sessionRooms.length; j++) {
+                    if (this.$store.state.rooms[i].id === this.sessionRooms[j].room_id) {
+                        this.rooms.push(this.$store.state.rooms[i])
+                    }
                 }
             }
         }
@@ -37,15 +45,6 @@ export default {
 </script>
 
 <style scoped>
-.dateRoom_container {
-    height: 100%;
-    width: 100%;
-    max-width: 400px;
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-}
-
 .date_room_text {
     display: flex;
     justify-content: center;
@@ -54,7 +53,6 @@ export default {
     margin: 0px 0px 0px 5px;
     padding: 0 3px 0 3px;
     font-size: 14px;
-    height: 100%;
     border-radius: 5px;
 }
 </style>

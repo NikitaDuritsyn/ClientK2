@@ -4,7 +4,7 @@
             <div v-for="(room, index_room) in $store.state.rooms" @click="visible = !visible" :key="index_room" class="room_name"
                 :style="{ height: `calc(100%/${$store.state.rooms.length})` }">
                 <div>
-                    {{ room.name }}
+                    {{ room.title }}
                 </div>
             </div>
         </div>

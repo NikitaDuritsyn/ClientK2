@@ -1,7 +1,7 @@
 <template>
     <div class="session_modal">
         <div class="head_line_container">
-            <SessionDateRoom v-if="mode !== 'createBooking'" :date="session.date" :room_id="session.room_id" />
+            <SessionDateRoom v-if="mode !== 'createBooking'" :date="session.booked_date" :session-rooms="session.session_rooms" />
             <SessionDateRoom v-if="mode === 'createBooking'" :date="bookingDay" :room_id="room.id" />
             <div class="close_btn" @click="$emit('close')"></div>
         </div>
@@ -19,7 +19,7 @@
             <vue-timepicker v-model="durationTime" :minute-interval="30"></vue-timepicker>
         </div>
         <div class="d-flex" v-if="mode === 'createBooking'">
-            <MyInput :type="'number'" v-model:modelValue="session.estimate_visitors_num" :label="'Количество гостей:'" />
+            <MyInput :type="'number'" v-model:modelValue="estimate_visitors" :label="'Количество гостей:'" />
         </div>
         <div class="visitors">
             <SessionVisitorsList @delete-visitor-by-index="deleteVisitorByIndex" :mode="mode"
@@ -75,6 +75,7 @@ export default {
             selectedVisitors: [],
             simpleStringValue: '',
             durationTime: '00:30',
+            estimate_visitors: null,
             visitors: []
         };
     },
@@ -90,13 +91,13 @@ export default {
             const vm = this
             const dateBooking = new Date(new Date(vm.bookingDay).setHours(vm.simpleStringValue.slice(0, 2), vm.simpleStringValue.slice(-2), 0, 0))
             const session = {
-                date: dateBooking,
-                // time_booking: vm.simpleStringValue, // Короче это поле больше не нужно 
-                timeLine: Number(vm.durationTime.slice(0, 2)) * 60 + Number(vm.durationTime.slice(-2)), //
                 room_id: vm.room.id,
-                start_time: '', // Сделать полем датой и просто переводить toLocaleTimeString
-                end_time: '', // Сделать полем датой и просто переводить toLocaleTimeString
-                status: 0,
+                booked_date: dateBooking,
+                estimate_session_duration: Number(vm.durationTime.slice(0, 2)) * 60 + Number(vm.durationTime.slice(-2)),
+                estimate_visitors_num: this.estimate_visitors,
+                // start_time_session: null, // в формате даты с временем
+                // end_time_session: null, // в формате даты с временем
+                status: 'booking',
                 visitors: vm.visitors
             }
             console.log(session);
@@ -166,7 +167,7 @@ export default {
     justify-content: space-between;
     flex-wrap: nowrap;
     padding: 0 0 5px 0;
-    height: 30px;
+    /* height: 30px; */
 }
 
 .visitors {
