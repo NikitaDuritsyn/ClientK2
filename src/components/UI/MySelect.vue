@@ -36,6 +36,7 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap');
 
 label {
+    color: rgb(0, 255, 0) !important;
     font-family: Montserrat;
     font-style: normal;
     font-weight: 500;
@@ -56,6 +57,7 @@ label {
 .select-wrap {
     width: 100%;
     max-width: 28rem;
+    padding: 10px 0;
 }
 
 select:focus-visible {

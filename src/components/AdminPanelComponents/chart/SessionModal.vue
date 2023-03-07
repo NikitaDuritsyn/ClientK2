@@ -1,22 +1,32 @@
 <template>
     <div class="session_modal">
-        <div class="head_line_container">
-            <SessionDateRoom v-if="mode !== 'createBooking'" :date="session.booked_date" :session-rooms="session.session_rooms" />
-            <SessionDateRoom v-if="mode === 'createBooking'" :date="bookingDay" :room_id="room.id" />
+        <div class="d-flex w-100 justify-content-between">
+            <SessionDate v-if="mode !== 'createBooking'" :date="session.booked_date" />
+            <SessionRooms v-if="mode !== 'createBooking'" :session-rooms="session.session_rooms" />
+            <SessionDate v-if="mode === 'createBooking'" :date="bookingDay" />
             <div class="close_btn" @click="$emit('close')"></div>
         </div>
-        <div v-if="mode === 'createBooking'" class="time_picker">
-            <!-- :hour-range="[10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]" -->
-            <div class="text_name">
-                Время:
+        <div v-if="mode === 'createBooking'" class="d-flex w-100 justify-content-between flex-wrap">
+            <div class="">
+                <div class="text_name">
+                    Время:
+                </div>
+                <vue-timepicker v-model="simpleStringValue" :minute-interval="15"></vue-timepicker>
             </div>
-            <vue-timepicker v-model="simpleStringValue" :minute-interval="15"></vue-timepicker>
+            <div class="">
+                <div class="text_name">
+                    Продолжительность:
+                </div>
+                <vue-timepicker v-model="durationTime" :minute-interval="30"></vue-timepicker>
+            </div>
         </div>
-        <div v-if="mode === 'createBooking'" class="time_picker">
-            <div class="text_name">
-                Продолжительность:
+        <div v-if="mode === 'createBooking'" class="">
+            <div class="w-100">
+                Выбрать комнаты:
             </div>
-            <vue-timepicker v-model="durationTime" :minute-interval="30"></vue-timepicker>
+            <div class="d-flex">
+                <MyMultiSelect :options="$store.state.rooms" v-model:model-value="rooms" />
+            </div>
         </div>
         <div class="d-flex" v-if="mode === 'createBooking'">
             <MyInput :type="'number'" v-model:modelValue="estimate_visitors" :label="'Количество гостей:'" />
@@ -27,7 +37,6 @@
                 :visitors_lsit="visitors" :session-id="session.id" />
         </div>
         <div v-if="mode !== 'createBooking'" class="time_line">
-            <!-- ТУТ Я КАК ПОНЯЛ ВСЕГДА ОБЩЕЕ ПО ВЫБРАННЫМ КЛИЕНТАМ -->
             <SessionTimeLine :session="session" />
         </div>
         <div v-if="mode !== 'createBooking'" class="services">
@@ -44,7 +53,8 @@
 
 <script>
 import SessionVisitorsList from './SessionModalComponents/SessionVisitorsList.vue';
-import SessionDateRoom from './SessionModalComponents/SessionDateRoom.vue';
+import SessionDate from './SessionModalComponents/SessionDate.vue';
+import SessionRooms from './SessionModalComponents/SessionRooms.vue';
 import SessionPayment from './SessionModalComponents/SessionPayment.vue';
 import SessionService from './SessionModalComponents/SessionService.vue';
 import SessionTimeLine from './SessionModalComponents/SessionTimeLine.vue';
@@ -52,10 +62,11 @@ import VueTimepicker from 'vue3-timepicker'
 import 'vue3-timepicker/dist/VueTimepicker.css'
 import MyButton from '@/components/UI/MyButton.vue';
 import MyInput from '@/components/UI/MyInput.vue';
+import MyMultiSelect from '@/components/UI/MyMultiSelect.vue';
 
 export default {
     name: "session-modal-vue",
-    components: { VueTimepicker, SessionVisitorsList, SessionTimeLine, SessionService, SessionPayment, SessionDateRoom, MyButton, MyInput },
+    components: { VueTimepicker, SessionVisitorsList, SessionTimeLine, SessionService, SessionPayment, SessionDate, MyButton, MyInput, MyMultiSelect, SessionRooms },
     props: {
         session: {
             type: Object,
@@ -68,7 +79,10 @@ export default {
         bookingDay: {
             default: new Date()
         },
-        room: {},
+        bookingRoom: {
+            type: Object,
+            default: {}
+        },
     },
     data() {
         return {
@@ -76,13 +90,12 @@ export default {
             simpleStringValue: '',
             durationTime: '00:30',
             estimate_visitors: null,
-            visitors: []
+            visitors: [],
+            rooms: []
         };
     },
     methods: {
         deleteVisitorByIndex(visitor_index) {
-            // console.log(visitor_index);
-            // console.log(this.visitors[visitor_index]);
             if (visitor_index > -1) {
                 this.visitors.splice(visitor_index, 1);
             }
@@ -91,14 +104,11 @@ export default {
             const vm = this
             const dateBooking = new Date(new Date(vm.bookingDay).setHours(vm.simpleStringValue.slice(0, 2), vm.simpleStringValue.slice(-2), 0, 0))
             const session = {
-                room_id: vm.room.id,
                 booked_date: dateBooking,
                 estimate_session_duration: Number(vm.durationTime.slice(0, 2)) * 60 + Number(vm.durationTime.slice(-2)),
                 estimate_visitors_num: this.estimate_visitors,
-                // start_time_session: null, // в формате даты с временем
-                // end_time_session: null, // в формате даты с временем
-                status: 'booking',
-                visitors: vm.visitors
+                visitors: vm.visitors,
+                rooms: vm.rooms
             }
             console.log(session);
             vm.$api.createBookingSession(session).then(() => {
@@ -124,11 +134,17 @@ export default {
         },
         setSimpleStringValue() {
             this.simpleStringValue = this.bookingDay.toLocaleTimeString()
+        },
+        setSessionRoomsSelected() {
+            this.rooms.push(this.bookingRoom.id)
         }
     },
     mounted() {
         this.setSimpleStringValue()
         this.setVisitorsBySession()
+        if (this.mode === 'createBooking') {
+            this.setSessionRoomsSelected()
+        }
     },
 }
 </script>
@@ -139,12 +155,6 @@ export default {
     padding: 0 10px 0 0;
 }
 
-.time_picker {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    padding: 10px 0;
-}
 
 .close_btn {
     display: flex;
@@ -152,6 +162,8 @@ export default {
     align-items: center;
     height: 25px;
     width: 25px;
+    min-width: 25px;
+    min-height: 25px;
     border-radius: 50%;
     border: 1px solid rgb(200, 200, 200);
     background-image: url('../../../assets/X.svg');
@@ -162,13 +174,12 @@ export default {
     margin: 0 0 0 5px;
 }
 
-.head_line_container {
+/* .head_line_container {
     display: flex;
     justify-content: space-between;
     flex-wrap: nowrap;
     padding: 0 0 5px 0;
-    /* height: 30px; */
-}
+} */
 
 .visitors {
     padding: 5px 0;

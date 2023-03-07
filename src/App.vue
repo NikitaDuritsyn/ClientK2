@@ -1,4 +1,6 @@
-<template><router-view /></template>
+<template>
+  <router-view />
+</template>
 <style>
 body {
   background-color: rgb(0, 0, 0) !important;
@@ -64,6 +66,7 @@ export default {
     this.$store.dispatch('GET_ROOMS');
     this.$store.dispatch('GET_TARIFFS');
     this.$store.dispatch('GET_SERVICES');
+    this.$store.dispatch('GET_PAYMENTTYPES');
   }
 }
 </script>

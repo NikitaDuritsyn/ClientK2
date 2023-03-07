@@ -2,7 +2,7 @@
     <div class="select-wrap">
         <select ref="select" @change="update" v-model="modelVal" :disabled="this.disabled" multiple>
             <option v-for="(option, index) in options" :key="index" :value="option.id">
-                {{ option.name }} - {{ option?.price }}
+                {{ option.title }} {{ option?.price }}
             </option>
         </select>
     </div>
@@ -78,7 +78,7 @@ select:focus-visible {
 select {
     -ms-overflow-style: none;
     scrollbar-width: none;
-    
+
     font-family: 'Montserrat';
     font-style: normal;
     font-weight: 500;

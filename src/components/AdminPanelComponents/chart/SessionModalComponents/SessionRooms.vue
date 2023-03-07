@@ -1,17 +1,11 @@
 <template>
     <div class="d-flex justify-content-between align-items-center w-100">
-        <div class="d-flex">
-            <!-- // new Date(date).toLocaleDateString() -->
-            Дата:
-            <div>
-                <div class="date_room_text">{{ new Date(date).toLocaleDateString() }}
-                </div>
-            </div>
-        </div>
-        <div class="d-flex  align-items-center m-auto">
+        <div class="d-flex align-items-center m-auto">
             Комнаты:
             <div>
-                <div v-for="room in rooms" :key="room.id" class="date_room_text mt-2">{{ room.title }}</div>
+                <!-- !!!! У ПЕРВОГО ОТСТУП НЕ ПРАВИЛЬНЫЙ -->
+                <div v-for="room in rooms" :key="room.id" class="date_room_text"
+                    :class="{ 'm-2': (rooms.length > 1) ? true : false }">{{ room.title }}</div>
             </div>
         </div>
     </div>
@@ -19,8 +13,8 @@
 
 <script>
 export default {
-    name: 'session-date-room',
-    props: ['date', 'sessionRooms'],
+    name: 'session-rooms',
+    props: ['sessionRooms'],
     data() {
         return {
             rooms: [],
@@ -28,6 +22,8 @@ export default {
     },
     methods: {
         setRoom() {
+            // console.log('set');
+            // console.log(this.sessionRooms);
             for (let i = 0; i < this.$store.state.rooms.length; i++) {
                 for (let j = 0; j < this.sessionRooms.length; j++) {
                     if (this.$store.state.rooms[i].id === this.sessionRooms[j].room_id) {
@@ -39,8 +35,7 @@ export default {
     },
     mounted() {
         this.setRoom()
-    }
-
+    },
 }
 </script>
 

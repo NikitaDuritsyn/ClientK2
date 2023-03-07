@@ -9,7 +9,7 @@
                 <div class="time" v-for="time in timeArray">{{ time }}</div>
             </div>
             <div ref="canvas_container" class="canvas_container" @click="mouseСhipped">
-                <div class="currentLineTime" :style="{ left: 2940 + setTimeCurrent + 'px' }">
+                <div class="currentLineTime d-flex align-items-end" :style="{ left: 2940 + setTimeCurrent + 'px' }">
                     <div class="current_time">
                         {{ today.toLocaleTimeString() }}
                     </div>
@@ -31,7 +31,7 @@
         </div>
         <MyModal :mode-flex-center="true" ref="booking_create">
             <SessionModal @bookingCreated="getSessions" @close="$refs.booking_create.close()" :mode="'createBooking'"
-                :booking-day="bookingDay" :room="bookingRoom" />
+                :booking-day="bookingDay" :booking-room="bookingRoom" />
         </MyModal>
     </div>
 </template>
@@ -196,12 +196,10 @@ export default {
 
 .currentLineTime {
     position: absolute;
-    display: flex;
-    align-items: end;
     top: 0;
+    background-color: rgb(255, 0, 0);
     height: 100%;
     width: 1px;
-    background-color: rgb(255, 0, 0);
     z-index: 100;
 }
 

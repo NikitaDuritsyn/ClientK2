@@ -18,10 +18,9 @@
                 <MyButton :cls="'btn_second'" @click="$refs.create_visitor.open()">ДОБАВИТЬ</MyButton>
             </div>
         </div>
-
         <MyModal :mode-flex-center="true" ref="create_visitor">
             <VisitorForm @visitor-created="updateVisitorList" :session-id="sessionId" :mode="mode"
-                @close="$refs.create_visitor.close()" />
+                @close="$refs.create_visitor.close()" :visitor-object="{}" />
         </MyModal>
     </div>
 </template>
@@ -56,9 +55,6 @@ export default {
             } else {
                 this.$emit('updateVisitorList', visitor)
             }
-        },
-        logMassage() {
-            console.log('Окно добавления пользователя');
         },
         setSelectedArr(value) {
             this.setSelected.push(value)

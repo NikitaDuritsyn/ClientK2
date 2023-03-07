@@ -63,6 +63,12 @@ class KamekaApi extends BaseApi {
             url: url
         })
     }
+    getPaymentTypes() {
+        let url = `/api/get_payment_types`
+        return this._request({
+            url: url
+        })
+    }
 }
 
 const BASE_URL = process.env.NODE_ENV === 'development' ? process.env.MAIN_URL_KAMENKA2 : 'https://croospost.pro100quiz.ru'

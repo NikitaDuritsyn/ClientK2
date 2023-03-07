@@ -6,6 +6,7 @@ export default createStore({
     rooms: [],
     tariffs: [],
     services: [],
+    paymentTypes: []
   },
   getters: {},
   mutations: {
@@ -32,6 +33,12 @@ export default createStore({
       kamekaApi.getServices()
         .then(data => {
           commit('SET_DATA_ON_STATE', { services: data })
+        })
+    },
+    GET_PAYMENTTYPES({ commit }) {
+      kamekaApi.getPaymentTypes()
+        .then(data => {
+          commit('SET_DATA_ON_STATE', { paymentTypes: data })
         })
     },
   },
