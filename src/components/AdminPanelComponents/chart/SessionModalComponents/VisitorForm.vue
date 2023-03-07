@@ -7,26 +7,35 @@
                 </MyButton>
             </div>
             <MyInput class="m-auto w-100" v-model:modelValue="visitor.name" :label="'Имя:'" />
-            <MyInput class="m-auto w-100" v-model:modelValue="visitor.lastname" :label="'Фамилия:'" />
+
+            <MyInput class="m-auto w-100" v-model:modelValue="visitor.lastname"
+                :label="(visitor.number_phone?.length < 11 || !visitor.number_phone) ? 'Фамилия: нужен номер' : 'Фамилия:'"
+                :disabled="(visitor.number_phone?.length < 11 || !visitor.number_phone) ? true : false" />
+
             <MyInput class="m-auto w-100" :phone-input="true" v-model:modelValue="visitor.number_phone"
                 :label="'Номер телефона:'" />
+
             <MySelect class="m-auto w-100" :label="'Тариф:'" v-model:modelValue="visitor.tariff_id"
-                :options="$store.state.tariffs"></MySelect>
+                :options="$store.state.tariffs" />
 
             <MyInput class="m-auto w-100" :type="'number'" v-model:modelValue="visitor.deponent.value"
-                v-if="mode === 'createBooking'" :label="'Депонент:'" />
+                v-if="mode === 'createBooking' || mode === 'createBookingUpdate'"
+                :label="(visitor.number_phone?.length < 11 || !visitor.number_phone) ? 'Депонент: нужен номер' : 'Депонент:'"
+                :disabled="(visitor.number_phone?.length < 11 || !visitor.number_phone) ? true : false" />
 
             <div class="d-flex ">
                 <MyInput class="m-auto w-100" :type="'number'" v-model:modelValue="visitor.deposit.value"
-                    v-if="mode === 'createBooking'" :label="'Депозит:'" />
+                    v-if="mode === 'createBooking' || mode === 'createBookingUpdate'"
+                    :label="(visitor.number_phone?.length < 11 || !visitor.number_phone) ? 'Депозит: нужен номер' : 'Депозит:'"
+                    :disabled="(visitor.number_phone?.length < 11 || !visitor.number_phone) ? true : false" />
                 <div>
                     <MySelect :label="'Тип оплаты'" class="m-auto w-100"
                         :options="$store.state.paymentTypes.map(type => { return { id: type.id, title: type.type } })"
-                        v-model:model-value="visitor.deposit.paymet_type_id" />
+                        v-model:model-value="visitor.deposit.paymet_type_id"
+                        :disabled="(visitor.number_phone?.length < 11 || !visitor.number_phone) ? true : false" />
                 </div>
             </div>
         </div>
-
     </div>
 </template>
 
@@ -53,25 +62,36 @@ export default {
     },
     methods: {
         createVisitor() {
-            if (this.mode !== 'createBooking') {
+            if (this.mode === 'createBooking' || this.mode === 'createBookingUpdate') {
+                console.log(this.visitor);
+                if (!this.visitor.deposit.value) {
+                    this.visitor.deposit = null
+                }
+                if (!this.visitor.deponent.value) {
+                    this.visitor.deponent = null
+                }
+                if (!this.visitor.number_phone || this.visitor.number_phone?.length < 11) {
+                    this.visitor.number_phone = null
+                }
+                if (this.mode === 'createBookingUpdate') {
+                    console.log(this.mode);
+                    this.$emit('visitorUpdated', this.visitor)
+                    this.visitor = null
+                    this.$emit('close')
+                } else {
+                    console.log(this.mode);
+                    this.$emit('visitorCreated', this.visitor)
+                    this.visitor = null
+                    this.$emit('close')
+                }
+            } else {
                 //Cоздаём пользователя в уже созданой брони или текущей сессии
                 this.$api.createVisitor(this.visitor, this.sessionId).then(() => {
                     this.$emit('visitorCreated')
                     this.visitor = null
                     this.$emit('close')
                 })
-            } else {
-                //Cоздаём пользователя в момент создания (бронирования) сессии
-                    console.log(this.visitor.deposit.value);
-                if (!this.visitor.deposit.value){
-                    this.visitor.deposit = null
-                    console.log(this.visitor.deposit);
-                }
-                this.$emit('visitorCreated', this.visitor)
-                this.visitor = null
-                this.$emit('close')
             }
-
         }
     },
     mounted() {

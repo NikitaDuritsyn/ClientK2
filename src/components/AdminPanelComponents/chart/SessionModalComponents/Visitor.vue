@@ -6,7 +6,7 @@
                 {{ visitor.name }}
             </div>
             <div>
-                {{ visitor?.number_phone }}
+                {{ glb.formatPhoneForShow(visitor?.number_phone) }}
             </div>
             <div v-if="mode == 'createBooking'" class="d-flex">
                 <MyButton @click="$refs.update_visitor.open()" class="m-1 mt-0 mb-0" :cls="'btn_second'">
@@ -19,7 +19,7 @@
         </div>
     </div>
     <MyModal :mode-flex-center="true" ref="update_visitor">
-        <VisitorForm :mode="mode" :visitor-object="this.visitor" @close="$refs.update_visitor.close()" />
+        <VisitorForm :mode="mode + 'Update'" :visitor-object="this.visitor" @close="$refs.update_visitor.close()" />
     </MyModal>
 </template>
 

@@ -7,9 +7,7 @@
 export default {
     name: 'session-payment',
     data() {
-        return {
-            
-        }
+        return {}
     },
     methods: {
     },
@@ -20,7 +18,7 @@ export default {
 </script>
 
 <style scoped>
-.payment_container{
+.payment_container {
     width: 100%;
     height: 100%;
     border: 1px solid white;

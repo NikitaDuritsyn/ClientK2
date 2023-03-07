@@ -2,25 +2,44 @@
     <div class="visitors_list_container">
         <div class="visitors_block">
             <div v-for="(visitor, index) in visitors_lsit">
-                <Visitor @delete-visitor="deleteVisitorByIndex" :visitor-index="index" :mode="mode" ref="visitor"
-                    :select_all="setSelectedAll" :visitor="visitor" @selected="setSelectedArr"
+                <Visitor 
+                    @delete-visitor="deleteVisitorByIndex" 
+                    :visitor-index="index" :mode="mode" 
+                    ref="visitor"
+                    :select_all="setSelectedAll" 
+                    :visitor="visitor" 
+                    @selected="setSelectedArr"
                     @selected-or="updateSelectedArr" />
             </div>
         </div>
         <div class="select_menu">
             <div class="d-flex justify-content-between align-items-center w-100">
-                <div v-if="mode != 'createBooking'" class="d-flex align-items-center">
-                    <Switch @click="updateSelectedAll('click')" v-model:modelValue="select_all" />
+                <div 
+                    v-if="mode != 'createBooking'" 
+                    class="d-flex align-items-center">
+                    <Switch 
+                        @click="updateSelectedAll('click')" 
+                        v-model:modelValue="select_all" />
                     <div class="select_counter">
                         Все ( {{ selected_counter }} из {{ visitors_lsit.length }} )
                     </div>
                 </div>
-                <MyButton :cls="'btn_second'" @click="$refs.create_visitor.open()">ДОБАВИТЬ</MyButton>
+                <MyButton 
+                    :cls="'btn_second'" 
+                    @click="$refs.create_visitor.open()">
+                    ДОБАВИТЬ
+                </MyButton>
             </div>
         </div>
-        <MyModal :mode-flex-center="true" ref="create_visitor">
-            <VisitorForm @visitor-created="updateVisitorList" :session-id="sessionId" :mode="mode"
-                @close="$refs.create_visitor.close()" :visitor-object="{}" />
+        <MyModal 
+            :mode-flex-center="true" 
+            ref="create_visitor">
+            <VisitorForm
+                @visitor-created="updateVisitorList"
+                :session-id="sessionId"
+                :mode="mode"
+                @close="$refs.create_visitor.close()"
+                :visitor-object="{}"/>
         </MyModal>
     </div>
 </template>
@@ -50,6 +69,7 @@ export default {
             }
         },
         updateVisitorList(visitor) {
+            console.log(visitor);
             if (this.mode !== 'createBooking') {
                 this.$emit('updateVisitorList')
             } else {

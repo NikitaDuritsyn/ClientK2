@@ -3,7 +3,7 @@
     <label v-show="label">{{ label }}</label>
     <input ref="input" :type="type" :maxlength="maxlength" :max="type === 'number' && max ? max : undefined"
       :autocomplete="autocomplete" :placeholder=placeholder :pattern="pattern" @input="updateInput" :value="modelValue"
-      :data-tel-input="phoneInput ? true : undefined">
+      :data-tel-input="phoneInput ? true : undefined" :disabled="disabled">
   </div>
 </template>
 
@@ -11,51 +11,18 @@
 export default {
   name: "MyInput",
   props: {
-    label: {
-      type: String,
-      default: "",
-      required: false
-    },
-    placeholder: {
-      type: String,
-      default: "",
-      required: false
-    },
-    type: {
-      type: String,
-      default: "text"
-    },
-    max: {
-      type: String,
-      default: undefined
-    },
-    maxlength: {
-      type: String,
-      default: undefined
-    },
-    autocomplete: {
-      type: String,
-      default: undefined
-    },
-    pattern: {
-      type: String,
-      default: undefined
-    },
-    required: {
-      type: Boolean,
-      default: false
-    },
-    modelValue: {
-      required: true
-    },
-    withIcon: {
-      type: Boolean,
-      default: false
-    },
-    phoneInput: {
-      type: Boolean,
-      default: false
-    }
+    label: { type: String, default: "", required: false },
+    placeholder: { type: String, default: "", required: false },
+    type: { type: String, default: "text" },
+    max: { type: String, default: undefined },
+    maxlength: { type: String, default: undefined },
+    autocomplete: { type: String, default: undefined },
+    pattern: { type: String, default: undefined },
+    required: { type: Boolean, default: false },
+    modelValue: { required: true },
+    withIcon: { type: Boolean, default: false },
+    phoneInput: { type: Boolean, default: false },
+    disabled: { type: Boolean, default: false },
   },
 
   data: () => ({
@@ -66,7 +33,11 @@ export default {
   methods: {
     updateInput(event) {
       if (this.type != 'number' || this.type == '') {
-        this.$emit('update:modelValue', event.target.value)
+        if (this.phoneInput) {
+          this.$emit('update:modelValue', this.glb.formatPhone(event.target.value))
+        } else {
+          this.$emit('update:modelValue', event.target.value)
+        }
       } else if (this.type === 'number') {
         this.$emit('update:modelValue', Number(event.target.value))
       }
