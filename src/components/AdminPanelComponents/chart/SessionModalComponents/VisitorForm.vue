@@ -7,16 +7,19 @@
                 </MyButton>
             </div>
             <MyInput class="m-auto w-100" v-model:modelValue="visitor.name" :label="'Имя:'" />
+            <MySelect class="m-auto w-100" :label="'Тариф:'" v-model:modelValue="visitor.tariff_id"
+                :options="$store.state.tariffs" />
+
+                
+            <MyInput class="m-auto w-100" :phone-input="true" v-model:modelValue="visitor.number_phone"
+                :label="'Номер телефона:'" />
+
 
             <MyInput class="m-auto w-100" v-model:modelValue="visitor.lastname"
                 :label="(visitor.number_phone?.length < 11 || !visitor.number_phone) ? 'Фамилия: нужен номер' : 'Фамилия:'"
                 :disabled="(visitor.number_phone?.length < 11 || !visitor.number_phone) ? true : false" />
 
-            <MyInput class="m-auto w-100" :phone-input="true" v-model:modelValue="visitor.number_phone"
-                :label="'Номер телефона:'" />
 
-            <MySelect class="m-auto w-100" :label="'Тариф:'" v-model:modelValue="visitor.tariff_id"
-                :options="$store.state.tariffs" />
 
             <MyInput class="m-auto w-100" :type="'number'" v-model:modelValue="visitor.deponent.value"
                 v-if="mode === 'createBooking' || mode === 'createBookingUpdate'"

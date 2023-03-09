@@ -7,7 +7,7 @@
                     <div>
                         <MySelect v-model:modelValue="tariff" :options="$store.state.tariffs"></MySelect>
                     </div>
-                    <MyButton :cls="'btn_second'" @click="setTariff">СМЕНИТЬ</MyButton>
+                    <MyButton :cls="'btn_second'" @click="setTariff(false)">СМЕНИТЬ</MyButton>
                 </div>
             </div>
             <div class="d-flex align-items-center justify-content-between p-2">
@@ -46,7 +46,7 @@ export default {
     components: { MySelect, MyMultiSelect, MyButton },
     data() {
         return {
-            tariff: 1,
+            tariff: null,
             service_selected: null,
             visitorServices: [],
         };
@@ -54,17 +54,13 @@ export default {
     computed: mapState(['services']),
     methods: {
         setTariff(firstVisitorTariff) {
-            // for (let i = 0; i < this.visitorList.length; i++) {
-            //     const visitors_id = this.visitorList[i].id;
-            //     console.log(visitors_id);
-            // }
             if (firstVisitorTariff) {
+                this.tariff = firstVisitorTariff
                 console.log(firstVisitorTariff);
             } else {
+                console.log(firstVisitorTariff);
                 console.log(this.tariff);
             }
-
-
         },
         addVisitorService() {
             console.log(this.service_selected);
@@ -78,9 +74,14 @@ export default {
         }
     },
     watch: {
-        visitorList(value){
-            console.log(value);
-            console.log(this.tariff);
+        visitorList(value) {
+            // console.log(value);
+            // console.log(this.tariff);
+            if (value) {
+                (value[0]) ? this.setTariff(value[0].tariff_id) : this.tariff = null;
+            } else {
+                console.log('ОШИБКА');
+            }
         }
         // 'visitorList': {
         //     handler: (value) => {
