@@ -91,7 +91,7 @@ export default {
             }
           }
         }
-        this.emmitSelectedVisitors(this.setSelected);
+        // TODO раньше было тут и это - this.emmitSelectedVisitors(this.setSelected);
         return {
           selected_counter: this.selected_counter,
           select_all: this.select_all,
