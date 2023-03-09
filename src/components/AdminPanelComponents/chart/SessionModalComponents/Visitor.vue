@@ -1,93 +1,103 @@
 <template>
-    <div class="visitor_container">
-        <Switch v-if="mode != 'createBooking'" v-model:modelValue="status_switch" />
-        <div class="visitor">
-            <div>
-                {{ visitor.name }}
-            </div>
-            <div>
-                {{ glb.formatPhoneForShow(visitor?.number_phone) }}
-            </div>
-            <div v-if="mode == 'createBooking'" class="d-flex">
-                <MyButton @click="$refs.update_visitor.open()" class="m-1 mt-0 mb-0" :cls="'btn_second'">
-                    <i class="bi bi-pen"></i>
-                </MyButton>
-                <MyButton @click="deleteVisitor" class="m-1 mt-0 mb-0" :cls="'btn_second'">
-                    <i class="bi f bi-file-minus"></i>
-                </MyButton>
-            </div>
-        </div>
+  <div class="visitor_container">
+    <Switch v-if="mode != 'createBooking'" v-model:modelValue="status_switch" />
+    <div class="visitor">
+      <div>
+        {{ visitor.name }}
+      </div>
+      <div>
+        {{ glb.formatPhoneForShow(visitor?.number_phone) }}
+      </div>
+      <div v-if="mode == 'createBooking'" class="d-flex">
+        <MyButton @click="$refs.update_visitor.open()" class="m-1 mt-0 mb-0" :cls="'btn_second'">
+          <i class="bi bi-pen"></i>
+        </MyButton>
+        <MyButton @click="deleteVisitor" class="m-1 mt-0 mb-0" :cls="'btn_second'">
+          <i class="bi f bi-file-minus"></i>
+        </MyButton>
+      </div>
     </div>
-    <MyModal :mode-flex-center="true" ref="update_visitor">
-        <VisitorForm :mode="mode + 'Update'" :visitor-object="this.visitor" @close="$refs.update_visitor.close()" />
-    </MyModal>
+  </div>
+  <MyModal :mode-flex-center="true" ref="update_visitor">
+    <VisitorForm @visitor-updated="updateVisitorInList" :mode="mode + 'Update'" :visitor-object="this.visitor"
+      @close="$refs.update_visitor.close()" />
+  </MyModal>
 </template>
 
 <script>
-import MyButton from '@/components/UI/MyButton.vue';
-import MyModal from '@/components/UI/MyModal.vue';
-import Switch from '@/components/UI/Switch.vue';
-import VisitorForm from './VisitorForm.vue';
+import MyButton from "@/components/UI/MyButton.vue";
+import MyModal from "@/components/UI/MyModal.vue";
+import Switch from "@/components/UI/Switch.vue";
+import VisitorForm from "./VisitorForm.vue";
 
 export default {
-    name: "visitor-vue",
-    emits: ['selectedOr', 'deleteVisitor', 'selected'],
-    props: ["visitor", 'select_all', 'mode', 'visitorIndex'],
-    data() {
-        return {
-            status_switch: true
-        };
-    },
-    watch: {
-        "select_all": {
-            handler(value) {
-                if (value.select_all === true) {
-                    this.status_switch = true
-                } else if (value.select_all === false && value.selected_counter === 0) {
-                    this.status_switch = false
-                }
-            }
-        },
-        "status_switch": {
-            handler(value) {
-                this.$emit('selectedOr', { select_status: value, visitor_id: this.visitor.id })
-            }
+  name: "visitor-vue",
+  emits: ["selectedOr", "deleteVisitor", "selected", "updateVisitor"],
+  props: ["visitor", "select_all", "mode", "visitorIndex"],
+  data() {
+    return {
+      status_switch: true,
+    };
+  },
+  watch: {
+    select_all: {
+      handler(value) {
+        if (value.select_all === true) {
+          this.status_switch = true;
+        } else if (value.select_all === false && value.selected_counter === 0) {
+          this.status_switch = false;
         }
+      },
     },
-    methods: {
-        deleteVisitor() {
-            this.$emit('deleteVisitor', this.visitorIndex)
-        },
+    status_switch: {
+      handler(value) {
+        this.$emit("selectedOr", {
+          select_status: value,
+          visitor_id: this.visitor.id,
+        });
+      },
     },
-    mounted() {
-        this.$emit('selected', { select_status: this.status_switch, visitor: this.visitor })
+  },
+  methods: {
+    updateVisitorInList(updatedVisitor) {
+      this.$emit("updateVisitor", { visitorData: updatedVisitor, visitorIndex: this.visitorIndex },);
     },
-    components: { Switch, MyButton, MyModal, VisitorForm }
-}
+    deleteVisitor() {
+      this.$emit("deleteVisitor", this.visitorIndex);
+    },
+  },
+  mounted() {
+    this.$emit("selected", {
+      select_status: this.status_switch,
+      visitor: this.visitor,
+    });
+  },
+  components: { Switch, MyButton, MyModal, VisitorForm },
+};
 </script>
 
 <style scoped>
 .bi {
-    font-size: 16px;
+  font-size: 16px;
 }
 
 .visitor_container {
-    display: flex;
-    padding: 5px 10px;
+  display: flex;
+  padding: 5px 10px;
 }
 
 .visitor {
-    display: flex;
-    width: 100%;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 10px;
-    font-size: 16px;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  font-size: 16px;
 }
 
 .timeLine_container {
-    height: 100%;
-    width: 100%;
-    border: 1px solid white;
+  height: 100%;
+  width: 100%;
+  border: 1px solid white;
 }
 </style>

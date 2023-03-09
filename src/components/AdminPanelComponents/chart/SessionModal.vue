@@ -32,15 +32,15 @@
             <MyInput :type="'number'" v-model:modelValue="estimate_visitors" :label="'Количество гостей:'" />
         </div>
         <div class="visitors">
-            <SessionVisitorsList @delete-visitor-by-index="deleteVisitorByIndex" :mode="mode"
-                @update-visitor-list="setVisitorsBySession" @visitors-selected="setSelectedVisitors"
-                :visitors_lsit="visitors" :session-id="session.id" />
+            <SessionVisitorsList @update-visitor-by-index="updateVisitorByIndex"
+                @delete-visitor-by-index="deleteVisitorByIndex" @update-visitor-list="setVisitorsBySession"
+                @visitors-selected="setSelectedVisitors" :mode="mode" :visitors_lsit="visitors" :session-id="session.id" />
         </div>
         <div v-if="mode !== 'createBooking'" class="time_line">
             <SessionTimeLine :session="session" />
         </div>
         <div v-if="mode !== 'createBooking'" class="services">
-            <SessionService />
+            <SessionService v-model:visitor-list="selectedVisitors" />
         </div>
         <div v-if="mode !== 'createBooking'" class="payment">
             <SessionPayment />
@@ -68,21 +68,10 @@ export default {
     name: "session-modal-vue",
     components: { VueTimepicker, SessionVisitorsList, SessionTimeLine, SessionService, SessionPayment, SessionDate, MyButton, MyInput, MyMultiSelect, SessionRooms },
     props: {
-        session: {
-            type: Object,
-            default: {}
-        },
-        mode: {
-            type: String,
-            default: ''
-        },
-        bookingDay: {
-            default: new Date()
-        },
-        bookingRoom: {
-            type: Object,
-            default: {}
-        },
+        session: { type: Object, default: {} },
+        mode: { type: String, default: '' },
+        bookingDay: { default: new Date() },
+        bookingRoom: { type: Object, default: {} },
     },
     data() {
         return {
@@ -95,6 +84,11 @@ export default {
         };
     },
     methods: {
+        updateVisitorByIndex(updatedVisitor) {
+            // console.log('SessionModal');
+            // console.log(updated_visitor);
+            this.visitors[updatedVisitor.visitorIndex] = updatedVisitor.visitorData
+        },
         deleteVisitorByIndex(visitor_index) {
             if (visitor_index > -1) {
                 this.visitors.splice(visitor_index, 1);

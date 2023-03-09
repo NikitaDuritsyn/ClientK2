@@ -17,8 +17,8 @@
                         <MySelect v-model:modelValue="service_selected" :options="services"></MySelect>
                     </div>
                     <div class="d-flex">
-                        <MyButton class="m-1 mt-0 mb-0" :cls="'btn_second'" @click="">ПОКАЗАТЬ ({{ visitorServices.length
-                        }})
+                        <MyButton class="m-1 mt-0 mb-0" :cls="'btn_second'" @click="">
+                            ПОКАЗАТЬ ({{ visitorServices.length }})
                         </MyButton>
                         <MyButton class="m-1 mt-0 mb-0" :cls="'btn_second'" @click="addVisitorService">ДОБАВИТЬ</MyButton>
                     </div>
@@ -42,26 +42,58 @@ import MyButton from '@/components/UI/MyButton.vue';
 
 export default {
     name: "session-service", // VisitorServices
+    props: ['visitorList'],
     components: { MySelect, MyMultiSelect, MyButton },
     data() {
         return {
-            tariff: '',
+            tariff: 1,
             service_selected: null,
             visitorServices: [],
         };
     },
     computed: mapState(['services']),
     methods: {
-        setTariff() {
-            console.log(this.tariff);
+        setTariff(firstVisitorTariff) {
+            // for (let i = 0; i < this.visitorList.length; i++) {
+            //     const visitors_id = this.visitorList[i].id;
+            //     console.log(visitors_id);
+            // }
+            if (firstVisitorTariff) {
+                console.log(firstVisitorTariff);
+            } else {
+                console.log(this.tariff);
+            }
+
+
         },
         addVisitorService() {
             console.log(this.service_selected);
             //Запрос на добавление услуги посетителю
         },
         getVisitorServices() {
-            //Запрос на получение всех услуг посетителя
+            // for (let i = 0; i < this.visitorList.length; i++) {
+            //     const element = this.visitorList[i];
+            //     //Запрос на получение всех услуг по пользователям
+            // }
         }
+    },
+    watch: {
+        visitorList(value){
+            console.log(value);
+            console.log(this.tariff);
+        }
+        // 'visitorList': {
+        //     handler: (value) => {
+        //         if (value) {
+        //             // setTariff(){}
+        //             // console.log(value);
+        //             // console.log(this.tariff);
+        //             (value[0]) ? this.setTariff(value[0].tariff_id) : null;
+        //         } else {
+        //             console.log('ОШИБКА');
+        //         }
+        //     }
+        // }
     },
     mounted() {
         //придумать как считать итог (спросить уточнить у САШИ и как лучше сделать данный функционал)
