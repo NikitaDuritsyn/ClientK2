@@ -34,7 +34,8 @@ export default {
           'noText',
           'blank',
           'purple',
-          'darknessButton'
+          'darknessButton',
+          'close_btn'
         ].includes(value)
       }
     },
@@ -211,5 +212,29 @@ export default {
 
 .btn_second:hover {
   border-color: rgb(0, 255, 255);
+}
+.btn_second:disabled{
+  background-color: rgb(70, 70, 70);
+}
+
+.close_btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 25px;
+    width: 25px;
+    min-width: 25px;
+    min-height: 25px;
+    border-radius: 50%;
+    border: 1px solid rgb(200, 200, 200);
+    background-image: url('@/assets/X.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: transparent;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    margin: 0 0 0 5px;
 }
 </style>

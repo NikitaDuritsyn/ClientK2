@@ -2,16 +2,24 @@ import BaseApi from './BaseApi'
 
 class KamekaApi extends BaseApi {
     //creates
+    createVisitorService(visitorService) {
+        let url = `/api/creaete_visitor_service`
+        // console.log(visitorService);
+        return this._request({
+            method: 'post',
+            url: url,
+            data: visitorService
+        })
+    }
     createBookingSession(session) {
         let url = `/api/create_session`
-        console.log(session);
+        // console.log(session);
         return this._request({
             method: 'post',
             url: url,
             data: session
         })
     }
-
     createVisitor(visitor, session_id) {
         let url = `/api/create_visitor/${session_id}`
         return this._request({
@@ -67,6 +75,31 @@ class KamekaApi extends BaseApi {
         let url = `/api/get_payment_types`
         return this._request({
             url: url
+        })
+    }
+    getVisitorsServices(visitorsId) {
+        let url = `/api/get_visitors_services`
+        return this._request({
+            method: 'post',
+            url: url,
+            data: visitorsId
+        })
+    }
+    //putes
+    updateVisitors(updateData, visitorsId) {
+        let url = `/api/update_visitors`
+        return this._request({
+            method: 'put',
+            url: url,
+            data: { updateData: updateData, visitorsId: visitorsId }
+        })
+    }
+    //deletes
+    deleteVisitorService(serviceId) {
+        let url = `/api/delete_visitor_service/${serviceId}`
+        return this._request({
+            method: 'delete',
+            url: url,
         })
     }
 }

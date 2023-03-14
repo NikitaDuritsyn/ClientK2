@@ -1,10 +1,10 @@
 <template>
     <div class="session_modal">
         <div class="d-flex w-100 justify-content-between">
-            <SessionDate v-if="mode !== 'createBooking'" :date="session.booked_date" />
+            <SessionDate :date="(mode !== 'createBooking') ? session.booked_date : bookingDay" />
             <SessionRooms v-if="mode !== 'createBooking'" :session-rooms="session.session_rooms" />
-            <SessionDate v-if="mode === 'createBooking'" :date="bookingDay" />
-            <div class="close_btn" @click="$emit('close')"></div>
+            <MyButton :cls="'close_btn'" @click="$emit('close')"></MyButton>
+            <!-- <div class="close_btn" @click="$emit('close')"></div> -->
         </div>
         <div v-if="mode === 'createBooking'" class="d-flex w-100 justify-content-between flex-wrap">
             <div class="">
@@ -28,25 +28,32 @@
                 <MyMultiSelect :options="$store.state.rooms" v-model:model-value="rooms" />
             </div>
         </div>
-        <div class="d-flex" v-if="mode === 'createBooking'">
-            <MyInput :type="'number'" v-model:modelValue="estimate_visitors" :label="'Количество гостей:'" />
+        <div class="d-flex justify-content-between" v-if="mode === 'createBooking'">
+            <div>
+                <MyInput :type="'number'" v-model:modelValue="estimate_visitors" :label="'Количество гостей:'" />
+            </div>
+            <div>
+                <MySelect class="m-auto w-100" :label="'Тариф:'" v-model:modelValue="tariff_id"
+                    :options="$store.state.tariffs" />
+            </div>
         </div>
         <div class="visitors">
             <SessionVisitorsList @update-visitor-by-index="updateVisitorByIndex"
                 @delete-visitor-by-index="deleteVisitorByIndex" @update-visitor-list="setVisitorsBySession"
-                @visitors-selected="setSelectedVisitors" :mode="mode" :visitors_lsit="visitors" :session-id="session.id" />
+                @visitors-selected="setSelectedVisitors" :mode="mode" v-model:visitors_lsit="visitors"
+                :session-id="session.id" />
         </div>
         <div v-if="mode !== 'createBooking'" class="time_line">
             <SessionTimeLine :session="session" />
         </div>
         <div v-if="mode !== 'createBooking'" class="services">
-            <SessionService v-model:visitor-list="selectedVisitors" />
+            <SessionService @visitors-updated="setVisitorsBySession" v-model:visitor-list="selectedVisitors" />
         </div>
         <div v-if="mode !== 'createBooking'" class="payment">
             <SessionPayment />
         </div>
         <div class="d-flex justify-content-end">
-            <MyButton v-if="mode === 'createBooking'" :cls="'btn_second'" @click="createBooking">Сохранить</MyButton>
+            <MyButton v-if="mode === 'createBooking'" :cls="'btn_second'" @click="createBooking">СОЗДАТЬ</MyButton>
         </div>
     </div>
 </template>
@@ -59,14 +66,15 @@ import SessionPayment from './SessionModalComponents/SessionPayment.vue';
 import SessionService from './SessionModalComponents/SessionService.vue';
 import SessionTimeLine from './SessionModalComponents/SessionTimeLine.vue';
 import VueTimepicker from 'vue3-timepicker'
-import 'vue3-timepicker/dist/VueTimepicker.css'
 import MyButton from '@/components/UI/MyButton.vue';
 import MyInput from '@/components/UI/MyInput.vue';
 import MyMultiSelect from '@/components/UI/MyMultiSelect.vue';
+import MySelect from '@/components/UI/MySelect.vue';
+import 'vue3-timepicker/dist/VueTimepicker.css'
 
 export default {
     name: "session-modal-vue",
-    components: { VueTimepicker, SessionVisitorsList, SessionTimeLine, SessionService, SessionPayment, SessionDate, MyButton, MyInput, MyMultiSelect, SessionRooms },
+    components: { VueTimepicker, SessionVisitorsList, SessionTimeLine, SessionService, SessionPayment, SessionDate, MyButton, MyInput, MyMultiSelect, SessionRooms, MySelect },
     props: {
         session: { type: Object, default: {} },
         mode: { type: String, default: '' },
@@ -75,6 +83,7 @@ export default {
     },
     data() {
         return {
+            tariff_id: null,
             selectedVisitors: [],
             simpleStringValue: '',
             durationTime: '00:30',
@@ -85,8 +94,6 @@ export default {
     },
     methods: {
         updateVisitorByIndex(updatedVisitor) {
-            // console.log('SessionModal');
-            // console.log(updated_visitor);
             this.visitors[updatedVisitor.visitorIndex] = updatedVisitor.visitorData
         },
         deleteVisitorByIndex(visitor_index) {
@@ -94,7 +101,7 @@ export default {
                 this.visitors.splice(visitor_index, 1);
             }
         },
-        createBooking() {
+        async createBooking() {
             const vm = this
             const dateBooking = new Date(new Date(vm.bookingDay).setHours(vm.simpleStringValue.slice(0, 2), vm.simpleStringValue.slice(-2), 0, 0))
             const session = {
@@ -102,25 +109,22 @@ export default {
                 estimate_session_duration: Number(vm.durationTime.slice(0, 2)) * 60 + Number(vm.durationTime.slice(-2)),
                 estimate_visitors_num: this.estimate_visitors,
                 visitors: vm.visitors,
-                rooms: vm.rooms
+                rooms: vm.rooms,
+                tariff_id: this.tariff_id
             }
             console.log(session);
-            vm.$api.createBookingSession(session).then(() => {
+            await vm.$api.createBookingSession(session).then(() => {
                 console.log('$emit:bookingCreated');
                 this.$emit('bookingCreated')
                 this.$emit('close')
             })
         },
-        setVisitorsBySession(visitor) {
+        async setVisitorsBySession(visitor) {
             const vm = this
             if (vm.mode !== 'createBooking') {
-                vm.$api.getVisitorsBySession(vm.session.id).then((data) => {
-                    vm.visitors = data
-                })
+                vm.visitors = await vm.$api.getVisitorsBySession(vm.session.id)
             } else {
-                if (visitor) {
-                    vm.visitors.push(visitor)
-                }
+                (visitor) ? vm.visitors.push(visitor) : false;
             }
         },
         setSelectedVisitors(value) {
@@ -150,23 +154,7 @@ export default {
 }
 
 
-.close_btn {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 25px;
-    width: 25px;
-    min-width: 25px;
-    min-height: 25px;
-    border-radius: 50%;
-    border: 1px solid rgb(200, 200, 200);
-    background-image: url('../../../assets/X.svg');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    cursor: pointer;
-    margin: 0 0 0 5px;
-}
+
 
 /* .head_line_container {
     display: flex;

@@ -7,28 +7,24 @@
                 </MyButton>
             </div>
             <MyInput class="m-auto w-100" v-model:modelValue="visitor.name" :label="'Имя:'" />
-            <MySelect class="m-auto w-100" :label="'Тариф:'" v-model:modelValue="visitor.tariff_id"
-                :options="$store.state.tariffs" />
 
-                
+            <MySelect class="m-auto w-100" :label="'Тариф:'" v-model:modelValue="visitor.tariff_id"
+                v-if="mode != 'createBooking' && mode != 'createBookingUpdate'" :options="$store.state.tariffs" />
+
             <MyInput class="m-auto w-100" :phone-input="true" v-model:modelValue="visitor.number_phone"
                 :label="'Номер телефона:'" />
-
 
             <MyInput class="m-auto w-100" v-model:modelValue="visitor.lastname"
                 :label="(visitor.number_phone?.length < 11 || !visitor.number_phone) ? 'Фамилия: нужен номер' : 'Фамилия:'"
                 :disabled="(visitor.number_phone?.length < 11 || !visitor.number_phone) ? true : false" />
-
-
 
             <MyInput class="m-auto w-100" :type="'number'" v-model:modelValue="visitor.deponent.value"
                 v-if="mode === 'createBooking' || mode === 'createBookingUpdate'"
                 :label="(visitor.number_phone?.length < 11 || !visitor.number_phone) ? 'Депонент: нужен номер' : 'Депонент:'"
                 :disabled="(visitor.number_phone?.length < 11 || !visitor.number_phone) ? true : false" />
 
-            <div class="d-flex ">
+            <div class="d-flex " v-if="mode === 'createBooking' || mode === 'createBookingUpdate'">
                 <MyInput class="m-auto w-100" :type="'number'" v-model:modelValue="visitor.deposit.value"
-                    v-if="mode === 'createBooking' || mode === 'createBookingUpdate'"
                     :label="(visitor.number_phone?.length < 11 || !visitor.number_phone) ? 'Депозит: нужен номер' : 'Депозит:'"
                     :disabled="(visitor.number_phone?.length < 11 || !visitor.number_phone) ? true : false" />
                 <div>
@@ -65,34 +61,35 @@ export default {
     },
     methods: {
         createVisitor() {
-            if (this.mode === 'createBooking' || this.mode === 'createBookingUpdate') {
-                console.log(this.visitor);
-                if (!this.visitor.deposit.value) {
-                    this.visitor.deposit = null
+            const vm = this
+            if (vm.mode === 'createBooking' || vm.mode === 'createBookingUpdate') {
+                console.log(vm.visitor);
+                if (!vm.visitor.deposit.value) {
+                    vm.visitor.deposit = null
                 }
-                if (!this.visitor.deponent.value) {
-                    this.visitor.deponent = null
+                if (!vm.visitor.deponent.value) {
+                    vm.visitor.deponent = null
                 }
-                if (!this.visitor.number_phone || this.visitor.number_phone?.length < 11) {
-                    this.visitor.number_phone = null
+                if (!vm.visitor.number_phone || vm.visitor.number_phone?.length < 11) {
+                    vm.visitor.number_phone = null
                 }
-                if (this.mode === 'createBookingUpdate') {
-                    console.log(this.mode);
-                    this.$emit('visitorUpdated', this.visitor)
-                    this.visitor = null
-                    this.$emit('close')
+                if (vm.mode === 'createBookingUpdate') {
+                    console.log(vm.mode);
+                    vm.$emit('visitorUpdated', vm.visitor)
+                    vm.visitor = null
+                    vm.$emit('close')
                 } else {
-                    console.log(this.mode);
-                    this.$emit('visitorCreated', this.visitor)
-                    this.visitor = null
-                    this.$emit('close')
+                    console.log(vm.mode);
+                    vm.$emit('visitorCreated', vm.visitor)
+                    vm.visitor = null
+                    vm.$emit('close')
                 }
             } else {
                 //Cоздаём пользователя в уже созданой брони или текущей сессии
-                this.$api.createVisitor(this.visitor, this.sessionId).then(() => {
-                    this.$emit('visitorCreated')
-                    this.visitor = null
-                    this.$emit('close')
+                vm.$api.createVisitor(vm.visitor, vm.sessionId).then(() => {
+                    vm.$emit('visitorCreated')
+                    vm.visitor = null
+                    vm.$emit('close')
                 })
             }
         }

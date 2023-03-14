@@ -46,5 +46,8 @@ export default {
 .admin_panel {
   background-color: rgb(30, 30, 30);
   color: rgb(175, 175, 175);
+  /* background-color: white; */
+  /* color: rgb(30, 30, 175); */
+  
 }
 </style>

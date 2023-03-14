@@ -40,6 +40,12 @@ export default {
     };
   },
   watch: {
+    visitor: {
+      handler(value) {
+        // console.log(value);
+        this.updateVisitorInList(value)
+      },
+    },
     select_all: {
       handler(value) {
         if (value.select_all === true) {
@@ -60,6 +66,7 @@ export default {
   },
   methods: {
     updateVisitorInList(updatedVisitor) {
+      // console.log(updatedVisitor, this.visitorIndex);
       this.$emit("updateVisitor", { visitorData: updatedVisitor, visitorIndex: this.visitorIndex },);
     },
     deleteVisitor() {

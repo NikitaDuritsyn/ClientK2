@@ -7,7 +7,7 @@
                     <div>
                         <MySelect v-model:modelValue="tariff" :options="$store.state.tariffs"></MySelect>
                     </div>
-                    <MyButton :cls="'btn_second'" @click="updateVisitorTariff()">СМЕНИТЬ</MyButton>
+                    <MyButton :cls="'btn_second'" @click="setTariff(false)">СМЕНИТЬ</MyButton>
                 </div>
             </div>
             <div class="d-flex align-items-center justify-content-between p-2">
@@ -36,13 +36,12 @@
             </div>
         </div>
         <MyModal :mode-flex-center="true" ref="visitors_service_modal">
-            <visitorServicesModal @delete-visitor-service="setVisitorsServices(visitorsId)"
-                :visitors-services="visitorServices" @close="$refs.visitors_service_modal.close()" />
+            <visitorServicesModal :visitors-services="visitorServices" @close="$refs.visitors_service_modal.close()" />
         </MyModal>
     </div>
 </template>
 
-<script>
+<script lang="js">
 import MySelect from '@/components/UI/MySelect.vue';
 import MyMultiSelect from '@/components/UI/MyMultiSelect.vue';
 import MyButton from '@/components/UI/MyButton.vue';
@@ -53,14 +52,12 @@ import { mapState } from 'vuex';
 export default {
     name: "session-service", // VisitorServices
     props: ['visitorList', 'sessionTariff'],
-    emits: ['visitorsUpdated'],
     components: { MySelect, MyMultiSelect, MyButton, MyModal, visitorServicesModal },
     data() {
         return {
             tariff: null,
             service_selected: null,
             visitorServices: [],
-            visitorsId: []
         };
     },
     computed: mapState(['services']),
@@ -68,38 +65,31 @@ export default {
         setTariff(firstVisitorTariff) {
             (firstVisitorTariff) ? this.tariff = firstVisitorTariff : 'Ошибка';
         },
-        setDataByVisitorList(visitorList) {
-            if (visitorList) {
-                if (visitorList[0]) {
-                    this.setTariff(visitorList[0].tariff_id)
-                    this.visitorsId = visitorList.map((visitor) => { return visitor.id })
-                    this.setVisitorsServices(this.visitorsId)
-                } else {
-                    this.tariff = null
-                    this.visitorsId = []
-                    this.visitorServices = []
-                }
-            }
-        },
+
         async addVisitorService() {
             await this.$api.createVisitorService({ visitor_id: this.visitorList[0].id, service_id: this.service_selected })
-            await this.setVisitorsServices(this.visitorsId)
+            await this.setVisitorsServices(this.visitorList.map((visitor) => { return visitor.id }))
         },
+
         async setVisitorsServices(visitorsId) {
             this.visitorServices = await this.$api.getVisitorsServices(visitorsId)
-        },
-        async updateVisitorTariff() {
-            await this.$api.updateVisitors({ tariff_id: this.tariff }, this.visitorsId)
-            this.$emit('visitorsUpdated')
-        },
+        }
     },
     watch: {
         visitorList(value) {
-            this.setDataByVisitorList(value)
+            if (value) {
+                if (value[0]) {
+                    this.setTariff(value[0].tariff_id)
+                    this.setVisitorsServices(value.map((visitor) => { return visitor.id }))
+                } else {
+                    this.tariff = null
+                    this.visitorServices = []
+                }
+            }
         }
     },
     mounted() {
-        this.setDataByVisitorList(this.visitorList)
+        //придумать как считать итог (спросить уточнить у САШИ и как лучше сделать данный функционал)
     },
 }
 </script>

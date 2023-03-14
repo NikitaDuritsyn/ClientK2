@@ -1,6 +1,22 @@
 <template>
   <router-view />
 </template>
+
+<script>
+export default {
+  name: "App",
+  data: () => {
+    return {}
+  },
+  mounted() {
+    this.$store.dispatch('GET_ROOMS');
+    this.$store.dispatch('GET_TARIFFS');
+    this.$store.dispatch('GET_SERVICES');
+    this.$store.dispatch('GET_PAYMENTTYPES');
+  }
+}
+</script>
+
 <style>
 body {
   background-color: rgb(0, 0, 0) !important;
@@ -54,19 +70,4 @@ body {
   outline: none;
   width: 100%;
   padding: 1.1rem;
-}
-</style>
-<script>
-export default {
-  name: "App",
-  data: () => {
-    return {}
-  },
-  mounted() {
-    this.$store.dispatch('GET_ROOMS');
-    this.$store.dispatch('GET_TARIFFS');
-    this.$store.dispatch('GET_SERVICES');
-    this.$store.dispatch('GET_PAYMENTTYPES');
-  }
-}
-</script>
+}</style>
