@@ -32,6 +32,7 @@
         </div>
         <div class="visitors">
             <SessionVisitorsList :mode="mode" v-model:visitors_lsit="visitors" :session-id="session.id"
+                :session-tariff="session.tariff_id"
                 @update-visitor-by-index="updateVisitorByIndex" @delete-visitor-by-index="deleteVisitorByIndex"
                 @update-visitor-list="setVisitorsBySession" @visitors-selected="setSelectedVisitors" />
         </div>

@@ -2,27 +2,20 @@
     <div class=" d-flex justify-content-center">
         <div class="visitor_form_container">
             <div class="d-flex justify-content-end">
-                <MyButton :cls="'btn_second'" @click="createVisitor()">
-                    Сохранить
-                </MyButton>
+                <MyButton :cls="'btn_second'" @click="createVisitor()">Сохранить</MyButton>
             </div>
             <MyInput class="m-auto w-100" v-model:modelValue="visitor.name" :label="'Имя:'" />
-
             <MySelect class="m-auto w-100" :label="'Тариф:'" v-model:modelValue="visitor.tariff_id"
                 v-if="mode != 'createBooking' && mode != 'createBookingUpdate'" :options="$store.state.tariffs" />
-
             <MyInput class="m-auto w-100" :phone-input="true" v-model:modelValue="visitor.number_phone"
                 :label="'Номер телефона:'" />
-
             <MyInput class="m-auto w-100" v-model:modelValue="visitor.lastname"
                 :label="(visitor.number_phone?.length < 11 || !visitor.number_phone) ? 'Фамилия: нужен номер' : 'Фамилия:'"
                 :disabled="(visitor.number_phone?.length < 11 || !visitor.number_phone) ? true : false" />
-
             <MyInput class="m-auto w-100" :type="'number'" v-model:modelValue="visitor.deponent.value"
                 v-if="mode === 'createBooking' || mode === 'createBookingUpdate'"
                 :label="(visitor.number_phone?.length < 11 || !visitor.number_phone) ? 'Депонент: нужен номер' : 'Депонент:'"
                 :disabled="(visitor.number_phone?.length < 11 || !visitor.number_phone) ? true : false" />
-
             <div class="d-flex " v-if="mode === 'createBooking' || mode === 'createBookingUpdate'">
                 <MyInput class="m-auto w-100" :type="'number'" v-model:modelValue="visitor.deposit.value"
                     :label="(visitor.number_phone?.length < 11 || !visitor.number_phone) ? 'Депозит: нужен номер' : 'Депозит:'"
@@ -48,12 +41,14 @@ export default {
     props: {
         mode: { type: String, default: '' },
         sessionId: { type: Number, default: null },
+        sessionTariff: { type: Number, default: null },
         visitorObject: { type: Object, default: {} },
     },
     data() {
         return {
             visitor: {
                 ...this.visitorObject,
+                tariff_id: this.sessionTariff,
                 deposit: this.visitorObject.deposit || {},
                 deponent: this.visitorObject.deponent || {},
             },

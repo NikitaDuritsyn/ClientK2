@@ -22,7 +22,7 @@
     </div>
     <MyModal :mode-flex-center="true" ref="create_visitor">
       <VisitorForm @visitor-created="updateVisitorList" :session-id="sessionId" :mode="mode"
-        @close="$refs.create_visitor.close()" :visitor-object="{}" />
+        @close="$refs.create_visitor.close()" :visitor-object="{}" :session-tariff="sessionTariff" />
     </MyModal>
   </div>
 </template>
@@ -38,7 +38,7 @@ export default {
   name: "session-visitors-list",
   emits: ["updateVisitorByIndex", "deleteVisitorByIndex", "updateVisitorList", "visitorsSelected"],
 
-  props: ["visitors_lsit", "mode", "sessionId"],
+  props: ["visitors_lsit", "mode", "sessionId", "sessionTariff"],
 
   components: { Switch, Visitor, MyButton, MyModal, VisitorForm },
 
@@ -65,15 +65,14 @@ export default {
       }
     },
     setSelectedArr(value) {
-      console.log(value);
       this.setSelected.push(value);
     },
     updateSelectedArr(value) {
-      console.log('updateSelectedArr');
+      // console.log('updateSelectedArr');
       this.setSelected = this.setSelected.map((item) => { return (item.visitor.id === value.visitor_id) ? { ...item, select_status: value.select_status } : { ...item }; })
     },
     updateSelectedAll(_value) {
-      console.log('updateSelectedAll');
+      // console.log('updateSelectedAll');
       if (_value === "click") {
         if (this.select_all === false) {
           this.setSelected = this.setSelected.map((item) => { return (item.select_status === false) ? { ...item, select_status: true } : { ...item }; })
@@ -117,6 +116,11 @@ export default {
       return this.updateSelectedAll();
     },
   },
+  watch: {
+    visitors_lsit(value) {
+      this.setSelected = []
+    }
+  }
 };
 </script>
 

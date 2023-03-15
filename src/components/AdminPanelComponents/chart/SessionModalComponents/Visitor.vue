@@ -43,6 +43,7 @@ export default {
     visitor: {
       handler(value) {
         this.updateVisitorInList(value)
+        this.emitSelected()
       },
     },
     select_all: {
