@@ -27,26 +27,35 @@ import MyButton from '@/components/UI/MyButton.vue'
 export default {
     name: 'session-time-line',
     components: { MyButton },
-    props: ['session'],
+    props: ['session', 'visitorList'],
     data() {
         return {
-            start_time: this.session?.start_time || '__:__',
-            end_time: this.session?.end_time || '__:__',
-
+            start_time: this.session?.start_time_session || '__:__',
+            end_time: this.session?.end_time_session || '__:__',
         }
     },
     methods: {
-        setStartTime() {
-            let currentTime = new Date()
-            this.start_time = currentTime.getHours() + ':' + currentTime.getMinutes()
-            console.log(this.start_time);
-            // Зпрос на получение статуса, что бронь перешла в статус активной фазы (Status:2 напрмер) Изначально статус 1 статус бронь установленна
+        async setStartTime() {
+            let currentDateTime = new Date()
+            this.start_time = currentDateTime.getHours() + ':' + currentDateTime.getMinutes()
+
+            // visitorsId, sessionId, startTime
+            await this.$api.setStartTime({ visitorsId: this.visitorList.map((item) => { return item.id }), sessionId: this.session.id, startTime: currentDateTime })
+            // Зпрос на получение статуса, что бронь перешла в статус активной фазы (Status: "active") Изначально статус "booked" статус бронь установленна
         },
-        setEndTime() {
-            let currentTime = new Date()
-            this.end_time = currentTime.getHours() + ':' + currentTime.getMinutes()
-            // Тут же делать запрос для изменения статуса, что бронь перешла в статус закрытой фазы (Status:3 напрмер)
+        async setEndTime() {
+            let currentDateTime = new Date()
+            this.end_time = currentDateTime.getHours() + ':' + currentDateTime.getMinutes()
+
+            // visitorsId, sessionId, endTime
+            await this.$api.setEndTime({ visitorsId: this.visitorList.map((item) => { return item.id }), sessionId: this.session.id, endTime: currentDateTime })
+            // Тут же делать запрос для изменения статуса, что бронь перешла в статус закрытой фазы (Status: "close" напрмер)
         },
+    },
+    watch: {
+        visitorList(value) {
+            console.log(value);
+        }
     },
     mounted() {
         //можно сделать запрос на получение данной брони по id и выводить ее данные

@@ -1,7 +1,7 @@
 import BaseApi from './BaseApi'
 
 class KamekaApi extends BaseApi {
-    //creates
+    //posts
     createVisitorService(visitorService) {
         let url = `/api/creaete_visitor_service`
         // console.log(visitorService);
@@ -26,6 +26,31 @@ class KamekaApi extends BaseApi {
             method: 'post',
             url: url,
             data: visitor
+        })
+    }
+    getVisitorsServices(visitorsId) {
+        let url = `/api/get_visitors_services`
+        return this._request({
+            method: 'post',
+            url: url,
+            data: visitorsId
+        })
+    }
+    setStartTime(data) {
+        let url = `/api/start_time`
+        return this._request({
+            method: 'post',
+            url: url,
+            data: data
+        })
+
+    }
+    setEndTime(data) {
+        let url = `/api/end_time`
+        return this._request({
+            method: 'post',
+            url: url,
+            data: data
         })
     }
     //gets
@@ -75,14 +100,6 @@ class KamekaApi extends BaseApi {
         let url = `/api/get_payment_types`
         return this._request({
             url: url
-        })
-    }
-    getVisitorsServices(visitorsId) {
-        let url = `/api/get_visitors_services`
-        return this._request({
-            method: 'post',
-            url: url,
-            data: visitorsId
         })
     }
     //putes

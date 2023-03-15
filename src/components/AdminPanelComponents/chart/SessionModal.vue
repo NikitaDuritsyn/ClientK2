@@ -32,12 +32,12 @@
         </div>
         <div class="visitors">
             <SessionVisitorsList :mode="mode" v-model:visitors_lsit="visitors" :session-id="session.id"
-                :session-tariff="session.tariff_id"
-                @update-visitor-by-index="updateVisitorByIndex" @delete-visitor-by-index="deleteVisitorByIndex"
-                @update-visitor-list="setVisitorsBySession" @visitors-selected="setSelectedVisitors" />
+                :session-tariff="session.tariff_id" @update-visitor-by-index="updateVisitorByIndex"
+                @delete-visitor-by-index="deleteVisitorByIndex" @update-visitor-list="setVisitorsBySession"
+                @visitors-selected="setSelectedVisitors" />
         </div>
         <div v-if="mode !== 'createBooking'" class="time_line">
-            <SessionTimeLine :session="session" />
+            <SessionTimeLine v-model:visitor-list="selectedVisitors" :session="session" />
         </div>
         <div v-if="mode !== 'createBooking'" class="services">
             <SessionService @visitors-updated="setVisitorsBySession" v-model:visitor-list="selectedVisitors" />

@@ -1,5 +1,6 @@
 <template>
     <div class="service_block_container">
+
         <div class="sevices_block">
             <div class="d-flex align-items-center justify-content-between p-2">
                 <div class="text">Тариф:</div>
@@ -17,9 +18,11 @@
                         <MySelect v-model:modelValue="service_selected" :options="services"></MySelect>
                     </div>
                     <div class="d-flex">
-                        <MyButton class="m-1 mt-0 mb-0" :cls="'btn_second'" @click="$refs.visitors_service_modal.open()"
+                        <!-- $refs.visitors_service_modal.open() -->
+                        <MyButton class="m-1 mt-0 mb-0" :cls="'btn_second'"
+                            @click="visitorsServicesShow = !visitorsServicesShow"
                             :disabled="(visitorList.length === 0) ? true : false">
-                            ПОКАЗАТЬ ({{ visitorServices.length }})
+                            ПОКАЗАТЬ ({{ visitorsServices.length }})
                         </MyButton>
                         <MyButton class="m-1 mt-0 mb-0" :cls="'btn_second'" @click="addVisitorService"
                             :disabled="(visitorList.length > 1 || visitorList.length === 0 || service_selected === null) ? true : false">
@@ -28,17 +31,19 @@
                     </div>
                 </div>
             </div>
+            <VisitorsServicesModal v-if="visitorsServicesShow" @delete-visitor-service="setVisitorsServices(visitorsId)"
+                :visitors-services="visitorsServices" @close="$refs.visitors_service_modal.close()"
+                v-model:payment-results="paymentResults" />
         </div>
         <div class="results">
             <div class="text">
-                Итоги:
+                Итоги: {{ paymentResults }}
                 <!-- Тут {{  }} расчиттать сумму общую за время прошедшее и за услуги -->
             </div>
         </div>
-        <MyModal :mode-flex-center="true" ref="visitors_service_modal">
-            <visitorServicesModal @delete-visitor-service="setVisitorsServices(visitorsId)"
-                :visitors-services="visitorServices" @close="$refs.visitors_service_modal.close()" />
-        </MyModal>
+        <!-- <MyModal :mode-flex-center="true" ref="visitors_service_modal"> -->
+
+        <!-- </MyModal> -->
     </div>
 </template>
 
@@ -46,24 +51,35 @@
 import MySelect from '@/components/UI/MySelect.vue';
 import MyMultiSelect from '@/components/UI/MyMultiSelect.vue';
 import MyButton from '@/components/UI/MyButton.vue';
-import MyModal from '@/components/UI/MyModal.vue';
-import visitorServicesModal from '@/components/AdminPanelComponents/chart/SessionModalComponents/VisitorsServicesModal.vue';
+// import MyModal from '@/components/UI/MyModal.vue';
+import VisitorsServicesModal from '@/components/AdminPanelComponents/chart/SessionModalComponents/VisitorsServicesModal.vue';
 import { mapState } from 'vuex';
 
 export default {
-    name: "session-service", // VisitorServices
+    name: "session-service",
     props: ['visitorList', 'sessionTariff'],
     emits: ['visitorsUpdated'],
-    components: { MySelect, MyMultiSelect, MyButton, MyModal, visitorServicesModal },
+    components: {
+        MySelect, MyMultiSelect, MyButton,
+        // MyModal, 
+        VisitorsServicesModal
+    },
     data() {
         return {
+            visitorsServicesShow: false,
             tariff: null,
             service_selected: null,
-            visitorServices: [],
+            visitorsServices: [],
             visitorsId: []
         };
     },
-    computed: mapState(['services']),
+    computed: {
+        paymentResults() {
+            const result = this.visitorsServices.reduce((acc, service) => acc + Number(service.price), 0)
+            return result
+        },
+        ...mapState(['services'])
+    },
     methods: {
         setTariff(firstVisitorTariff) {
             (firstVisitorTariff) ? this.tariff = firstVisitorTariff : 'Ошибка';
@@ -77,7 +93,7 @@ export default {
                 } else {
                     this.tariff = null
                     this.visitorsId = []
-                    this.visitorServices = []
+                    this.visitorsServices = []
                 }
             }
         },
@@ -86,7 +102,7 @@ export default {
             await this.setVisitorsServices(this.visitorsId)
         },
         async setVisitorsServices(visitorsId) {
-            this.visitorServices = await this.$api.getVisitorsServices(visitorsId)
+            this.visitorsServices = await this.$api.getVisitorsServices(visitorsId)
         },
         async updateVisitorTariff() {
             await this.$api.updateVisitors({ tariff_id: this.tariff }, this.visitorsId)

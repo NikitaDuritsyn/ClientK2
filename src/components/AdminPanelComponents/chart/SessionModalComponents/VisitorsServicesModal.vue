@@ -1,11 +1,11 @@
 <template>
     <div class="visitors_services">
-        <div class="d-flex w-100 ">
+        <!-- <div class="d-flex w-100 ">
             <strong>
-                ЗА ВСЁ: {{ setPayment }} ₽
+                ЗА УСЛУГИ: {{ paymentResults }} ₽
             </strong>
             <MyButton class="ms-auto" :cls="'close_btn'" @click="$emit('close')"></MyButton>
-        </div>
+        </div> -->
         <div v-for="visitorService in visitorsServices"
             class="d-flex flex-wrap align-items-center justify-content-between p-2 mt-2 mb-2 visitor_service">
             <!-- VisitirService -->
@@ -24,7 +24,7 @@ import MyButton from '@/components/UI/MyButton.vue';
 export default {
     name: "visitors-services",
     emit: ['deleteVisitorService'],
-    props: ["visitorsServices"],
+    props: ["visitorsServices", "paymentResults"],
     components: { MyButton },
     data() {
         return {};
@@ -34,12 +34,7 @@ export default {
             await this.$api.deleteVisitorService(serviceId)
             this.$emit('deleteVisitorService')
         }
-    },
-    computed: {
-        setPayment() {
-            return this.visitorsServices.reduce((acc, service) => acc + Number(service.price), 0)
-        }
-    },
+    }
 }
 </script>
 
