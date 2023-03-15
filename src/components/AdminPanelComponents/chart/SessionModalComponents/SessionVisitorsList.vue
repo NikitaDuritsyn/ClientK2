@@ -4,7 +4,7 @@
       <div v-for="(visitor, index) in visitors_lsit" :key="index">
         <Visitor @update-visitor="updateVisitorByIndex" @delete-visitor="deleteVisitorByIndex" :visitor-index="index"
           :mode="mode" ref="visitor" :select_all="setSelectedAll" :visitor="visitor" @selected="setSelectedArr"
-          @selected-or="updateSelectedArr" />
+          @status-switch="updateSelectedArr" />
       </div>
     </div>
     <div class="select_menu">
@@ -37,13 +37,14 @@ import Visitor from "./Visitor.vue";
 export default {
   name: "session-visitors-list",
   emits: ["updateVisitorByIndex", "deleteVisitorByIndex", "updateVisitorList", "visitorsSelected"],
+
   props: ["visitors_lsit", "mode", "sessionId"],
+
   components: { Switch, Visitor, MyButton, MyModal, VisitorForm },
+
   data() {
     return {
-      selected_counter: this.visitors_lsit.length,
-      select_all: true,
-      setSelected: [],
+      selected_counter: this.visitors_lsit.length, select_all: true, setSelected: [],
     };
   },
   methods: {
@@ -56,7 +57,7 @@ export default {
       }
     },
     updateVisitorList(visitor) {
-      console.log(visitor);
+      // console.log(visitor);
       if (this.mode !== "createBooking") {
         this.$emit("updateVisitorList");
       } else {
@@ -64,43 +65,26 @@ export default {
       }
     },
     setSelectedArr(value) {
+      console.log(value);
       this.setSelected.push(value);
     },
     updateSelectedArr(value) {
-      for (let i = 0; i < this.setSelected.length; i++) {
-        const element = this.setSelected[i];
-        if (element.visitor.id === value.visitor_id) {
-          element.select_status = value.select_status;
-        }
-      }
+      console.log('updateSelectedArr');
+      this.setSelected = this.setSelected.map((item) => { return (item.visitor.id === value.visitor_id) ? { ...item, select_status: value.select_status } : { ...item }; })
     },
     updateSelectedAll(_value) {
+      console.log('updateSelectedAll');
       if (_value === "click") {
         if (this.select_all === false) {
-          for (let i = 0; i < this.setSelected.length; i++) {
-            const element = this.setSelected[i];
-            if (element.select_status === false) {
-              element.select_status = true;
-            }
-          }
+          this.setSelected = this.setSelected.map((item) => { return (item.select_status === false) ? { ...item, select_status: true } : { ...item }; })
         } else {
-          for (let i = 0; i < this.setSelected.length; i++) {
-            const element = this.setSelected[i];
-            if (element.select_status === true) {
-              element.select_status = false;
-            }
-          }
+          this.setSelected = this.setSelected.map((item) => { return (item.select_status === true) ? { ...item, select_status: false } : { ...item }; })
         }
-        // TODO раньше было тут и это - this.emmitSelectedVisitors(this.setSelected);
-        return {
-          selected_counter: this.selected_counter,
-          select_all: this.select_all,
-        };
+        return { selected_counter: this.selected_counter, select_all: this.select_all };
       } else {
         let count_selected = 0;
         for (let i = 0; i < this.setSelected.length; i++) {
-          const element = this.setSelected[i];
-          if (element.select_status === true) {
+          if (this.setSelected[i].select_status === true) {
             count_selected = count_selected + 1;
           }
         }
@@ -133,7 +117,6 @@ export default {
       return this.updateSelectedAll();
     },
   },
-  mounted() { },
 };
 </script>
 

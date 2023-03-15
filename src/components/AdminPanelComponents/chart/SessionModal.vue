@@ -4,26 +4,19 @@
             <SessionDate :date="(mode !== 'createBooking') ? session.booked_date : bookingDay" />
             <SessionRooms v-if="mode !== 'createBooking'" :session-rooms="session.session_rooms" />
             <MyButton :cls="'close_btn'" @click="$emit('close')"></MyButton>
-            <!-- <div class="close_btn" @click="$emit('close')"></div> -->
         </div>
         <div v-if="mode === 'createBooking'" class="d-flex w-100 justify-content-between flex-wrap">
             <div class="">
-                <div class="text_name">
-                    Время:
-                </div>
+                <div class="text_name">Время:</div>
                 <vue-timepicker v-model="simpleStringValue" :minute-interval="15"></vue-timepicker>
             </div>
             <div class="">
-                <div class="text_name">
-                    Продолжительность:
-                </div>
+                <div class="text_name">Продолжительность:</div>
                 <vue-timepicker v-model="durationTime" :minute-interval="30"></vue-timepicker>
             </div>
         </div>
         <div v-if="mode === 'createBooking'" class="">
-            <div class="w-100">
-                Выбрать комнаты:
-            </div>
+            <div class="w-100">Выбрать комнаты:</div>
             <div class="d-flex">
                 <MyMultiSelect :options="$store.state.rooms" v-model:model-value="rooms" />
             </div>
@@ -38,10 +31,9 @@
             </div>
         </div>
         <div class="visitors">
-            <SessionVisitorsList @update-visitor-by-index="updateVisitorByIndex"
-                @delete-visitor-by-index="deleteVisitorByIndex" @update-visitor-list="setVisitorsBySession"
-                @visitors-selected="setSelectedVisitors" :mode="mode" v-model:visitors_lsit="visitors"
-                :session-id="session.id" />
+            <SessionVisitorsList :mode="mode" v-model:visitors_lsit="visitors" :session-id="session.id"
+                @update-visitor-by-index="updateVisitorByIndex" @delete-visitor-by-index="deleteVisitorByIndex"
+                @update-visitor-list="setVisitorsBySession" @visitors-selected="setSelectedVisitors" />
         </div>
         <div v-if="mode !== 'createBooking'" class="time_line">
             <SessionTimeLine :session="session" />
@@ -93,14 +85,6 @@ export default {
         };
     },
     methods: {
-        updateVisitorByIndex(updatedVisitor) {
-            this.visitors[updatedVisitor.visitorIndex] = updatedVisitor.visitorData
-        },
-        deleteVisitorByIndex(visitor_index) {
-            if (visitor_index > -1) {
-                this.visitors.splice(visitor_index, 1);
-            }
-        },
         async createBooking() {
             const vm = this
             const dateBooking = new Date(new Date(vm.bookingDay).setHours(vm.simpleStringValue.slice(0, 2), vm.simpleStringValue.slice(-2), 0, 0))
@@ -112,9 +96,7 @@ export default {
                 rooms: vm.rooms,
                 tariff_id: this.tariff_id
             }
-            console.log(session);
             await vm.$api.createBookingSession(session).then(() => {
-                console.log('$emit:bookingCreated');
                 this.$emit('bookingCreated')
                 this.$emit('close')
             })
@@ -126,6 +108,13 @@ export default {
             } else {
                 (visitor) ? vm.visitors.push(visitor) : false;
             }
+        },
+
+        updateVisitorByIndex(updatedVisitor) {
+            this.visitors[updatedVisitor.visitorIndex] = updatedVisitor.visitorData
+        },
+        deleteVisitorByIndex(visitor_index) {
+            (visitor_index > -1) ? this.visitors.splice(visitor_index, 1) : false;
         },
         setSelectedVisitors(value) {
             this.selectedVisitors = value
@@ -152,16 +141,6 @@ export default {
     font-size: 16px;
     padding: 0 10px 0 0;
 }
-
-
-
-
-/* .head_line_container {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: nowrap;
-    padding: 0 0 5px 0;
-} */
 
 .visitors {
     padding: 5px 0;

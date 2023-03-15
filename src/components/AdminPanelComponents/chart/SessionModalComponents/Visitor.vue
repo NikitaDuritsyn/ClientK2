@@ -32,7 +32,7 @@ import VisitorForm from "./VisitorForm.vue";
 
 export default {
   name: "visitor-vue",
-  emits: ["selectedOr", "deleteVisitor", "selected", "updateVisitor"],
+  emits: ["statusSwitch", "deleteVisitor", "selected", "updateVisitor"],
   props: ["visitor", "select_all", "mode", "visitorIndex"],
   data() {
     return {
@@ -42,7 +42,6 @@ export default {
   watch: {
     visitor: {
       handler(value) {
-        // console.log(value);
         this.updateVisitorInList(value)
       },
     },
@@ -57,7 +56,7 @@ export default {
     },
     status_switch: {
       handler(value) {
-        this.$emit("selectedOr", {
+        this.$emit("statusSwitch", {
           select_status: value,
           visitor_id: this.visitor.id,
         });
@@ -66,18 +65,17 @@ export default {
   },
   methods: {
     updateVisitorInList(updatedVisitor) {
-      // console.log(updatedVisitor, this.visitorIndex);
       this.$emit("updateVisitor", { visitorData: updatedVisitor, visitorIndex: this.visitorIndex },);
     },
     deleteVisitor() {
       this.$emit("deleteVisitor", this.visitorIndex);
     },
+    emitSelected() {
+      this.$emit("selected", { select_status: this.status_switch, visitor: this.visitor });
+    }
   },
   mounted() {
-    this.$emit("selected", {
-      select_status: this.status_switch,
-      visitor: this.visitor,
-    });
+    this.emitSelected()
   },
   components: { Switch, MyButton, MyModal, VisitorForm },
 };
