@@ -37,7 +37,7 @@
                 @visitors-selected="setSelectedVisitors" />
         </div>
         <div v-if="mode !== 'createBooking'" class="time_line">
-            <SessionTimeLine v-model:visitor-list="selectedVisitors" :session="session" />
+            <SessionTimeLine @time-updated="setVisitorsBySession" v-model:visitor-list="selectedVisitors" :session="session" />
         </div>
         <div v-if="mode !== 'createBooking'" class="services">
             <SessionService @visitors-updated="setVisitorsBySession" v-model:visitor-list="selectedVisitors" />

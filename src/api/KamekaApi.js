@@ -36,7 +36,7 @@ class KamekaApi extends BaseApi {
             data: visitorsId
         })
     }
-    setStartTime(data) {
+    updateStartTime(data) {
         let url = `/api/start_time`
         return this._request({
             method: 'post',
@@ -45,7 +45,7 @@ class KamekaApi extends BaseApi {
         })
 
     }
-    setEndTime(data) {
+    updateEndTime(data) {
         let url = `/api/end_time`
         return this._request({
             method: 'post',
