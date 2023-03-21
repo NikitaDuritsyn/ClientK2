@@ -58,7 +58,7 @@ export default {
         createVisitor() {
             const vm = this
             if (vm.mode === 'createBooking' || vm.mode === 'createBookingUpdate') {
-                console.log(vm.visitor);
+                // console.log(vm.visitor);
                 if (!vm.visitor.deposit.value) {
                     vm.visitor.deposit = null
                 }
@@ -69,12 +69,12 @@ export default {
                     vm.visitor.number_phone = null
                 }
                 if (vm.mode === 'createBookingUpdate') {
-                    console.log(vm.mode);
+                    // console.log(vm.mode);
                     vm.$emit('visitorUpdated', vm.visitor)
                     vm.visitor = null
                     vm.$emit('close')
                 } else {
-                    console.log(vm.mode);
+                    // console.log(vm.mode);
                     vm.$emit('visitorCreated', vm.visitor)
                     vm.visitor = null
                     vm.$emit('close')

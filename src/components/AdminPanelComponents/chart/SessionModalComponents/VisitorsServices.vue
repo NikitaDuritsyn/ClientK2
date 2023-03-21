@@ -1,20 +1,15 @@
 <template>
-    <div class="visitors_services">
-        <!-- <div class="d-flex w-100 ">
+    <div>
+        <div class="d-flex w-100 mb-2">
             <strong>
                 ЗА УСЛУГИ: {{ paymentResults }} ₽
             </strong>
-            <MyButton class="ms-auto" :cls="'close_btn'" @click="$emit('close')"></MyButton>
-        </div> -->
-        <div v-for="visitorService in visitorsServices"
+        </div>
+        <div v-if="visitorsServicesShow" v-for="visitorService in visitorsServices"
             class="d-flex flex-wrap align-items-center justify-content-between p-2 mt-2 mb-2 visitor_service">
-            <!-- VisitirService -->
             <div>Посетитель: {{ visitorService.name }}</div>
             <div>Услуга: {{ visitorService.title }}</div>
             <div>Цена: {{ visitorService.price }}</div>
-            <MyButton @click="deleteVisitorService(visitorService.id)" class="m-1 mt-0 mb-0" :cls="'btn_second'">
-                <i class="bi f bi-file-minus"></i>
-            </MyButton>
         </div>
     </div>
 </template>
@@ -24,24 +19,18 @@ import MyButton from '@/components/UI/MyButton.vue';
 export default {
     name: "visitors-services",
     emit: ['deleteVisitorService'],
-    props: ["visitorsServices", "paymentResults"],
+    props: ["visitorsServices", "visitorsServicesShow", "paymentResults"],
     components: { MyButton },
     data() {
         return {};
     },
-    methods: {
-        async deleteVisitorService(serviceId) {
-            await this.$api.deleteVisitorService(serviceId)
-            this.$emit('deleteVisitorService')
-        }
-    }
+    methods: {}
 }
 </script>
 
 <style scoped>
 .visitor_service {
     font-weight: 700;
-    background-color: black;
     border: 1px solid white;
     border-radius: 10px;
 }

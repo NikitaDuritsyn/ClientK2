@@ -5,7 +5,7 @@
             <div class="d-flex align-items-center col-6 m-0">
                 <div class="d-flex justify-content-between w-100">
                     <div class="show_time">{{ start_time }}</div>
-                    <MyButton :cls="'btn_second'" @click="updateStartTime">СТАРТ</MyButton>
+                    <MyButton :cls="'btn_second'" @click="updateStartTime" :disabled="startTimeDisabled">СТАРТ</MyButton>
                 </div>
             </div>
         </div>
@@ -32,6 +32,7 @@ export default {
         return {
             start_time: '__:__',
             end_time: '__:__',
+            startTimeDisabled: false
         }
     },
     methods: {
@@ -70,6 +71,13 @@ export default {
     },
     watch: {
         visitorList(value) {
+
+            if (value.find((visitor) => { return (visitor.start_time_visitor) ? true : false; })) {
+                this.startTimeDisabled = true
+            } else {
+                this.startTimeDisabled = false
+            }
+
             if (value.length === 1) {
                 this.setEndStartTimeVisitor()
             } else if (value.length != 0) {

@@ -8,7 +8,8 @@
                     <div>
                         <MySelect v-model:modelValue="tariff" :options="$store.state.tariffs"></MySelect>
                     </div>
-                    <MyButton :cls="'btn_second'" @click="updateVisitorTariff()">СМЕНИТЬ</MyButton>
+                    <MyButton :cls="'btn_second'" @click="updateVisitorTariff()" :disabled="tariffDisabled">СМЕНИТЬ
+                    </MyButton>
                 </div>
             </div>
             <div class="d-flex align-items-center justify-content-between p-2">
@@ -18,7 +19,6 @@
                         <MySelect v-model:modelValue="service_selected" :options="services"></MySelect>
                     </div>
                     <div class="d-flex">
-                        <!-- $refs.visitors_service_modal.open() -->
                         <MyButton class="m-1 mt-0 mb-0" :cls="'btn_second'"
                             @click="visitorsServicesShow = !visitorsServicesShow"
                             :disabled="(visitorList.length === 0) ? true : false">
@@ -31,19 +31,19 @@
                     </div>
                 </div>
             </div>
-            <VisitorsServicesModal v-if="visitorsServicesShow" @delete-visitor-service="setVisitorsServices(visitorsId)"
-                :visitors-services="visitorsServices" @close="$refs.visitors_service_modal.close()"
-                v-model:payment-results="paymentResults" />
+            <VisitorsServices class="ps-2 pe-2" :visitors-services-show="visitorsServicesShow"
+                @delete-visitor-service="setVisitorsServices(visitorsId)" :visitors-services="visitorsServices"
+                @close="$refs.visitors_service_modal.close()" v-model:payment-results="paymentByServices" />
         </div>
         <div class="results">
             <div class="text">
-                Итоги: {{ paymentResults }}
+                <strong>
+                    Итоги: {{ paymentByServices + paymentByTariffs }} ₽
+                </strong>
+
                 <!-- Тут {{  }} расчиттать сумму общую за время прошедшее и за услуги -->
             </div>
         </div>
-        <!-- <MyModal :mode-flex-center="true" ref="visitors_service_modal"> -->
-
-        <!-- </MyModal> -->
     </div>
 </template>
 
@@ -51,8 +51,7 @@
 import MySelect from '@/components/UI/MySelect.vue';
 import MyMultiSelect from '@/components/UI/MyMultiSelect.vue';
 import MyButton from '@/components/UI/MyButton.vue';
-// import MyModal from '@/components/UI/MyModal.vue';
-import VisitorsServicesModal from '@/components/AdminPanelComponents/chart/SessionModalComponents/VisitorsServicesModal.vue';
+import VisitorsServices from '@/components/AdminPanelComponents/chart/SessionModalComponents/VisitorsServices.vue';
 import { mapState } from 'vuex';
 
 export default {
@@ -61,8 +60,7 @@ export default {
     emits: ['visitorsUpdated'],
     components: {
         MySelect, MyMultiSelect, MyButton,
-        // MyModal, 
-        VisitorsServicesModal
+        VisitorsServices
     },
     data() {
         return {
@@ -70,32 +68,71 @@ export default {
             tariff: null,
             service_selected: null,
             visitorsServices: [],
-            visitorsId: []
+            visitorsId: [],
+            paymentByTariffs: 0,
+            paymentByServices: 0,
+            tariffDisabled: false,
         };
     },
-    computed: {
-        paymentResults() {
-            const result = this.visitorsServices.reduce((acc, service) => acc + Number(service.price), 0)
-            return result
-        },
-        ...mapState(['services'])
-    },
+    computed: { ...mapState(['services', 'tariffs']) },
     methods: {
         setTariff(firstVisitorTariff) {
             (firstVisitorTariff) ? this.tariff = firstVisitorTariff : 'Ошибка';
         },
         setDataByVisitorList(visitorList) {
-            if (visitorList) {
-                if (visitorList[0]) {
+
+            if (visitorList.find((visitor) => { return (visitor.start_time_visitor) ? true : false; })) {
+                this.tariffDisabled = true
+            } else {
+                this.tariffDisabled = false
+            }
+            
+            // console.log((startTimeVisitorIndicate) ? true : false);
+
+            if (visitorList.length > 0) {
+                this.visitorsId = visitorList.map((visitor) => { return visitor.id })
+                this.setVisitorsServices(this.visitorsId)
+                if (visitorList.length === 1) {
                     this.setTariff(visitorList[0].tariff_id)
-                    this.visitorsId = visitorList.map((visitor) => { return visitor.id })
-                    this.setVisitorsServices(this.visitorsId)
-                } else {
+                } else if (visitorList.length > 1) {
                     this.tariff = null
-                    this.visitorsId = []
-                    this.visitorsServices = []
+                    this.setTariff(this.sessionTariff)
+                }
+            } else {
+                this.tariff = null
+                this.visitorsId = []
+                this.visitorsServices = []
+                this.paymentByServices = 0
+            }
+        },
+        setTimePayment(visitorList, tariffs) { // Можно вынести за пределы Компонента (GlobalFunction)
+            let timeSum = null
+            let tariffPayments = null
+            // Tariff_points:{ title:"По минутам" | metric:"TimeBased"/"Fixed" | duration:null | cost:3 } 
+            for (let i = 0; i < visitorList.length; i++) {
+                const visitor = visitorList[i]
+                if (visitor.start_time_visitor && visitor.end_time_visitor) {
+                    const visitorTariff = tariffs.filter((item) => { return (item.id === visitor.tariff_id) ? true : false; })[0]
+
+                    const deifferenceVisitorTime = Math.ceil((new Date(visitor.end_time_visitor).getTime() - new Date(visitor.start_time_visitor).getTime()) / 60000)
+
+                    timeSum = timeSum + deifferenceVisitorTime;
+                    // console.log(deifferenceVisitorTime);
+                    if (visitorTariff.metric == 'TimeBased') {
+                        const visitorTariffPayment = deifferenceVisitorTime * visitorTariff.cost;
+                        tariffPayments = tariffPayments + visitorTariffPayment;
+                        // console.log('visitorTariffPayment', visitorTariffPayment);
+                    } else if (visitorTariff.metric == 'Fixed') {
+                        const visitorTariffPayment = visitorTariff.cost
+                        tariffPayments = tariffPayments + visitorTariffPayment;
+                        // console.log('visitorTariffPayment', visitorTariffPayment);
+                    }
                 }
             }
+            // console.log('Сумарное время', timeSum)
+            // console.log('Сука БАБКИ: ', tariffPayments, '₽')
+            // return tariffPayments
+            this.paymentByTariffs = tariffPayments
         },
         async addVisitorService() {
             await this.$api.createVisitorService({ visitor_id: this.visitorList[0].id, service_id: this.service_selected })
@@ -103,6 +140,8 @@ export default {
         },
         async setVisitorsServices(visitorsId) {
             this.visitorsServices = await this.$api.getVisitorsServices(visitorsId)
+            this.paymentByServices = this.visitorsServices.reduce((acc, service) => acc + Number(service.price), 0)
+
         },
         async updateVisitorTariff() {
             await this.$api.updateVisitors({ tariff_id: this.tariff }, this.visitorsId)
@@ -112,6 +151,7 @@ export default {
     watch: {
         visitorList(value) {
             this.setDataByVisitorList(value)
+            this.setTimePayment(value, this.tariffs)
         }
     },
     mounted() {

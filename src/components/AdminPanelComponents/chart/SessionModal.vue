@@ -40,7 +40,7 @@
             <SessionTimeLine @time-updated="setVisitorsBySession" v-model:visitor-list="selectedVisitors" :session="session" />
         </div>
         <div v-if="mode !== 'createBooking'" class="services">
-            <SessionService @visitors-updated="setVisitorsBySession" v-model:visitor-list="selectedVisitors" />
+            <SessionService @visitors-updated="setVisitorsBySession" v-model:visitor-list="selectedVisitors" :session-tariff="session.tariff_id"/>
         </div>
         <div v-if="mode !== 'createBooking'" class="payment">
             <SessionPayment />
