@@ -19,12 +19,11 @@
                         <MySelect v-model:modelValue="service_selected" :options="services"></MySelect>
                     </div>
                     <div class="d-flex">
-                        <MyButton class="m-1 mt-0 mb-0" :cls="'btn_second'"
-                            @click="visitorsServicesShow = !visitorsServicesShow"
+                        <MyButton :cls="'btn_second'" @click="visitorsServicesShow = !visitorsServicesShow"
                             :disabled="(visitorList.length === 0) ? true : false">
                             ПОКАЗАТЬ ({{ visitorsServices.length }})
                         </MyButton>
-                        <MyButton class="m-1 mt-0 mb-0" :cls="'btn_second'" @click="addVisitorService"
+                        <MyButton class="ms-1" :cls="'btn_second'" @click="addVisitorService"
                             :disabled="(visitorList.length > 1 || visitorList.length === 0 || service_selected === null) ? true : false">
                             ДОБАВИТЬ
                         </MyButton>
@@ -86,7 +85,7 @@ export default {
             } else {
                 this.tariffDisabled = false
             }
-            
+
             // console.log((startTimeVisitorIndicate) ? true : false);
 
             if (visitorList.length > 0) {

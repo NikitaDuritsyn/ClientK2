@@ -27,6 +27,17 @@ body {
   border-radius: 5px;
 }
 
+.text_block {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #fff;
+  padding: 0 3px 0 3px;
+  font-size: 14px;
+  border-radius: 5px;
+  line-height: 14px;
+}
+
 .vue__time-picker .dropdown ul li:not([disabled]).active,
 .vue__time-picker .dropdown ul li:not([disabled]).active:focus,
 .vue__time-picker .dropdown ul li:not([disabled]).active:hover {
@@ -70,4 +81,5 @@ body {
   outline: none;
   width: 100%;
   padding: 1.1rem;
-}</style>
+}
+</style>

@@ -30,23 +30,15 @@
                     :options="$store.state.tariffs" />
             </div>
         </div>
-        <div class="visitors">
-            <SessionVisitorsList :mode="mode" v-model:visitors_lsit="visitors" :session-id="session.id"
-                :session-tariff="session.tariff_id" @update-visitor-by-index="updateVisitorByIndex"
-                @delete-visitor-by-index="deleteVisitorByIndex" @update-visitor-list="setVisitorsBySession"
-                @visitors-selected="setSelectedVisitors" />
-        </div>
-        <div v-if="mode !== 'createBooking'" class="time_line">
-            <SessionTimeLine @time-updated="setVisitorsBySession" @session-updated="$emit('sessionUpdated')"
-                v-model:visitor-list="selectedVisitors" :session="session" />
-        </div>
-        <div v-if="mode !== 'createBooking'" class="services">
-            <SessionService @visitors-updated="setVisitorsBySession" v-model:visitor-list="selectedVisitors"
-                :session-tariff="session.tariff_id" />
-        </div>
-        <div v-if="mode !== 'createBooking'" class="payment">
-            <SessionPayment />
-        </div>
+        <SessionVisitorsList :mode="mode" v-model:visitors_lsit="visitors" :session-id="session.id"
+            :session-tariff="session.tariff_id" @update-visitor-by-index="updateVisitorByIndex"
+            @delete-visitor-by-index="deleteVisitorByIndex" @update-visitor-list="setVisitorsBySession"
+            @visitors-selected="setSelectedVisitors" />
+        <SessionTimeLine v-if="mode !== 'createBooking'" @time-updated="setVisitorsBySession"
+            @session-updated="$emit('sessionUpdated')" v-model:visitor-list="selectedVisitors" :session="session" />
+        <SessionService v-if="mode !== 'createBooking'" @visitors-updated="setVisitorsBySession"
+            v-model:visitor-list="selectedVisitors" :session-tariff="session.tariff_id" />
+        <SessionPayment :visitor-list="selectedVisitors" v-if="mode !== 'createBooking'" />
         <div class="d-flex justify-content-end">
             <MyButton v-if="mode === 'createBooking'" :cls="'btn_second'" @click="createBooking">СОЗДАТЬ</MyButton>
         </div>
