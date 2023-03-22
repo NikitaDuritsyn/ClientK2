@@ -1,11 +1,9 @@
 <template>
   <div class="visitors_list_container">
     <div class="visitors_block">
-      <div v-for="(visitor, index) in visitors_lsit" :key="index">
-        <Visitor @update-visitor="updateVisitorByIndex" @delete-visitor="deleteVisitorByIndex" :visitor-index="index"
-          :mode="mode" ref="visitor" :select_all="setSelectedAll" :visitor="visitor" @selected="setSelectedArr"
-          @status-switch="updateSelectedArr" />
-      </div>
+      <Visitor v-for="(visitor, index) in visitors_lsit" :key="index" @update-visitor="updateVisitorByIndex"
+        @delete-visitor="deleteVisitorByIndex" :visitor-index="index" :mode="mode" ref="visitor"
+        :select_all="setSelectedAll" :visitor="visitor" @selected="setSelectedArr" @status-switch="updateSelectedArr" />
     </div>
     <div class="select_menu">
       <div class="d-flex justify-content-between align-items-center w-100">
@@ -37,9 +35,7 @@ import Visitor from "./Visitor.vue";
 export default {
   name: "session-visitors-list",
   emits: ["updateVisitorByIndex", "deleteVisitorByIndex", "updateVisitorList", "visitorsSelected"],
-
   props: ["visitors_lsit", "mode", "sessionId", "sessionTariff"],
-
   components: { Switch, Visitor, MyButton, MyModal, VisitorForm },
 
   data() {
@@ -140,21 +136,20 @@ export default {
 .visitors_list_container {
   display: flex;
   flex-direction: column;
-  border: 1px solid whitesmoke;
-  height: 100%;
+  border: 2px solid whitesmoke;
   width: 100%;
   border-radius: 5px;
+  height: 100%;
+  max-height: 250px;
+  margin: 5px 0px;
 }
 
 .visitors_block {
   overflow: scroll;
-  height: 100%;
+  max-height: 100%;
   width: 100%;
   -ms-overflow-style: none;
   scrollbar-width: none;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
 }
 
 .visitors_block::-webkit-scrollbar {

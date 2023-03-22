@@ -57,6 +57,10 @@ export default {
     methods: {
         createVisitor() {
             const vm = this
+
+            if (!vm.visitor.name) {
+                vm.visitor.name = 'Anonymous'
+            }
             if (vm.mode === 'createBooking' || vm.mode === 'createBookingUpdate') {
                 // console.log(vm.visitor);
                 if (!vm.visitor.deposit.value) {

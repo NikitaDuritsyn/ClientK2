@@ -37,10 +37,12 @@
                 @visitors-selected="setSelectedVisitors" />
         </div>
         <div v-if="mode !== 'createBooking'" class="time_line">
-            <SessionTimeLine @time-updated="setVisitorsBySession" v-model:visitor-list="selectedVisitors" :session="session" />
+            <SessionTimeLine @time-updated="setVisitorsBySession" @session-updated="$emit('sessionUpdated')"
+                v-model:visitor-list="selectedVisitors" :session="session" />
         </div>
         <div v-if="mode !== 'createBooking'" class="services">
-            <SessionService @visitors-updated="setVisitorsBySession" v-model:visitor-list="selectedVisitors" :session-tariff="session.tariff_id"/>
+            <SessionService @visitors-updated="setVisitorsBySession" v-model:visitor-list="selectedVisitors"
+                :session-tariff="session.tariff_id" />
         </div>
         <div v-if="mode !== 'createBooking'" class="payment">
             <SessionPayment />
@@ -68,6 +70,7 @@ import 'vue3-timepicker/dist/VueTimepicker.css'
 export default {
     name: "session-modal-vue",
     components: { VueTimepicker, SessionVisitorsList, SessionTimeLine, SessionService, SessionPayment, SessionDate, MyButton, MyInput, MyMultiSelect, SessionRooms, MySelect },
+    emits: ['sessionUpdated'],
     props: {
         session: { type: Object, default: {} },
         mode: { type: String, default: '' },
@@ -141,24 +144,5 @@ export default {
 .text_name {
     font-size: 16px;
     padding: 0 10px 0 0;
-}
-
-.visitors {
-    padding: 5px 0;
-    height: 250px;
-}
-
-.time_line {
-    padding: 5px 0;
-    height: 100px;
-}
-
-.services {
-    padding: 5px 0;
-}
-
-.payment {
-    padding: 5px 0 0 0;
-    height: 500px;
 }
 </style>

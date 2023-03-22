@@ -23,5 +23,8 @@ export default {
     height: 100%;
     border: 1px solid white;
     border-radius: 5px;
+    margin-top: 5px;
+    max-height: 500px;
+
 }
 </style>
