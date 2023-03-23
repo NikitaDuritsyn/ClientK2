@@ -46,17 +46,17 @@
 </template>
 
 <script>
-import SessionVisitorsList from './SessionModalComponents/SessionVisitorsList.vue';
-import SessionDate from './SessionModalComponents/SessionDate.vue';
-import SessionRooms from './SessionModalComponents/SessionRooms.vue';
-import SessionPayment from './SessionModalComponents/SessionPayment.vue';
-import SessionService from './SessionModalComponents/SessionService.vue';
-import SessionTimeLine from './SessionModalComponents/SessionTimeLine.vue';
-import VueTimepicker from 'vue3-timepicker'
+import SessionVisitorsList from '@/components/SessionModalComponents/SessionVisitorsList.vue';
+import SessionDate from '@/components/SessionModalComponents/SessionDate.vue';
+import SessionRooms from '@/components/SessionModalComponents/SessionRooms.vue';
+import SessionPayment from '@/components/SessionModalComponents/SessionPayment.vue';
+import SessionService from '@/components/SessionModalComponents/SessionService.vue';
+import SessionTimeLine from '@/components/SessionModalComponents/SessionTimeLine.vue';
 import MyButton from '@/components/UI/MyButton.vue';
 import MyInput from '@/components/UI/MyInput.vue';
 import MyMultiSelect from '@/components/UI/MyMultiSelect.vue';
 import MySelect from '@/components/UI/MySelect.vue';
+import VueTimepicker from 'vue3-timepicker'
 import 'vue3-timepicker/dist/VueTimepicker.css'
 
 export default {

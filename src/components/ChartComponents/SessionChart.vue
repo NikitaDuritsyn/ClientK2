@@ -1,6 +1,5 @@
 <template>
     <div class="w-100 h-100 position-relative d-flex align-items-center">
-
         <div :style="{ height: this.chartHeight + 'px' }" class="clue">
             <ClueRoomsComponent />
         </div>
@@ -38,10 +37,10 @@
 
 <script>
 import { mapState } from 'vuex';
-import MyModal from '../../UI/MyModal.vue';
-import ClueRoomsComponent from './clueRoomsComponent.vue';
-import Session from './Session.vue'
-import SessionModal from './SessionModal.vue';
+import MyModal from '@/components/UI/MyModal.vue';
+import ClueRoomsComponent from '@/components/ChartComponents/clueRoomsComponent.vue';
+import Session from '@/components/ChartComponents/Session.vue'
+import SessionModal from '@/components/ChartComponents/SessionModal.vue';
 export default {
     name: "my-chart-canvas",
     props: ["days"],
@@ -180,9 +179,7 @@ export default {
     mounted() {
         this.setTimeLine()
         this.setCanvasChartBlock(this.days);
-        setInterval(() => {
-            this.setToday()
-        }, 1000);
+        setInterval(() => { this.setToday() }, 1000);
         this.functionScrollToDay();
         this.getSessions()
     }

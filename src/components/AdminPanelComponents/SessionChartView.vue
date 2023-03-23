@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import SessionChart from '@/components/AdminPanelComponents/chart/SessionChart.vue';
+import SessionChart from '@/components/ChartComponents/SessionChart.vue';
 
 export default {
     name: "session-chart",

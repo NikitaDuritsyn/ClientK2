@@ -28,7 +28,7 @@
 import MyButton from "@/components/UI/MyButton.vue";
 import MyModal from "@/components/UI/MyModal.vue";
 import Switch from "@/components/UI/Switch.vue";
-import VisitorForm from "./VisitorForm.vue";
+import VisitorForm from "@/components/VisitorComponents/VisitorForm.vue";
 
 export default {
   name: "visitor-vue",

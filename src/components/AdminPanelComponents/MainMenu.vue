@@ -24,9 +24,7 @@ import MyButton from '../UI/MyButton.vue';
 
 export default {
     name: "main-menu",
-    data() {
-        return {}
-    },
+    data() { return {} },
     methods: {},
     mounted() {
         this.$router.push({ name: 'booking' })

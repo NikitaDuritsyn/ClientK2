@@ -14,11 +14,11 @@
                 <div class="d-flex align-items-center">
                     <div class="p-1 me-1 text_block">{{ visitorsDeposit }}</div>
                     =
-                    <div class="p-1 m-1 text_block">НАЛИЧКА</div>
+                    <div class="p-1 me-1 ms-1 text_block">НАЛИЧКА</div>
                     +
-                    <div class="p-1 m-1 text_block">ПЕРЕВОД</div>
+                    <div class="p-1 me-1 ms-1 text_block">ПЕРЕВОД</div>
                     +
-                    <div class="p-1 m-1 text_block">ТЕРМИНАЛ</div>
+                    <div class="p-1 ms-1 text_block">ТЕРМИНАЛ</div>
                 </div>
             </div>
         </div>
@@ -28,9 +28,9 @@
                 <div class="d-flex align-items-center">
                     <div class="p-1 me-1 text_block">{{ toPay }}</div>
                     =
-                    <div class="p-1 m-1 text_block">{{ paymentSumm }}</div>
+                    <div class="p-1 me-1 ms-1 text_block">{{ paymentSumm }}</div>
                     -
-                    <div class="p-1 m-1 text_block">{{ visitorsDeposit }}</div>
+                    <div class="p-1 ms-1 me-1 text_block">{{ visitorsDeposit }}</div>
                 </div>
             </div>
         </div>

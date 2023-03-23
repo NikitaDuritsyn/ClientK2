@@ -50,7 +50,7 @@
 import MySelect from '@/components/UI/MySelect.vue';
 import MyMultiSelect from '@/components/UI/MyMultiSelect.vue';
 import MyButton from '@/components/UI/MyButton.vue';
-import VisitorsServices from '@/components/AdminPanelComponents/chart/SessionModalComponents/VisitorsServices.vue';
+import VisitorsServices from '@/components/VisitorComponents/VisitorsServices.vue';
 import { mapState } from 'vuex';
 
 export default {

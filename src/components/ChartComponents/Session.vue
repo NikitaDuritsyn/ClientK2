@@ -19,7 +19,7 @@
 
 <script>
 import MyModal from '@/components/UI/MyModal.vue';
-import SessionModal from './SessionModal.vue';
+import SessionModal from '@/components/ChartComponents/SessionModal.vue';
 
 export default {
     name: "session-vue",
