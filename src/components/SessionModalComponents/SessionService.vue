@@ -56,7 +56,7 @@ import { mapState } from 'vuex';
 export default {
     name: "session-service",
     props: ['visitorList', 'sessionTariff'],
-    emits: ['visitorsUpdated'],
+    emits: ['visitorsUpdated', 'resultToPay', 'priceForAll'],
     components: {
         MySelect, MyMultiSelect, MyButton,
         VisitorsServices
@@ -86,8 +86,6 @@ export default {
                 this.tariffDisabled = false
             }
 
-            // console.log((startTimeVisitorIndicate) ? true : false);
-
             if (visitorList.length > 0) {
                 this.visitorsId = visitorList.map((visitor) => { return visitor.id })
                 this.setVisitorsServices(this.visitorsId)
@@ -104,33 +102,24 @@ export default {
                 this.paymentByServices = 0
             }
         },
-        setTimePayment(visitorList, tariffs) { // Можно вынести за пределы Компонента (GlobalFunction)
+        setTariffPayment(visitorList, tariffs) {
             let timeSum = null
             let tariffPayments = null
-            // Tariff_points:{ title:"По минутам" | metric:"TimeBased"/"Fixed" | duration:null | cost:3 } 
             for (let i = 0; i < visitorList.length; i++) {
                 const visitor = visitorList[i]
                 if (visitor.start_time_visitor && visitor.end_time_visitor) {
                     const visitorTariff = tariffs.filter((item) => { return (item.id === visitor.tariff_id) ? true : false; })[0]
-
                     const deifferenceVisitorTime = Math.ceil((new Date(visitor.end_time_visitor).getTime() - new Date(visitor.start_time_visitor).getTime()) / 60000)
-
                     timeSum = timeSum + deifferenceVisitorTime;
-                    // console.log(deifferenceVisitorTime);
                     if (visitorTariff.metric == 'TimeBased') {
                         const visitorTariffPayment = deifferenceVisitorTime * visitorTariff.cost;
                         tariffPayments = tariffPayments + visitorTariffPayment;
-                        // console.log('visitorTariffPayment', visitorTariffPayment);
                     } else if (visitorTariff.metric == 'Fixed') {
                         const visitorTariffPayment = visitorTariff.cost
                         tariffPayments = tariffPayments + visitorTariffPayment;
-                        // console.log('visitorTariffPayment', visitorTariffPayment);
                     }
                 }
             }
-            // console.log('Сумарное время', timeSum)
-            // console.log('Сука БАБКИ: ', tariffPayments, '₽')
-            // return tariffPayments
             this.paymentByTariffs = tariffPayments
         },
         async addVisitorService() {
@@ -150,8 +139,15 @@ export default {
     watch: {
         visitorList(value) {
             this.setDataByVisitorList(value)
-            this.setTimePayment(value, this.tariffs)
-        }
+            this.setTariffPayment(value, this.tariffs)
+        },
+
+        paymentByTariffs() {
+            this.$emit('priceForAll', (this.paymentByServices + this.paymentByTariffs))
+        },
+        paymentByServices() {
+            this.$emit('priceForAll', (this.paymentByServices + this.paymentByTariffs))
+        },
     },
     mounted() {
         this.setDataByVisitorList(this.visitorList)

@@ -6,7 +6,7 @@
 
 <script>
 export default {
-    name: 'payment-component',
+    name: 'payment-page',
     data() {
         return {}
     },

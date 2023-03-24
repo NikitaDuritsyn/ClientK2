@@ -2,8 +2,9 @@
   <div class="wrapInput">
     <label v-show="label">{{ label }}</label>
     <input ref="input" :type="type" :maxlength="maxlength" :max="type === 'number' && max ? max : undefined"
-      :autocomplete="autocomplete" :placeholder=placeholder :pattern="pattern" @input="updateInput" :value="modelValue"
-      :data-tel-input="phoneInput ? true : undefined" :disabled="disabled">
+      :min="type === 'number' && min ? min : undefined" :autocomplete="autocomplete" :placeholder=placeholder
+      :pattern="pattern" @input="updateInput" :value="modelValue" :data-tel-input="phoneInput ? true : undefined"
+      :disabled="disabled">
   </div>
 </template>
 
@@ -14,7 +15,8 @@ export default {
     label: { type: String, default: "", required: false },
     placeholder: { type: String, default: "", required: false },
     type: { type: String, default: "text" },
-    max: { type: String, default: undefined },
+    max: { type: Number, default: undefined },
+    min: { type: Number, default: undefined },
     maxlength: { type: String, default: undefined },
     autocomplete: { type: String, default: undefined },
     pattern: { type: String, default: undefined },

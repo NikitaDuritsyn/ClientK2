@@ -6,7 +6,7 @@
 
 <script>
 export default {
-    name: 'checkout-component',
+    name: 'checkout-page',
     data() {
         return {}
     },

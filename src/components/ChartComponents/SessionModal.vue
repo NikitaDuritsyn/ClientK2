@@ -36,9 +36,11 @@
             @visitors-selected="setSelectedVisitors" />
         <SessionTimeLine v-if="mode !== 'createBooking'" @time-updated="setVisitorsBySession"
             @session-updated="$emit('sessionUpdated')" v-model:visitor-list="selectedVisitors" :session="session" />
-        <SessionService v-if="mode !== 'createBooking'" @visitors-updated="setVisitorsBySession"
-            v-model:visitor-list="selectedVisitors" :session-tariff="session.tariff_id" />
-        <SessionPayment :visitor-list="selectedVisitors" v-if="mode !== 'createBooking'" />
+        <SessionService v-if="mode !== 'createBooking'" @price-for-all="setPriceForAll"
+            @visitors-updated="setVisitorsBySession" v-model:visitor-list="selectedVisitors"
+            :session-tariff="session.tariff_id" />
+        <SessionPayment v-model:price-for-all="priceForAll" :visitor-list="selectedVisitors"
+            @visitor-updated="setVisitorsBySession" v-if="mode !== 'createBooking'" />
         <div class="d-flex justify-content-end">
             <MyButton v-if="mode === 'createBooking'" :cls="'btn_second'" @click="createBooking">СОЗДАТЬ</MyButton>
         </div>
@@ -77,7 +79,8 @@ export default {
             durationTime: '00:30',
             estimate_visitors: null,
             visitors: [],
-            rooms: []
+            rooms: [],
+            priceForAll: 0
         };
     },
     methods: {
@@ -105,7 +108,10 @@ export default {
                 (visitor) ? vm.visitors.push(visitor) : false;
             }
         },
-
+        setPriceForAll(value) {
+            console.log(value);
+            this.priceForAll = value
+        },
         updateVisitorByIndex(updatedVisitor) {
             this.visitors[updatedVisitor.visitorIndex] = updatedVisitor.visitorData
         },

@@ -6,7 +6,7 @@
 
 <script>
 export default {
-    name: 'booking-component',
+    name: 'booking-page',
     data() {
         return {}
     },

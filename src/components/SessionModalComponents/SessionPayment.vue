@@ -1,74 +1,23 @@
 <template>
     <div class="p-2 w-100 h-100 payment_container">
-        <div class="row justify-content-between">
-            <div class="col-md-3"><strong>Депонент:</strong></div>
-            <div class="col-md-9">
-                <div class="d-flex">
-                    <div class="p-1 text_block">{{ visitorsDeponent }}</div>
-                </div>
-            </div>
-        </div>
-        <div class="row mt-2 justify-content-between">
-            <div class="col-md-3"><strong>Депозит:</strong></div>
-            <div class="col-md-9">
-                <div class="d-flex align-items-center">
-                    <div class="p-1 me-1 text_block">{{ visitorsDeposit }}</div>
-                    =
-                    <div class="p-1 me-1 ms-1 text_block">НАЛИЧКА</div>
-                    +
-                    <div class="p-1 me-1 ms-1 text_block">ПЕРЕВОД</div>
-                    +
-                    <div class="p-1 ms-1 text_block">ТЕРМИНАЛ</div>
-                </div>
-            </div>
-        </div>
-        <div class="row mt-2 justify-content-between">
-            <div class="col-md-3"><strong>К оплате:</strong></div>
-            <div class="col-md-9">
-                <div class="d-flex align-items-center">
-                    <div class="p-1 me-1 text_block">{{ toPay }}</div>
-                    =
-                    <div class="p-1 me-1 ms-1 text_block">{{ paymentSumm }}</div>
-                    -
-                    <div class="p-1 ms-1 me-1 text_block">{{ visitorsDeposit }}</div>
-                </div>
-            </div>
-        </div>
-
-
+        <ResultsPayments :visitor-list="visitorList" :price-for-all="priceForAll"
+            @visitor-updated="$emit('visitorUpdated')" />
+        <hr class="m-2">
+        <IntroductionPayments :visitor-list="visitorList" @visitor-updated="$emit('visitorUpdated')" />
     </div>
 </template>
 
 <script>
-import MyInput from '@/components/UI/MyInput.vue';
+import ResultsPayments from '@/components/SessionPaymentConponents/ResultsPayments.vue';
+import IntroductionPayments from '@/components/SessionPaymentConponents/IntroductionPayments.vue';
 
 export default {
     name: "session-payment",
-    props: ['visitorList'],
-    components: { MyInput },
+    emits: ['visitorUpdated'],
+    props: ['visitorList', 'priceForAll'],
+    components: { ResultsPayments, IntroductionPayments },
     data() {
-        return {
-            visitorsDeposit: 0,
-            visitorsDeponent: 0,
-            toPay: 0,
-            paymentSumm: 0,
-        };
-    },
-    methods: {
-        setVisitorsDepositDeponent(visitorList) {
-            this.visitorsDeponent = visitorList.reduce((acc, visitor) => acc + Number(visitor.deponent_value), 0)
-            this.visitorsDeposit = visitorList.reduce((acc, visitor) => acc + Number(visitor.deposit_value), 0)
-        }
-    },
-    watch: {
-        visitorList(value) {
-            if (value.length > 0) {
-                this.setVisitorsDepositDeponent(value)
-            }
-        }
-    },
-    mounted() {
-        this.setVisitorsDepositDeponent(this.visitorList)
+        return {};
     },
 }
 </script>

@@ -6,7 +6,7 @@
 
 <script>
 export default {
-    name: 'stock-component',
+    name: 'stock-page',
     data() {
         return {}
     },

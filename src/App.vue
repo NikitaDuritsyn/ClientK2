@@ -18,6 +18,10 @@ export default {
 </script>
 
 <style>
+.h-fit-content {
+  height: fit-content;
+}
+
 body {
   background-color: rgb(0, 0, 0) !important;
 }
