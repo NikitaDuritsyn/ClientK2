@@ -62,7 +62,6 @@ export default {
                 vm.visitor.name = 'Anonymous'
             }
             if (vm.mode === 'createBooking' || vm.mode === 'createBookingUpdate') {
-                // console.log(vm.visitor);
                 if (!vm.visitor.deposit.value) {
                     vm.visitor.deposit = null
                 }
@@ -73,18 +72,15 @@ export default {
                     vm.visitor.number_phone = null
                 }
                 if (vm.mode === 'createBookingUpdate') {
-                    // console.log(vm.mode);
                     vm.$emit('visitorUpdated', vm.visitor)
                     vm.visitor = null
                     vm.$emit('close')
                 } else {
-                    // console.log(vm.mode);
                     vm.$emit('visitorCreated', vm.visitor)
                     vm.visitor = null
                     vm.$emit('close')
                 }
             } else {
-                //Cоздаём пользователя в уже созданой брони или текущей сессии
                 vm.$api.createVisitor(vm.visitor, vm.sessionId).then(() => {
                     vm.$emit('visitorCreated')
                     vm.visitor = null

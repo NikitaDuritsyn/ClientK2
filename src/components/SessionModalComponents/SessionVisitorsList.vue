@@ -53,7 +53,6 @@ export default {
       }
     },
     updateVisitorList(visitor) {
-      // console.log(visitor);
       if (this.mode !== "createBooking") {
         this.$emit("updateVisitorList");
       } else {
@@ -64,11 +63,9 @@ export default {
       this.setSelected.push(value);
     },
     updateSelectedArr(value) {
-      // console.log('updateSelectedArr');
       this.setSelected = this.setSelected.map((item) => { return (item.visitor.id === value.visitor_id) ? { ...item, select_status: value.select_status } : { ...item }; })
     },
     updateSelectedAll(_value) {
-      // console.log('updateSelectedAll');
       if (_value === "click") {
         if (this.select_all === false) {
           this.setSelected = this.setSelected.map((item) => { return (item.select_status === false) ? { ...item, select_status: true } : { ...item }; })

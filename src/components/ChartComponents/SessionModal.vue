@@ -109,7 +109,6 @@ export default {
             }
         },
         setPriceForAll(value) {
-            console.log(value);
             this.priceForAll = value
         },
         updateVisitorByIndex(updatedVisitor) {

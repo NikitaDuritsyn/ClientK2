@@ -37,7 +37,7 @@ export default {
         setDataCreationDeposits() {
             this.dataCreationDeposits = this.$store.state.paymentTypes.map(item => {
                 return {
-                    title: item.type,
+                    title: item.title,
                     payment_type_id: item.id,
                     deposit_value: null
                 }
