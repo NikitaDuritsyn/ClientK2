@@ -80,18 +80,22 @@ export default {
             vm.bookingDay = new Date()
             if (indexDay > 0 && currentMinutesToday < (((indexDay * 1440) / 60) * 60)) {
                 if (indexRoom > vm.rooms.length) {
-                    indexRoom = indexRoom - 1
+                    indexRoom = vm.rooms.length
                 }
                 for (let i = 0; i < vm.rooms.length; i++) {
                     if (Math.floor(indexRoom) === i) {
                         vm.bookingRoom = vm.rooms[i]
                     }
                 }
-                let bookingHours = Math.floor((indexDay * 1440) / 60 - (Math.floor(indexDay) * 24))
-                let bookingMinutes = Math.floor(((indexDay * 1440) % 60 / 60) * 60)
-                vm.bookingDay.setDate(vm.bookingDay.getDate() + Math.floor(indexDay));
-                vm.bookingDay.setHours(bookingHours, bookingMinutes, 0, 0)
-                vm.$refs.booking_create.open()
+                if (vm.bookingRoom) {
+                    let bookingHours = Math.floor((indexDay * 1440) / 60 - (Math.floor(indexDay) * 24))
+                    let bookingMinutes = Math.floor(((indexDay * 1440) % 60 / 60) * 60)
+                    vm.bookingDay.setDate(vm.bookingDay.getDate() + Math.floor(indexDay));
+                    vm.bookingDay.setHours(bookingHours, bookingMinutes, 0, 0)
+                    vm.$refs.booking_create.open()
+                }else{
+                    alert('Комнаты не заданны. Для дальнейшего использования создайте их.')
+                }
             }
         },
         getSessions() {

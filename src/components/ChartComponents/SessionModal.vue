@@ -87,15 +87,18 @@ export default {
         async createBooking() {
             const vm = this
             const dateBooking = new Date(new Date(vm.bookingDay).setHours(vm.simpleStringValue.slice(0, 2), vm.simpleStringValue.slice(-2), 0, 0))
-            const session = {
-                booked_date: dateBooking,
-                estimate_session_duration: Number(vm.durationTime.slice(0, 2)) * 60 + Number(vm.durationTime.slice(-2)),
-                estimate_visitors_num: this.estimate_visitors,
+            const createBookingData = {
+                session: {
+                    booked_date: dateBooking,
+                    estimate_session_duration: Number(vm.durationTime.slice(0, 2)) * 60 + Number(vm.durationTime.slice(-2)),
+                    estimate_visitors_num: this.estimate_visitors,
+                    tariff_id: this.tariff_id,
+                    status: 'booked'
+                },
                 visitors: vm.visitors,
-                rooms: vm.rooms,
-                tariff_id: this.tariff_id
+                rooms: vm.rooms
             }
-            await vm.$api.createBookingSession(session).then(() => {
+            await vm.$api.createBookingSession(createBookingData).then(() => {
                 this.$emit('bookingCreated')
                 this.$emit('close')
             })
