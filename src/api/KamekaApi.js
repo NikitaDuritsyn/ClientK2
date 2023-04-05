@@ -2,6 +2,14 @@ import BaseApi from './BaseApi'
 
 class KamekaApi extends BaseApi {
     //posts
+    updateVisitors(visitorUpdateData, visitorsId) {
+        let url = `/api/update_visitors`
+        return this._request({
+            method: 'post',
+            url: url,
+            data: { visitorUpdateData, visitorsId: visitorsId }
+        })
+    }
     useDeponent(data) {
         let url = `/api/use_deponent`
         return this._request({
@@ -19,7 +27,7 @@ class KamekaApi extends BaseApi {
         })
     }
     createVisitorService(visitorService) {
-        let url = `/api/creaete_visitor_service`
+        let url = `/api/create_visitor_service`
         return this._request({
             method: 'post',
             url: url,
@@ -43,7 +51,7 @@ class KamekaApi extends BaseApi {
         })
     }
     getVisitorsServices(visitorsId) {
-        let url = `/api/get_visitors_services`
+        let url = `/api/visitors_services`
         return this._request({
             method: 'post',
             url: url,
@@ -51,7 +59,7 @@ class KamekaApi extends BaseApi {
         })
     }
     getVisitorsDeposit(visitorsId) {
-        let url = `/api/get_deposits`
+        let url = `/api/visitors_deposits`
         return this._request({
             method: 'post',
             url: url,
@@ -59,15 +67,15 @@ class KamekaApi extends BaseApi {
         })
     }
     getVisitorsDeponent(visitorsId) {
-        let url = `/api/get_deponents`
+        let url = `/api/visitors_deponents`
         return this._request({
             method: 'post',
             url: url,
             data: visitorsId
         })
     }
-    updateStartTime(data) {
-        let url = `/api/start_time`
+    updateStartTimeVisitors(data) {
+        let url = `/api/update_visitors`
         return this._request({
             method: 'post',
             url: url,
@@ -75,13 +83,27 @@ class KamekaApi extends BaseApi {
         })
 
     }
-    updateEndTime(data) {
-        let url = `/api/end_time`
+    updateEndTimeVisitors(data) {
+        let url = `/api/update_visitors`
         return this._request({
             method: 'post',
             url: url,
             data: data
         })
+    }
+    updateStartTimeSession(sessionId) {
+        let url = `/api/update_start_time_session/${sessionId}`
+        return this._request({
+            url: url,
+        })
+
+    }
+    updateEndTimeSession(sessionId) {
+        let url = `/api/update_end_time_session/${sessionId}`
+        return this._request({
+            url: url,
+        })
+
     }
     //gets
     getVisitors() {
@@ -132,15 +154,7 @@ class KamekaApi extends BaseApi {
             url: url
         })
     }
-    //putes
-    updateVisitors(updateData, visitorsId) {
-        let url = `/api/update_visitors`
-        return this._request({
-            method: 'put',
-            url: url,
-            data: { updateData: updateData, visitorsId: visitorsId }
-        })
-    }
+
     //deletes
     deleteVisitorService(serviceId) {
         let url = `/api/delete_visitor_service/${serviceId}`

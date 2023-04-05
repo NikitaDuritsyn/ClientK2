@@ -93,22 +93,27 @@ export default {
         async updateStartTime() {
             let currentDateTime = new Date()
             this.start_time = currentDateTime.getHours() + ':' + currentDateTime.getMinutes()
-            await this.$api.updateStartTime({
+            await this.$api.updateStartTimeVisitors({
+                // sessionId: this.session.id,//возможно не нужно отправлять, но есил и отправить то что тогда делать
+                visitorUpdateData: { start_time_visitor: currentDateTime },
                 visitorsId: this.visitorList.map((item) => { return item.id }),
-                sessionId: this.session.id,
-                startTime: currentDateTime
             })
+            await this.$api.updateStartTimeSession(this.session.id)
+
+
             this.$emit('sessionUpdated')
             this.$emit('timeUpdated')
         },
         async updateEndTime() {
             let currentDateTime = new Date()
             this.end_time = currentDateTime.getHours() + ':' + currentDateTime.getMinutes()
-            await this.$api.updateEndTime({
+            await this.$api.updateEndTimeVisitors({
+                // sessionId: this.session.id,
                 visitorsId: this.visitorList.map((item) => { return item.id }),
-                sessionId: this.session.id,
-                endTime: currentDateTime
+                visitorUpdateData: { end_time_visitor: currentDateTime },
             })
+            await this.$api.updateEndTimeSession(this.session.id)
+
             this.$emit('sessionUpdated')
             this.$emit('timeUpdated')
         },

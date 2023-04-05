@@ -70,7 +70,7 @@ export default {
     methods: {
         async addDeponentInDeposite() {
             if (this.visitorList.length === 1 && this.deponentsSum > 0) {
-                await this.$api.useDeponent({ visitor: this.visitor, deposit_value: this.deponentsSum })
+                await this.$api.useDeponent({ visitor: this.visitor, value: this.deponentsSum })
                 this.$emit('visitorUpdated')
             }
         },
@@ -79,10 +79,10 @@ export default {
                 const visitorsDeposits = await this.$api.getVisitorsDeposit(visitorList.map((visitor) => { return visitor.id }))
                 const visitorsDeponents = await this.$api.getVisitorsDeponent(this.visitorList.map((visitor) => { return visitor.id }))
 
-                this.depositsSum = visitorsDeposits.reduce((acc, deposit) => acc + deposit.deposit_value, 0)
+                this.depositsSum = visitorsDeposits.reduce((acc, deposit) => acc + deposit.value, 0)
                 this.deponentsSum = visitorsDeponents
                     .filter(deponent => deponent.status === 'active')
-                    .reduce((acc, deponent) => acc + deponent.deponent_value, 0)
+                    .reduce((acc, deponent) => acc + deponent.value, 0)
                 this.depositsByTypesSum = []
                 for (let i = 0; i < this.$store.state.paymentTypes.length; i++) {
                     const paymentType = this.$store.state.paymentTypes[i]
@@ -90,7 +90,7 @@ export default {
                         title: paymentType.title,
                         depositValue: visitorsDeposits
                             .filter(deposit => deposit.payment_type_id === paymentType.id)
-                            .reduce((acc, deposit) => acc + deposit.deposit_value, 0)
+                            .reduce((acc, deposit) => acc + deposit.value, 0)
                     })
                 }
             } else {

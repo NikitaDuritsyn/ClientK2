@@ -7,7 +7,7 @@
             </div>
         </div>
 
-        <div v-for="paymentType in dataCreationDeposits"
+        <div v-for="paymentType in dataCreationDeposits" :key="paymentType.id"
             class="d-flex mt-2 align-items-center justify-content-between w-100">
             <div class="text-nowrap"><strong>{{ paymentType.title }}:</strong></div>
             <div class="d-flex flex-wrap justify-content-between">

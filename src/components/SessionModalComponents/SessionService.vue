@@ -12,6 +12,11 @@
                     </MyButton>
                 </div>
             </div>
+            <div class="d-flex w-100 mb-2">
+                <strong>
+                    ЗА ТАРИФ: {{ paymentByTariffs }} ₽
+                </strong>
+            </div>
             <div class="d-flex align-items-center justify-content-between p-2">
                 <div class="text">Услуги:</div>
                 <div class="d-flex align-items-center justify-content-between w-100">
@@ -71,6 +76,7 @@ export default {
             paymentByTariffs: 0,
             paymentByServices: 0,
             tariffDisabled: false,
+            today: new Date(),
         };
     },
     computed: { ...mapState(['services', 'tariffs']) },
@@ -103,14 +109,13 @@ export default {
             }
         },
         setTariffPayment(visitorList, tariffs) {
-            let timeSum = null
+            console.log('value2');
             let tariffPayments = null
             for (let i = 0; i < visitorList.length; i++) {
                 const visitor = visitorList[i]
+                const visitorTariff = tariffs.filter((item) => { return (item.id === visitor.tariff_id) ? true : false; })[0]
                 if (visitor.start_time_visitor && visitor.end_time_visitor) {
-                    const visitorTariff = tariffs.filter((item) => { return (item.id === visitor.tariff_id) ? true : false; })[0]
                     const deifferenceVisitorTime = Math.ceil((new Date(visitor.end_time_visitor).getTime() - new Date(visitor.start_time_visitor).getTime()) / 60000)
-                    timeSum = timeSum + deifferenceVisitorTime;
                     if (visitorTariff.metric == 'TimeBased') {
                         const visitorTariffPayment = deifferenceVisitorTime * visitorTariff.cost;
                         tariffPayments = tariffPayments + visitorTariffPayment;
@@ -118,6 +123,10 @@ export default {
                         const visitorTariffPayment = visitorTariff.cost
                         tariffPayments = tariffPayments + visitorTariffPayment;
                     }
+                } else if (visitor.start_time_visitor && !visitor.end_time_visitor && visitorTariff.metric == 'TimeBased') {
+                    const deifferenceVisitorTime = Math.ceil((new Date().getTime() - new Date(visitor.start_time_visitor).getTime()) / 60000)
+                    const visitorTariffPayment = deifferenceVisitorTime * visitorTariff.cost;
+                    tariffPayments = tariffPayments + visitorTariffPayment;
                 }
             }
             this.paymentByTariffs = tariffPayments
@@ -137,11 +146,13 @@ export default {
         },
     },
     watch: {
+        today() {
+            this.setTariffPayment(this.visitorList, this.tariffs)
+        },
         visitorList(value) {
             this.setDataByVisitorList(value)
             this.setTariffPayment(value, this.tariffs)
         },
-
         paymentByTariffs() {
             this.$emit('priceForAll', (this.paymentByServices + this.paymentByTariffs))
         },
@@ -150,6 +161,7 @@ export default {
         },
     },
     mounted() {
+        setInterval(() => { this.today = new Date() }, 1000);
         this.setDataByVisitorList(this.visitorList)
     },
 }
