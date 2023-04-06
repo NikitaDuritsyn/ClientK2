@@ -1,6 +1,5 @@
 <template>
     <div class="service_block_container">
-
         <div class="sevices_block">
             <div class="d-flex align-items-center justify-content-between p-2">
                 <div class="text">Тариф:</div>
@@ -44,8 +43,6 @@
                 <strong>
                     Итоги: {{ paymentByServices + paymentByTariffs }} ₽
                 </strong>
-
-                <!-- Тут {{  }} расчиттать сумму общую за время прошедшее и за услуги -->
             </div>
         </div>
     </div>
@@ -109,8 +106,7 @@ export default {
             }
         },
         setTariffPayment(visitorList, tariffs) {
-            console.log('value2');
-            let tariffPayments = null
+            let tariffPayments = 0
             for (let i = 0; i < visitorList.length; i++) {
                 const visitor = visitorList[i]
                 const visitorTariff = tariffs.filter((item) => { return (item.id === visitor.tariff_id) ? true : false; })[0]
@@ -123,10 +119,15 @@ export default {
                         const visitorTariffPayment = visitorTariff.cost
                         tariffPayments = tariffPayments + visitorTariffPayment;
                     }
-                } else if (visitor.start_time_visitor && !visitor.end_time_visitor && visitorTariff.metric == 'TimeBased') {
+                } else if (visitor.start_time_visitor && !visitor.end_time_visitor) {
                     const deifferenceVisitorTime = Math.ceil((new Date().getTime() - new Date(visitor.start_time_visitor).getTime()) / 60000)
-                    const visitorTariffPayment = deifferenceVisitorTime * visitorTariff.cost;
-                    tariffPayments = tariffPayments + visitorTariffPayment;
+                    if (visitorTariff.metric == 'TimeBased') {
+                        const visitorTariffPayment = deifferenceVisitorTime * visitorTariff.cost;
+                        tariffPayments = tariffPayments + visitorTariffPayment;
+                    } else if (visitorTariff.metric == 'Fixed') {
+                        const visitorTariffPayment = visitorTariff.cost
+                        tariffPayments = tariffPayments + visitorTariffPayment;
+                    }
                 }
             }
             this.paymentByTariffs = tariffPayments
@@ -207,5 +208,4 @@ export default {
     border: 1px solid white;
     border-radius: 5px;
     margin: 5px 0px;
-}
-</style>
+}</style>

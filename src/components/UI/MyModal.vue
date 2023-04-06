@@ -3,10 +3,10 @@
     <div class="popup-modal" :class="{ 'popup-modal-center': modeFlexCenter }" v-if="isVisible"
       @click.stop.pervent.self="close()">
       <div class="window">
-          <slot></slot>
+        <slot></slot>
       </div>
     </div>
-</transition>
+  </transition>
 </template>
 
 <script>
@@ -30,7 +30,19 @@ export default {
     close() {
       this.isVisible = false
     },
+    listener(event) {
+      if (event.code === 'Escape') {
+        this.close()
+      }
+    }
   },
+  mounted() {
+    addEventListener('keyup', this.listener);
+  },
+  beforeUnmount() {
+    removeEventListener('keyup', this.listener);
+  }
+
 }
 </script>
 

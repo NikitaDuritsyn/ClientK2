@@ -12,7 +12,7 @@
             </div>
             <div class="">
                 <div class="text_name">Продолжительность:</div>
-                <vue-timepicker v-model="durationTime" :minute-interval="30"></vue-timepicker>
+                <vue-timepicker v-model="durationTime" :minute-interval="15"></vue-timepicker>
             </div>
         </div>
         <div v-if="mode === 'createBooking'" class="">
@@ -30,8 +30,8 @@
                     :options="$store.state.tariffs" />
             </div>
         </div>
-        <SessionVisitorsList :mode="mode" v-model:visitors_lsit="visitors" :session-id="session.id"
-            :session-tariff="session.tariff_id" @update-visitor-by-index="updateVisitorByIndex"
+        <SessionVisitorsList :session-status="session.status" :mode="mode" v-model:visitors_lsit="visitors"
+            :session-id="session.id" :session-tariff="session.tariff_id" @update-visitor-by-index="updateVisitorByIndex"
             @delete-visitor-by-index="deleteVisitorByIndex" @update-visitor-list="setVisitorsBySession"
             @visitors-selected="setSelectedVisitors" />
         <SessionTimeLine v-if="mode !== 'createBooking'" @time-updated="setVisitorsBySession"
@@ -64,7 +64,7 @@ import 'vue3-timepicker/dist/VueTimepicker.css'
 export default {
     name: "session-modal-vue",
     components: { VueTimepicker, SessionVisitorsList, SessionTimeLine, SessionService, SessionPayment, SessionDate, MyButton, MyInput, MyMultiSelect, SessionRooms, MySelect },
-    emits: ['sessionUpdated'],
+    emits: ['sessionUpdated', 'close'],
     props: {
         session: { type: Object, default: {} },
         mode: { type: String, default: '' },
@@ -76,7 +76,7 @@ export default {
             tariff_id: null,
             selectedVisitors: [],
             simpleStringValue: '',
-            durationTime: '00:30',
+            durationTime: '01:00',
             estimate_visitors: null,
             visitors: [],
             rooms: [],
@@ -124,7 +124,7 @@ export default {
             this.selectedVisitors = value
         },
         setSimpleStringValue() {
-            this.simpleStringValue = this.bookingDay.toLocaleTimeString()
+            this.simpleStringValue = (this.bookingDay.getHours() < 10) ? '0' + this.bookingDay.getHours() + ':00' : this.bookingDay.getHours() + ':00'
         },
         setSessionRoomsSelected() {
             this.rooms.push(this.bookingRoom.id)

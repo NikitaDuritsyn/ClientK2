@@ -1,7 +1,7 @@
 <template>
   <div class="visitor_container">
     <Switch v-if="mode != 'createBooking'" v-model:modelValue="status_switch" />
-    <div class="visitor">
+    <div class="visitor" :class="{ 'text-decoration-line-through': visitor.status === 'close' }">
       <div>
         {{ visitor.name }}
       </div>

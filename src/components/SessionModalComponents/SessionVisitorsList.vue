@@ -13,7 +13,8 @@
             Все ( {{ selected_counter }} из {{ visitors_lsit.length }} )
           </div>
         </div>
-        <MyButton :cls="'btn_second'" @click="$refs.create_visitor.open()">
+        <MyButton :cls="'btn_second'" @click="$refs.create_visitor.open()"
+          :disabled="(sessionStatus === 'active' || sessionStatus === 'booked') ? false : true">
           ДОБАВИТЬ
         </MyButton>
       </div>
@@ -35,7 +36,7 @@ import Visitor from "@/components/VisitorComponents/Visitor.vue";
 export default {
   name: "session-visitors-list",
   emits: ["updateVisitorByIndex", "deleteVisitorByIndex", "updateVisitorList", "visitorsSelected"],
-  props: ["visitors_lsit", "mode", "sessionId", "sessionTariff"],
+  props: ["visitors_lsit", "mode", "sessionId", "sessionTariff", "sessionStatus"],
   components: { Switch, Visitor, MyButton, MyModal, VisitorForm },
 
   data() {

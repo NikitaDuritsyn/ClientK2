@@ -9,7 +9,7 @@
             class="d-flex flex-wrap align-items-center justify-content-between p-2 mt-2 mb-2 visitor_service">
             <div>Посетитель: {{ visitorService.name }}</div>
             <div>Услуга: {{ visitorService.title }}</div>
-            <div>Цена: {{ visitorService.price }}</div>
+            <div>Стоимость: {{ visitorService.price }}</div>
         </div>
     </div>
 </template>

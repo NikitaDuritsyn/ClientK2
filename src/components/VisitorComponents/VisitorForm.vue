@@ -22,8 +22,8 @@
                     :disabled="(visitor.number_phone?.length < 11 || !visitor.number_phone) ? true : false" />
                 <div>
                     <MySelect :label="'Тип оплаты'" class="m-auto w-100"
-                        :options="$store.state.paymentTypes.map(type => { return { id: type.id, title: type.type } })"
-                        v-model:model-value="visitor.deposit.paymet_type_id"
+                        :options="$store.state.paymentTypes.map(type => { return { id: type.id, title: type.title } })"
+                        v-model:model-value="visitor.deposit.payment_type_id"
                         :disabled="(visitor.number_phone?.length < 11 || !visitor.number_phone) ? true : false" />
                 </div>
             </div>

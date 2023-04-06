@@ -36,6 +36,7 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap');
 
 label {
+    white-space: nowrap;
     color: rgb(0, 255, 0) !important;
     font-family: Montserrat;
     font-style: normal;

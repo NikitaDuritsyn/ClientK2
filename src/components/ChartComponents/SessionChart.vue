@@ -15,7 +15,8 @@
                 </div>
                 <canvas ref="canvasChart" class="canvas"></canvas>
                 <div v-for="(item, index) in sessionsArray" :key="index">
-                    <Session @session-updated="getSessions" :rooms-number="rooms.length" :session="item" />
+                    <Session @session-updated="getSessions" :rooms-number="rooms.length" :session="item"
+                        v-model:currentTime="setTimeCurrent" />
                 </div>
             </div>
             <div class="dateLine" :style="{ width: 1440 * this.days + 'px' }">
@@ -93,7 +94,7 @@ export default {
                     vm.bookingDay.setDate(vm.bookingDay.getDate() + Math.floor(indexDay));
                     vm.bookingDay.setHours(bookingHours, bookingMinutes, 0, 0)
                     vm.$refs.booking_create.open()
-                }else{
+                } else {
                     alert('Комнаты не заданны. Для дальнейшего использования создайте их.')
                 }
             }

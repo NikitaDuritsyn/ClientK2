@@ -6,12 +6,11 @@
                 <MyButton :cls="'btn_second'" @click="addDepositByVisitor" :disabled="addDepositDisabled">Внести</MyButton>
             </div>
         </div>
-
         <div v-for="paymentType in dataCreationDeposits" :key="paymentType.id"
             class="d-flex mt-2 align-items-center justify-content-between w-100">
             <div class="text-nowrap"><strong>{{ paymentType.title }}:</strong></div>
             <div class="d-flex flex-wrap justify-content-between">
-                <MyInput class="p-0" :type="'number'" :min="0" v-model:model-value="paymentType.deposit_value" />
+                <MyInput class="p-0" :type="'number'" :min="0" v-model:model-value="paymentType.value" />
             </div>
         </div>
     </div>
@@ -39,14 +38,15 @@ export default {
                 return {
                     title: item.title,
                     payment_type_id: item.id,
-                    deposit_value: null
+                    value: null
                 }
             })
         },
         async addDepositByVisitor() {
-            const visitorDeposits = this.dataCreationDeposits.filter(item => (item.deposit_value && item.deposit_value > 0) ? true : false)
+            const visitorDeposits = this.dataCreationDeposits.filter(item => (item.value && item.value > 0) ? true : false)
+            const visitorDepositsData = visitorDeposits.map((visitorDeposit) => { return { ...visitorDeposit, visitor_id: this.visitor.id, client_id: this.visitor.client_id } })
             if (visitorDeposits.length > 0) {
-                await this.$api.createVisitorDeposits({ visitor: this.visitor, visitorDeposits: visitorDeposits })
+                await this.$api.createVisitorDeposits(visitorDepositsData)
                 this.$emit('visitorUpdated')
             }
         }
