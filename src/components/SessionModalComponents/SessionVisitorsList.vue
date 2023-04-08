@@ -14,7 +14,7 @@
           </div>
         </div>
         <MyButton :cls="'btn_second'" @click="$refs.create_visitor.open()"
-          :disabled="(sessionStatus === 'active' || sessionStatus === 'booked') ? false : true">
+          :disabled="(sessionStatus === 'close') ? true : false">
           ДОБАВИТЬ
         </MyButton>
       </div>
