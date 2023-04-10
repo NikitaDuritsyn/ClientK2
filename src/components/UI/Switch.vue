@@ -1,7 +1,7 @@
 <template>
   <div class="form-check form-switch">
-    <input :class="{ 'form-check-input': 1, 'form-check-input-lg': lg }" type="checkbox"
-      @input="$emit('update:modelValue', $event.target.checked)" :checked="modelValue">
+    <input class="form-check-input" type="checkbox" @input="$emit('update:modelValue', $event.target.checked)"
+      :checked="modelValue">
     <label v-if="label" class="form-check-label">
       {{ label }}
     </label>
@@ -21,10 +21,6 @@ export default {
     modelValue: {
       type: Boolean,
       default: false
-    },
-    lg: {
-      type: Boolean,
-      default: false
     }
   },
   emits: ['update:modelValue']
@@ -35,12 +31,12 @@ export default {
 .form-switch .form-check-input {
   width: 38px;
   height: 22px;
-  /* background-image: url("@/assets/switch_circle.svg"); */
+  background-image: url("@/assets/switch_circle_false.svg");
   background-position-y: center;
 }
 
 .form-switch .form-check-input:checked {
-  /* background-image: url("@/assets/switch_circle.svg"); */
+  background-image: url("@/assets/switch_circle_true.svg");
   background-position-x: 16px;
 }
 
@@ -63,15 +59,5 @@ export default {
 .form-switch .form-check-input:focus {
   /* background-color: red; */
   /* background-image: url("@/assets/switch_circle.svg"); */
-}
-
-.form-switch .form-check-input-lg {
-  width: 18px;
-  height: 18px;
-  background-position-x: 4px;
-}
-
-.form-switch .form-check-input-lg:checked {
-  background-position-x: 16px;
 }
 </style>

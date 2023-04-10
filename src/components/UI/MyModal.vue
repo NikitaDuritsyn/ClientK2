@@ -30,18 +30,7 @@ export default {
     close() {
       this.isVisible = false
     },
-    listener(event) {
-      if (event.code === 'Escape') {
-        this.close()
-      }
-    }
   },
-  mounted() {
-    addEventListener('keyup', this.listener);
-  },
-  beforeUnmount() {
-    removeEventListener('keyup', this.listener);
-  }
 
 }
 </script>

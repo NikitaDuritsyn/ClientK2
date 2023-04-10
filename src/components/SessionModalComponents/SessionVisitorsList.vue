@@ -2,8 +2,9 @@
   <div class="visitors_list_container">
     <div class="visitors_block">
       <Visitor v-for="(visitor, index) in visitors_lsit" :key="index" @update-visitor="updateVisitorByIndex"
-        @delete-visitor="deleteVisitorByIndex" :visitor-index="index" :mode="mode" ref="visitor"
-        :select_all="setSelectedAll" :visitor="visitor" @selected="setSelectedArr" @status-switch="updateSelectedArr" />
+        @update-visitor-list="$emit('updateVisitorList')" @delete-visitor="deleteVisitorByIndex" :visitor-index="index"
+        :mode="mode" ref="visitor" :select_all="setSelectedAll" :visitor="visitor" @selected="setSelectedArr"
+        @status-switch="updateSelectedArr" />
     </div>
     <div class="select_menu">
       <div class="d-flex justify-content-between align-items-center w-100">
@@ -13,6 +14,14 @@
             Все ( {{ selected_counter }} из {{ visitors_lsit.length }} )
           </div>
         </div>
+
+        <div class="d-flex">
+          <MyButton class="me-1 ms-1" v-for="addVisitorBtn in addVisitorBtns" :cls="'btn_second'"
+            @click="addSomeVisitors(addVisitorBtn.visitorsNum)" :disabled="(sessionStatus === 'close') ? true : false">
+            {{ addVisitorBtn.title }}
+          </MyButton>
+        </div>
+
         <MyButton :cls="'btn_second'" @click="$refs.create_visitor.open()"
           :disabled="(sessionStatus === 'close') ? true : false">
           ДОБАВИТЬ
@@ -41,10 +50,24 @@ export default {
 
   data() {
     return {
+      addVisitorBtns: [
+        { title: '+1', visitorsNum: 1 },
+        { title: '+3', visitorsNum: 3 },
+        { title: '+5', visitorsNum: 5 },
+      ],
       selected_counter: this.visitors_lsit.length, select_all: true, setSelected: [],
     };
   },
   methods: {
+    async addSomeVisitors(visitorsNum) {
+      const data = {
+        visitorsNum: visitorsNum,
+        tariff_id: this.sessionTariff,
+        session_id: this.sessionId
+      }
+      await this.$api.createSomeVisitors(data)
+      this.updateVisitorList()
+    },
     updateVisitorByIndex(updatedVisitor) {
       this.$emit("updateVisitorByIndex", updatedVisitor);
     },

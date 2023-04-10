@@ -18,6 +18,11 @@ export default {
 </script>
 
 <style>
+.text_label_name {
+  font-size: 16px;
+  padding: 0 10px 0 0;
+}
+
 .h-fit-content {
   height: fit-content;
 }

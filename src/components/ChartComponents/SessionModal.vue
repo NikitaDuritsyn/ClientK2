@@ -1,17 +1,17 @@
 <template>
-    <div class="session_modal">
+    <div>
         <div class="d-flex w-100 justify-content-between">
             <SessionDate :date="(mode !== 'createBooking') ? session.booked_date : bookingDay" />
-            <SessionRooms v-if="mode !== 'createBooking'" :session-rooms="session.session_rooms" />
+            <SessionRooms v-if="mode !== 'createBooking'" v-model:session-rooms="session.session_rooms" />
             <MyButton :cls="'close_btn'" @click="$emit('close')"></MyButton>
         </div>
         <div v-if="mode === 'createBooking'" class="d-flex w-100 justify-content-between flex-wrap">
             <div class="">
-                <div class="text_name">Время:</div>
+                <div class="text_label_name">Время:</div>
                 <vue-timepicker v-model="simpleStringValue" :minute-interval="15"></vue-timepicker>
             </div>
             <div class="">
-                <div class="text_name">Продолжительность:</div>
+                <div class="text_label_name">Продолжительность:</div>
                 <vue-timepicker v-model="durationTime" :minute-interval="15"></vue-timepicker>
             </div>
         </div>
@@ -30,15 +30,18 @@
                     :options="$store.state.tariffs" />
             </div>
         </div>
-        <SessionVisitorsList :session-status="session.status" :mode="mode" v-model:visitors_lsit="visitors"
-            :session-id="session.id" :session-tariff="session.tariff_id" @update-visitor-by-index="updateVisitorByIndex"
-            @delete-visitor-by-index="deleteVisitorByIndex" @update-visitor-list="setVisitorsBySession"
-            @visitors-selected="setSelectedVisitors" />
+        <SessionVisitorsList v-model:session-status="session.status" :mode="mode" v-model:visitors_lsit="visitors"
+            v-model:session-id="session.id" :session-tariff="session.tariff_id"
+            @update-visitor-by-index="updateVisitorByIndex" @delete-visitor-by-index="deleteVisitorByIndex"
+            @update-visitor-list="setVisitorsBySession" @visitors-selected="setSelectedVisitors" />
+
         <SessionTimeLine v-if="mode !== 'createBooking'" @time-updated="setVisitorsBySession"
             @session-updated="$emit('sessionUpdated')" v-model:visitor-list="selectedVisitors" :session="session" />
+
         <SessionService v-if="mode !== 'createBooking'" @price-for-all="setPriceForAll"
             @visitors-updated="setVisitorsBySession" v-model:visitor-list="selectedVisitors"
             :session-tariff="session.tariff_id" />
+
         <SessionPayment v-model:price-for-all="priceForAll" :visitor-list="selectedVisitors"
             @visitor-updated="setVisitorsBySession" v-if="mode !== 'createBooking'" />
         <div class="d-flex justify-content-end">
@@ -66,13 +69,17 @@ export default {
     components: { VueTimepicker, SessionVisitorsList, SessionTimeLine, SessionService, SessionPayment, SessionDate, MyButton, MyInput, MyMultiSelect, SessionRooms, MySelect },
     emits: ['sessionUpdated', 'close'],
     props: {
-        session: { type: Object, default: {} },
+        sessionId: { type: Number, default: null },
         mode: { type: String, default: '' },
         bookingDay: { default: new Date() },
         bookingRoom: { type: Object, default: {} },
     },
     data() {
         return {
+            session: {
+                booked_date: null,
+                session_rooms: []
+            },
             tariff_id: null,
             selectedVisitors: [],
             simpleStringValue: '',
@@ -84,6 +91,10 @@ export default {
         };
     },
     methods: {
+        async getSessionData() {
+            this.session = await this.$api.getSession(this.sessionId)
+            await this.setVisitorsBySession()
+        },
         async createBooking() {
             const vm = this
             const dateBooking = new Date(new Date(vm.bookingDay).setHours(vm.simpleStringValue.slice(0, 2), vm.simpleStringValue.slice(-2), 0, 0))
@@ -128,21 +139,30 @@ export default {
         },
         setSessionRoomsSelected() {
             this.rooms.push(this.bookingRoom.id)
+        },
+        listener(event) {
+            if (event.code === 'Escape') {
+                this.$emit('close')
+            }
         }
+
+    },
+    beforeMount() {
     },
     mounted() {
-        this.setSimpleStringValue()
-        this.setVisitorsBySession()
         if (this.mode === 'createBooking') {
             this.setSessionRoomsSelected()
+            this.setVisitorsBySession()
+            this.setSimpleStringValue()
+        } else {
+            this.getSessionData()
         }
+        addEventListener('keyup', this.listener);
     },
+    beforeUnmount() {
+        removeEventListener('keyup', this.listener);
+    }
 }
 </script>
 
-<style scoped>
-.text_name {
-    font-size: 16px;
-    padding: 0 10px 0 0;
-}
-</style>
+<style scoped></style>

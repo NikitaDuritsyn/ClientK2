@@ -14,7 +14,8 @@
         </strong>
     </div>
     <MyModal ref="session_modal">
-        <SessionModal @session-updated="$emit('sessionUpdated')" @close="$refs.session_modal.close()" :session="session" />
+        <!-- @session-updated="$emit('sessionUpdated')" -->
+        <SessionModal @close="$refs.session_modal.close(), $emit('sessionUpdated')" :session-id="session.id" />
     </MyModal>
 </template>
 
@@ -36,7 +37,6 @@ export default {
     computed: {
         setWidthSessionBlock() {
             let widthSessionBlock = 0
-
             if ((this.session.estimate_session_duration + this.startSessionBlock) < (2940 + this.currentTime) && this.session.status === 'active') {
                 widthSessionBlock = 2940 + this.currentTime - this.startSessionBlock
             } else if (this.session.status === 'close') {
@@ -44,8 +44,6 @@ export default {
             } else {
                 widthSessionBlock = this.session.estimate_session_duration
             }
-
-            console.log(widthSessionBlock);
             return widthSessionBlock
         }
     },

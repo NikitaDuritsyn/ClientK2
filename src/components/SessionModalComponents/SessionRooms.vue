@@ -31,9 +31,14 @@ export default {
             }
         }
     },
-    mounted() {
-        this.setRoom()
+    watch: {
+        sessionRooms() {
+            this.setRoom()
+        }
     },
+    // mounted() {
+    //     this.setRoom()
+    // },
 }
 </script>
 

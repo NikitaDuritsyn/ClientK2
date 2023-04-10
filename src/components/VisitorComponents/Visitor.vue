@@ -8,11 +8,13 @@
       <div>
         {{ glb.formatPhoneForShow(visitor?.number_phone) }}
       </div>
-      <div v-if="mode == 'createBooking'" class="d-flex">
-        <MyButton @click="$refs.update_visitor.open()" class="m-1 mt-0 mb-0" :cls="'btn_second'">
+      <div class="d-flex">
+        <MyButton v-if="mode == 'createBooking'" @click="$refs.update_visitor.open()" class="m-1 mt-0 mb-0"
+          :cls="'btn_second'">
           <i class="bi bi-pen"></i>
         </MyButton>
-        <MyButton @click="deleteVisitor" class="m-1 mt-0 mb-0" :cls="'btn_second'">
+        <MyButton :disabled="(visitor.start_time_visitor) ? true : false" @click="deleteVisitor" class="m-1 mt-0 mb-0"
+          :cls="'btn_second'">
           <i class="bi f bi-file-minus"></i>
         </MyButton>
       </div>
@@ -32,7 +34,7 @@ import VisitorForm from "@/components/VisitorComponents/VisitorForm.vue";
 
 export default {
   name: "visitor-vue",
-  emits: ["statusSwitch", "deleteVisitor", "selected", "updateVisitor"],
+  emits: ["statusSwitch", "deleteVisitor", "selected", "updateVisitor", 'updateVisitorList'],
   props: ["visitor", "select_all", "mode", "visitorIndex"],
   data() {
     return {
@@ -68,8 +70,13 @@ export default {
     updateVisitorInList(updatedVisitor) {
       this.$emit("updateVisitor", { visitorData: updatedVisitor, visitorIndex: this.visitorIndex },);
     },
-    deleteVisitor() {
-      this.$emit("deleteVisitor", this.visitorIndex);
+    async deleteVisitor() {
+      if (this.mode == 'createBooking') {
+        this.$emit("deleteVisitor", this.visitorIndex);
+      } else {
+        await this.$api.deleteVisitorById(this.visitor.id)
+        this.$emit("updateVisitorList")
+      }
     },
     emitSelected() {
       this.$emit("selected", { select_status: this.status_switch, visitor: this.visitor });
