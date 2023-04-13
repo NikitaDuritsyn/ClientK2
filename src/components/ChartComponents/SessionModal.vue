@@ -33,17 +33,18 @@
         <SessionVisitorsList v-model:session-status="session.status" :mode="mode" v-model:visitors_lsit="visitors"
             v-model:session-id="session.id" :session-tariff="session.tariff_id"
             @update-visitor-by-index="updateVisitorByIndex" @delete-visitor-by-index="deleteVisitorByIndex"
-            @update-visitor-list="setVisitorsBySession" @visitors-selected="setSelectedVisitors" />
+            @update-visitor-list="setVisitorsBySession($event), getSessionData()"
+            @visitors-selected="setSelectedVisitors" />
 
-        <SessionTimeLine v-if="mode !== 'createBooking'" @time-updated="setVisitorsBySession"
+        <SessionTimeLine v-if="mode !== 'createBooking'" @time-updated="setVisitorsBySession($event), getSessionData()"
             @session-updated="$emit('sessionUpdated')" v-model:visitor-list="selectedVisitors" :session="session" />
 
         <SessionService v-if="mode !== 'createBooking'" @price-for-all="setPriceForAll"
-            @visitors-updated="setVisitorsBySession" v-model:visitor-list="selectedVisitors"
+            @visitors-updated="setVisitorsBySession($event), getSessionData()" v-model:visitor-list="selectedVisitors"
             :session-tariff="session.tariff_id" />
 
         <SessionPayment v-model:price-for-all="priceForAll" :visitor-list="selectedVisitors"
-            @visitor-updated="setVisitorsBySession" v-if="mode !== 'createBooking'" />
+            @visitor-updated="setVisitorsBySession($event), getSessionData()" v-if="mode !== 'createBooking'" />
         <div class="d-flex justify-content-end">
             <MyButton v-if="mode === 'createBooking'" :cls="'btn_second'" @click="createBooking">СОЗДАТЬ</MyButton>
         </div>
@@ -92,8 +93,9 @@ export default {
     },
     methods: {
         async getSessionData() {
-            this.session = await this.$api.getSession(this.sessionId)
-            await this.setVisitorsBySession()
+            if (this.mode !== 'createBooking') {
+                this.session = await this.$api.getSession(this.sessionId)
+            }
         },
         async createBooking() {
             const vm = this
@@ -115,6 +117,7 @@ export default {
             })
         },
         async setVisitorsBySession(visitor) {
+            console.log(visitor);
             const vm = this
             if (vm.mode !== 'createBooking') {
                 vm.visitors = await vm.$api.getVisitorsBySession(vm.session.id)
@@ -149,13 +152,14 @@ export default {
     },
     beforeMount() {
     },
-    mounted() {
+    async mounted() {
         if (this.mode === 'createBooking') {
             this.setSessionRoomsSelected()
             this.setVisitorsBySession()
             this.setSimpleStringValue()
         } else {
-            this.getSessionData()
+            await this.getSessionData()
+            await this.setVisitorsBySession()
         }
         addEventListener('keyup', this.listener);
     },

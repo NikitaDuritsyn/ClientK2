@@ -1,6 +1,6 @@
 export const global_objects = {
     formatPhoneForShow: (phone) => {
-        if(phone){
+        if (phone) {
             phone = '+' + phone.slice(0, 1) + ' (' + phone.slice(1, 4) + ')' + ' ' + phone.slice(4, 7) + '-' + phone.slice(7, 9) + '-' + phone.slice(9, 11)
         }
         return phone
@@ -85,7 +85,6 @@ export const global_objects = {
             input.value = formattedInputValue;
         }
         var onPhoneKeyDown = function (e) {
-            // Clear input after remove last symbol
             var inputValue = e.target.value.replace(/\D/g, '');
             if (e.keyCode == 8 && inputValue.length == 1) {
                 e.target.value = "";

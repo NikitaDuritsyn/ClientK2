@@ -13,8 +13,7 @@
             {{ (session.status === 'active') ? session.visitors.length : session.estimate_visitors_num }}
         </strong>
     </div>
-    <MyModal ref="session_modal">
-        <!-- @session-updated="$emit('sessionUpdated')" -->
+    <MyModal @close="$emit('sessionUpdated')" ref="session_modal">
         <SessionModal @close="$refs.session_modal.close(), $emit('sessionUpdated')" :session-id="session.id" />
     </MyModal>
 </template>

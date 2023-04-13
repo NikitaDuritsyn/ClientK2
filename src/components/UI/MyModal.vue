@@ -12,6 +12,7 @@
 <script>
 export default {
   name: 'MyModal',
+  emits: ['close'],
   props: {
     modeFlexCenter: {
       type: Boolean,
@@ -29,6 +30,7 @@ export default {
     },
     close() {
       this.isVisible = false
+      this.$emit('close')
     },
   },
 

@@ -22,6 +22,7 @@ export default {
     },
     methods: {
         setRoom() {
+            this.rooms = []
             for (let i = 0; i < this.$store.state.rooms.length; i++) {
                 for (let j = 0; j < this.sessionRooms.length; j++) {
                     if (this.$store.state.rooms[i].id === this.sessionRooms[j].room_id) {
@@ -35,10 +36,7 @@ export default {
         sessionRooms() {
             this.setRoom()
         }
-    },
-    // mounted() {
-    //     this.setRoom()
-    // },
+    }
 }
 </script>
 

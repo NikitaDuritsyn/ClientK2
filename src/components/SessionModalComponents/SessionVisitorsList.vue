@@ -15,7 +15,7 @@
           </div>
         </div>
 
-        <div class="d-flex">
+        <div v-if="mode != 'createBooking'" class="d-flex">
           <MyButton class="me-1 ms-1" v-for="addVisitorBtn in addVisitorBtns" :cls="'btn_second'"
             @click="addSomeVisitors(addVisitorBtn.visitorsNum)" :disabled="(sessionStatus === 'close') ? true : false">
             {{ addVisitorBtn.title }}
@@ -77,6 +77,7 @@ export default {
       }
     },
     updateVisitorList(visitor) {
+      // console.log(visitor);
       if (this.mode !== "createBooking") {
         this.$emit("updateVisitorList");
       } else {
