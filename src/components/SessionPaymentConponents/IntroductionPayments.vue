@@ -3,7 +3,7 @@
         <div class="d-flex justify-content-between">
             <div><strong>Внесение:</strong></div>
             <div class="d-flex">
-                <MyButton :cls="'btn_second'" @click="addDepositByVisitor" :disabled="addDepositDisabled">Внести</MyButton>
+                <MyButton :cls="'btn_second'" @click="addDepositByVisitor">Внести</MyButton>
             </div>
         </div>
         <div v-for="paymentType in dataCreationDeposits" :key="paymentType.id"
@@ -27,9 +27,7 @@ export default {
     props: ["visitorList"],
     data() {
         return {
-            addDepositDisabled: true,
             dataCreationDeposits: [],
-            visitor: null
         };
     },
     methods: {
@@ -44,22 +42,12 @@ export default {
         },
         async addDepositByVisitor() {
             const visitorDeposits = this.dataCreationDeposits.filter(item => (item.value && item.value > 0) ? true : false)
-            const visitorDepositsData = visitorDeposits.map((visitorDeposit) => { return { ...visitorDeposit, visitor_id: this.visitor.id, client_id: this.visitor.client_id } })
-            if (visitorDeposits.length > 0) {
-                await this.$api.createVisitorDeposits(visitorDepositsData)
-                this.$emit('visitorUpdated')
-            }
+            await this.$api.createVisitorsDeposits({ visitors: this.visitorList.map(item => { return { id: item.id, client_id: item.client_id } }), deposits: visitorDeposits })
+            this.$emit('visitorUpdated')
         }
     },
     watch: {
-        visitorList(value) {
-            if (value.length === 1) {
-                this.visitor = value[0]
-                this.addDepositDisabled = false
-            } else {
-                this.visitorId = null
-                this.addDepositDisabled = true
-            }
+        visitorList() {
             this.setDataCreationDeposits()
         }
     },
@@ -68,5 +56,3 @@ export default {
     },
 }
 </script>
-
-<style scoped></style>

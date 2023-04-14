@@ -11,7 +11,7 @@
                     </MyButton>
                 </div>
             </div>
-            <div class="d-flex w-100 mb-2">
+            <div class="d-flex w-100 mb-2 ps-2 pe-2">
                 <strong>
                     ЗА ТАРИФ: {{ paymentByTariffs }} ₽
                 </strong>
@@ -25,7 +25,7 @@
                     <div class="d-flex">
                         <MyButton :cls="'btn_second'" @click="visitorsServicesShow = !visitorsServicesShow"
                             :disabled="(visitorList.length === 0) ? true : false">
-                            ПОКАЗАТЬ ({{ visitorsServices.length }})
+                            ПОКАЗАТЬ ({{ visitorsServices.reduce((acc, item) => acc + item.visitorServices.length, 0) }})
                         </MyButton>
                         <MyButton class="ms-1" :cls="'btn_second'" @click="addVisitorService"
                             :disabled="(visitorList.length > 1 || visitorList.length === 0 || service_selected === null) ? true : false">
@@ -138,8 +138,7 @@ export default {
         },
         async setVisitorsServices(visitorsId) {
             this.visitorsServices = await this.$api.getVisitorsServices(visitorsId)
-            this.paymentByServices = this.visitorsServices.reduce((acc, service) => acc + Number(service.price), 0)
-
+            this.paymentByServices = this.visitorsServices.reduce((acc, item) => acc + item.visitorServices.reduce((acc, item) => acc + item.service.price, 0), 0)
         },
         async updateVisitorTariff() {
             await this.$api.updateVisitors({ tariff_id: this.tariff }, this.visitorsId)
@@ -208,4 +207,5 @@ export default {
     border: 1px solid white;
     border-radius: 5px;
     margin: 5px 0px;
-}</style>
+}
+</style>

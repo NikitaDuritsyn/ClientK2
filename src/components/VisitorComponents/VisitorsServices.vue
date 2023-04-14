@@ -5,11 +5,14 @@
                 ЗА УСЛУГИ: {{ paymentResults }} ₽
             </strong>
         </div>
-        <div v-if="visitorsServicesShow" v-for="visitorService in visitorsServices"
-            class="d-flex flex-wrap align-items-center justify-content-between p-2 mt-2 mb-2 visitor_service">
-            <div>Посетитель: {{ visitorService.name }}</div>
-            <div>Услуга: {{ visitorService.title }}</div>
-            <div>Стоимость: {{ visitorService.price }}</div>
+        <div v-if="visitorsServicesShow" v-for="visitor in visitorsServices" class=" p-2 mt-2 mb-2 visitor_service">
+            <div>Посетитель: {{ visitor.name }}</div>
+            <div class="row justify-content-center align-items-center" v-for="visitorService in visitor.visitorServices">
+                <!-- {{ visitorService.id }} -->
+                <div class="col-5">- Услуга: {{ visitorService.service.title }}</div>
+                <div class="col-5">Стоимость: {{ visitorService.service.price }}</div>
+
+            </div>
         </div>
     </div>
 </template>

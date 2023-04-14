@@ -117,7 +117,6 @@ export default {
             })
         },
         async setVisitorsBySession(visitor) {
-            console.log(visitor);
             const vm = this
             if (vm.mode !== 'createBooking') {
                 vm.visitors = await vm.$api.getVisitorsBySession(vm.session.id)
