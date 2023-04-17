@@ -119,13 +119,7 @@ export default {
       }
     },
     emmitSelectedVisitors() {
-      let selected_visitors = [];
-      for (let i = 0; i < this.setSelected.length; i++) {
-        const element = this.setSelected[i];
-        if (element.select_status === true) {
-          selected_visitors.push(element.visitor);
-        }
-      }
+      const selected_visitors = this.setSelected.filter(item => item.select_status === true).map(item => item.visitor);
       this.$emit("visitorsSelected", selected_visitors);
     },
   },

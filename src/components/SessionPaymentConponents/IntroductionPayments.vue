@@ -1,9 +1,15 @@
 <template>
     <div>
-        <div class="d-flex justify-content-between">
+
+        <div>
             <div><strong>Внесение:</strong></div>
-            <div class="d-flex">
-                <MyButton :cls="'btn_second'" @click="addDepositByVisitor">Внести</MyButton>
+            <div class="d-flex align-items-end justify-content-between">
+                <div>
+                    <MySelect :label="'Плательщик'" :model-value="visitorList[0]?.id" v-model:options="setPotentialPayer" />
+                </div>
+                <div>
+                    <MyButton :cls="'btn_second'" @click="addDepositByVisitor">Внести</MyButton>
+                </div>
             </div>
         </div>
         <div v-for="paymentType in dataCreationDeposits" :key="paymentType.id"
@@ -19,16 +25,23 @@
 <script>
 import MyButton from '@/components/UI/MyButton.vue';
 import MyInput from '@/components/UI/MyInput.vue';
+import MySelect from '../UI/MySelect.vue';
 
 export default {
     name: "introduction-payments",
-    components: { MyInput, MyButton },
+    components: { MyInput, MyButton, MySelect },
     emits: ["visitorUpdated"],
     props: ["visitorList"],
     data() {
         return {
             dataCreationDeposits: [],
         };
+    },
+    computed: {
+        setPotentialPayer() {
+            const potentialPayer = this.visitorList.map(item => { return { id: item.id, title: item.name } })
+            return potentialPayer
+        }
     },
     methods: {
         setDataCreationDeposits() {

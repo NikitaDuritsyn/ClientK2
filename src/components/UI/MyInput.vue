@@ -63,7 +63,6 @@ input {
 }
 
 .wrapInput {
-  padding: 10px 0;
   max-width: 28rem;
 }
 

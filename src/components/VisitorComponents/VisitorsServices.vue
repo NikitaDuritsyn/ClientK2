@@ -9,8 +9,8 @@
             <div>Посетитель: {{ visitor.name }}</div>
             <div class="row justify-content-center align-items-center" v-for="visitorService in visitor.visitorServices">
                 <!-- {{ visitorService.id }} -->
-                <div class="col-5">- Услуга: {{ visitorService.service.title }}</div>
-                <div class="col-5">Стоимость: {{ visitorService.service.price }}</div>
+                <div class="col-6 d-flex justify-content-center">- Услуга: {{ visitorService.service.title }}</div>
+                <div class="col-6 d-flex justify-content-center">Стоимость: {{ visitorService.service.price }}</div>
 
             </div>
         </div>

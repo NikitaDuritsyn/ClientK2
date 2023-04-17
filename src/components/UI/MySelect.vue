@@ -58,7 +58,6 @@ label {
 .select-wrap {
     width: 100%;
     max-width: 28rem;
-    padding: 10px 0;
 }
 
 select:focus-visible {
