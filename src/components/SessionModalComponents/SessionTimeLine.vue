@@ -119,10 +119,13 @@ export default {
         },
     },
     watch: {
-        visitorList(value) {
-            this.setStartEndDisavleds(value)
-            this.setEndStartTimeVisitorsBySelected(value)
-        }
+        visitorList: {
+            handler(value) {
+                this.setStartEndDisavleds(value)
+                this.setEndStartTimeVisitorsBySelected(value)
+            },
+            deep: true
+        },
     },
     mounted() {
         this.setStartEndDisavleds(this.visitorList)

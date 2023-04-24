@@ -1,6 +1,6 @@
 <template>
   <div class="visitor_container">
-    <Switch v-if="mode != 'createBooking'" v-model:modelValue="status_switch" />
+    <Switch v-if="mode != 'createBooking'" v-model:modelValue="statusSwitch" />
     <div class="visitor" :class="{ 'text-decoration-line-through': visitor.status === 'close' }">
       <div>
         {{ visitor.name }}
@@ -21,7 +21,7 @@
     </div>
   </div>
   <MyModal :mode-flex-center="true" ref="update_visitor">
-    <VisitorForm @visitor-updated="updateVisitorInList" :mode="mode + 'Update'" :visitor-object="this.visitor"
+    <VisitorForm :mode="mode + 'Update'" :visitor-object="this.visitor" @visitor-updated="updateVisitorInList"
       @close="$refs.update_visitor.close()" />
   </MyModal>
 </template>
@@ -34,37 +34,13 @@ import VisitorForm from "@/components/VisitorComponents/VisitorForm.vue";
 
 export default {
   name: "visitor-vue",
-  emits: ["statusSwitch", "deleteVisitor", "selected", "updateVisitor", 'updateVisitorList'],
-  props: ["visitor", "select_all", "mode", "visitorIndex"],
+  emits: ["visitorDeleted", "statusSwitch", "deleteVisitor", "updateVisitor", 'updateVisitorList'],
+  props: ["visitor", "mode", "visitorIndex", 'selectAllClick', 'selectAllValue'],
+  components: { Switch, MyButton, MyModal, VisitorForm },
   data() {
     return {
-      status_switch: true,
+      statusSwitch: true,
     };
-  },
-  watch: {
-    visitor: {
-      handler(value) {
-        this.updateVisitorInList(value)
-        this.emitSelected()
-      },
-    },
-    select_all: {
-      handler(value) {
-        if (value.select_all === true) {
-          this.status_switch = true;
-        } else if (value.select_all === false && value.selected_counter === 0) {
-          this.status_switch = false;
-        }
-      },
-    },
-    status_switch: {
-      handler(value) {
-        this.$emit("statusSwitch", {
-          select_status: value,
-          visitor_id: this.visitor.id,
-        });
-      },
-    },
   },
   methods: {
     updateVisitorInList(updatedVisitor) {
@@ -75,17 +51,30 @@ export default {
         this.$emit("deleteVisitor", this.visitorIndex);
       } else {
         await this.$api.deleteVisitorById(this.visitor.id)
+        this.$emit("visitorDeleted", this.visitor.id)
         this.$emit("updateVisitorList")
       }
     },
-    emitSelected() {
-      this.$emit("selected", { select_status: this.status_switch, visitor: this.visitor });
-    }
+  },
+  watch: {
+    visitor: {
+      handler(value) {
+          this.updateVisitorInList(value)
+          // this.$emit("statusSwitch", { statusSwitch: this.status_switch, visitor: this.visitor });
+      },
+    },
+    selectAllClick(value) {
+      this.statusSwitch = !this.selectAllValue
+    },
+    statusSwitch: {
+      handler(value) {
+        this.$emit('statusSwitch', { statusSwitch: value, visitor: this.visitor })
+      },
+    },
   },
   mounted() {
-    this.emitSelected()
-  },
-  components: { Switch, MyButton, MyModal, VisitorForm },
+    this.$emit('statusSwitch', { statusSwitch: this.statusSwitch, visitor: this.visitor })
+  }
 };
 </script>
 

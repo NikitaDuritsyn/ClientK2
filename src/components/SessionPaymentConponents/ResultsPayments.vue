@@ -101,16 +101,19 @@ export default {
         }
     },
     watch: {
-        visitorList(value) {
-            this.setVisitorsDepositDeponent(value);
-            if (value.length === 1) {
-                this.addDeponentInDisabled = false
-                this.visitor = value[0]
-            } else {
-                this.addDeponentInDisabled = true
-                this.visitor = null
-            }
-        }
+        visitorList: {
+            handler(value) {
+                this.setVisitorsDepositDeponent(value);
+                if (value.length === 1) {
+                    this.addDeponentInDisabled = false
+                    this.visitor = value[0]
+                } else {
+                    this.addDeponentInDisabled = true
+                    this.visitor = null
+                }
+            },
+            deep: true
+        },
     },
     mounted() { this.setVisitorsDepositDeponent(this.visitorList); },
     components: { MyButton }

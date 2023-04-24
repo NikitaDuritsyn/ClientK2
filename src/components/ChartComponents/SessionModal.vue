@@ -68,7 +68,7 @@ import 'vue3-timepicker/dist/VueTimepicker.css'
 export default {
     name: "session-modal-vue",
     components: { VueTimepicker, SessionVisitorsList, SessionTimeLine, SessionService, SessionPayment, SessionDate, MyButton, MyInput, MyMultiSelect, SessionRooms, MySelect },
-    emits: ['sessionUpdated', 'close'],
+    emits: ['sessionUpdated', 'close', 'bookingCreated'],
     props: {
         sessionId: { type: Number, default: null },
         mode: { type: String, default: '' },
@@ -147,9 +147,6 @@ export default {
                 this.$emit('close')
             }
         }
-
-    },
-    beforeMount() {
     },
     async mounted() {
         if (this.mode === 'createBooking') {
@@ -167,5 +164,3 @@ export default {
     }
 }
 </script>
-
-<style scoped></style>

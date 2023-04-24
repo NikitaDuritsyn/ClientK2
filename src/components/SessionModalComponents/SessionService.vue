@@ -149,9 +149,12 @@ export default {
         today() {
             this.setTariffPayment(this.visitorList, this.tariffs)
         },
-        visitorList(value) {
-            this.setDataByVisitorList(value)
-            this.setTariffPayment(value, this.tariffs)
+        visitorList: {
+            handler(value) {
+                this.setDataByVisitorList(value)
+                this.setTariffPayment(value, this.tariffs)
+            },
+            deep: true
         },
         paymentByTariffs() {
             this.$emit('priceForAll', (this.paymentByServices + this.paymentByTariffs))

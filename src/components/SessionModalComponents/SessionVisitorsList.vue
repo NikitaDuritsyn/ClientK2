@@ -1,36 +1,37 @@
 <template>
   <div class="visitors_list_container">
     <div class="visitors_block">
-      <Visitor v-for="(visitor, index) in visitors_lsit" :key="index" @update-visitor="updateVisitorByIndex"
-        @update-visitor-list="$emit('updateVisitorList')" @delete-visitor="deleteVisitorByIndex" :visitor-index="index"
-        :mode="mode" ref="visitor" :select_all="setSelectedAll" :visitor="visitor" @selected="setSelectedArr"
-        @status-switch="updateSelectedArr" />
+      <Visitor ref="visitor" v-for="(visitor, index) in visitors_lsit" :key="visitor.id" :visitor="visitor" :mode="mode"
+        :select-all-click="selectAll.click" :select-all-value="selectAll.value" :visitorIndex="index"
+        @update-visitor="updateVisitorByIndex" @delete-visitor="deleteVisitorByIndex"
+        @visitor-deleted="deleteSelectedVisitorById" @status-switch="updateSelectedVisitors"
+        @update-visitor-list="$emit('updateVisitorList')" />
     </div>
     <div class="select_menu">
       <div class="d-flex justify-content-between align-items-center w-100">
         <div v-if="mode != 'createBooking'" class="d-flex align-items-center">
-          <Switch @click="updateSelectedAll('click')" v-model:modelValue="select_all" />
+          <Switch v-model:modelValue="selectAll.value" @click="selectAllSwitch" />
           <div class="select_counter">
-            Все ( {{ selected_counter }} из {{ visitors_lsit.length }} )
+            Все ( {{ selectedVisitors.length }} из {{ visitors_lsit.length }} )
           </div>
         </div>
 
         <div v-if="mode != 'createBooking'" class="d-flex">
           <MyButton class="me-1 ms-1" v-for="addVisitorBtn in addVisitorBtns" :cls="'btn_second'"
-            @click="addSomeVisitors(addVisitorBtn.visitorsNum)" :disabled="(sessionStatus === 'close') ? true : false">
+            :disabled="(sessionStatus === 'close') ? true : false" @click="addSomeVisitors(addVisitorBtn.visitorsNum)">
             {{ addVisitorBtn.title }}
           </MyButton>
         </div>
 
-        <MyButton :cls="'btn_second'" @click="$refs.create_visitor.open()"
-          :disabled="(sessionStatus === 'close') ? true : false">
+        <MyButton :cls="'btn_second'" :disabled="(sessionStatus === 'close') ? true : false"
+          @click="$refs.create_visitor.open()">
           ДОБАВИТЬ
         </MyButton>
       </div>
     </div>
     <MyModal :mode-flex-center="true" ref="create_visitor">
-      <VisitorForm @visitor-created="updateVisitorList" :session-id="sessionId" :mode="mode"
-        @close="$refs.create_visitor.close()" :visitor-object="{}" :session-tariff="sessionTariff" />
+      <VisitorForm :session-id="sessionId" :mode="mode" :session-tariff="sessionTariff" :visitor-object="{}"
+        @visitor-created="updateVisitorList" @close="$refs.create_visitor.close()" />
     </MyModal>
   </div>
 </template>
@@ -47,7 +48,6 @@ export default {
   emits: ["updateVisitorByIndex", "deleteVisitorByIndex", "updateVisitorList", "visitorsSelected"],
   props: ["visitors_lsit", "mode", "sessionId", "sessionTariff", "sessionStatus"],
   components: { Switch, Visitor, MyButton, MyModal, VisitorForm },
-
   data() {
     return {
       addVisitorBtns: [
@@ -55,82 +55,65 @@ export default {
         { title: '+3', visitorsNum: 3 },
         { title: '+5', visitorsNum: 5 },
       ],
-      selected_counter: this.visitors_lsit.length, select_all: true, setSelected: [],
+      selected_counter: this.visitors_lsit.length,
+      selectAll: { value: true, click: false },
+      selectedVisitors: [],
     };
   },
   methods: {
-    async addSomeVisitors(visitorsNum) {
-      const data = {
-        visitorsNum: visitorsNum,
-        tariff_id: this.sessionTariff,
-        session_id: this.sessionId
-      }
-      await this.$api.createSomeVisitors(data)
-      this.updateVisitorList()
-    },
     updateVisitorByIndex(updatedVisitor) {
-      this.$emit("updateVisitorByIndex", updatedVisitor);
+      if (this.mode === "createBooking") {
+        this.$emit("updateVisitorByIndex", updatedVisitor);
+      }
     },
     deleteVisitorByIndex(visitor_index) {
       if (this.mode === "createBooking") {
         this.$emit("deleteVisitorByIndex", visitor_index);
       }
     },
+    //ЗАПРОС Добавление АНАНИМУСОВ
+    async addSomeVisitors(visitorsNum) {
+      await this.$api.createSomeVisitors({ visitorsNum: visitorsNum, tariff_id: this.sessionTariff, session_id: this.sessionId })
+      this.updateVisitorList()
+    },
+    //Обновление выбранных посетителей
+    updateSelectedVisitors(event) {
+      if (event.statusSwitch) {
+        this.selectedVisitors.push(event.visitor)
+      } else {
+        this.selectedVisitors = this.selectedVisitors.filter(item => item.id !== event.visitor.id)
+      }
+      this.$emit("visitorsSelected", this.selectedVisitors);
+    },
+    deleteSelectedVisitorById(visitoriId) {
+      this.selectedVisitors = this.selectedVisitors.filter(item => item.id !== visitoriId)
+      this.selectAll.value = true
+    },
+    //Выбор всех посетителей
+    selectAllSwitch() {
+      this.selectAll.click = !this.selectAll.click
+    },
+    //ЗАПРОС на Обновление Листа посетителей через родительский комаонент
     updateVisitorList(visitor) {
-      // console.log(visitor);
       if (this.mode !== "createBooking") {
         this.$emit("updateVisitorList");
       } else {
         this.$emit("updateVisitorList", visitor);
       }
     },
-    setSelectedArr(value) {
-      this.setSelected.push(value);
-    },
-    updateSelectedArr(value) {
-      this.setSelected = this.setSelected.map((item) => { return (item.visitor.id === value.visitor_id) ? { ...item, select_status: value.select_status } : { ...item }; })
-    },
-    updateSelectedAll(_value) {
-      if (_value === "click") {
-        if (this.select_all === false) {
-          this.setSelected = this.setSelected.map((item) => { return (item.select_status === false) ? { ...item, select_status: true } : { ...item }; })
-        } else {
-          this.setSelected = this.setSelected.map((item) => { return (item.select_status === true) ? { ...item, select_status: false } : { ...item }; })
-        }
-        return { selected_counter: this.selected_counter, select_all: this.select_all };
-      } else {
-        let count_selected = 0;
-        for (let i = 0; i < this.setSelected.length; i++) {
-          if (this.setSelected[i].select_status === true) {
-            count_selected = count_selected + 1;
-          }
-        }
-        this.selected_counter = count_selected;
-        if (count_selected === this.setSelected.length) {
-          this.select_all = true;
-        } else {
-          this.select_all = false;
-        }
-        this.emmitSelectedVisitors(this.setSelected);
-        return {
-          selected_counter: this.selected_counter,
-          select_all: this.select_all,
-        };
-      }
-    },
-    emmitSelectedVisitors() {
-      const selected_visitors = this.setSelected.filter(item => item.select_status === true).map(item => item.visitor);
-      this.$emit("visitorsSelected", selected_visitors);
-    },
-  },
-  computed: {
-    setSelectedAll() {
-      return this.updateSelectedAll();
-    },
   },
   watch: {
-    visitors_lsit(value) {
-      this.setSelected = []
+    selectedVisitors: {
+      handler(value) {
+        this.selectAll.value = (value.length === this.visitors_lsit.length) ? true : false;
+      },
+      deep: true
+    },
+    visitors_lsit: {
+      handler(value) {
+        this.selectAll.value = (value.length === this.selectedVisitors.length) ? true : false;
+      },
+      deep: true
     }
   }
 };

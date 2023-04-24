@@ -1,11 +1,10 @@
 <template>
     <div>
-
         <div>
             <div><strong>Внесение:</strong></div>
             <div class="d-flex align-items-end justify-content-between">
                 <div>
-                    <MySelect :label="'Плательщик'" :model-value="visitorList[0]?.id" v-model:options="setPotentialPayer" />
+                    <MySelect :label="'Плательщик'" v-model:model-value="payerId" v-model:options="setPotentialPayer" />
                 </div>
                 <div>
                     <MyButton :cls="'btn_second'" @click="addDepositByVisitor">Внести</MyButton>
@@ -35,6 +34,7 @@ export default {
     data() {
         return {
             dataCreationDeposits: [],
+            payerId: null
         };
     },
     computed: {
@@ -55,13 +55,25 @@ export default {
         },
         async addDepositByVisitor() {
             const visitorDeposits = this.dataCreationDeposits.filter(item => (item.value && item.value > 0) ? true : false)
-            await this.$api.createVisitorsDeposits({ visitors: this.visitorList.map(item => { return { id: item.id, client_id: item.client_id } }), deposits: visitorDeposits })
+            const payer = this.visitorList.map(item => { return { id: item.id, client_id: item.client_id } }).find(item => item.id === this.payerId)
+            const visitors = this.visitorList.map(item => { return { id: item.id, client_id: item.client_id } }).filter(item => item.id !== this.payerId)
+            // visitors.unshift(payer)
+            // console.log(visitors);
+            await this.$api.createVisitorsDeposits({
+                payer: payer,
+                visitors: visitors,
+                deposits: visitorDeposits,
+            })
             this.$emit('visitorUpdated')
         }
     },
     watch: {
-        visitorList() {
-            this.setDataCreationDeposits()
+        visitorList: {
+            handler(value) {
+                this.setDataCreationDeposits();
+                this.payerId = (value[0]?.id) ? value[0].id : null
+            },
+            deep: true
         }
     },
     mounted() {
