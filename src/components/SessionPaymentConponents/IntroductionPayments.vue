@@ -57,8 +57,6 @@ export default {
             const visitorDeposits = this.dataCreationDeposits.filter(item => (item.value && item.value > 0) ? true : false)
             const payer = this.visitorList.map(item => { return { id: item.id, client_id: item.client_id } }).find(item => item.id === this.payerId)
             const visitors = this.visitorList.map(item => { return { id: item.id, client_id: item.client_id } }).filter(item => item.id !== this.payerId)
-            // visitors.unshift(payer)
-            // console.log(visitors);
             await this.$api.createVisitorsDeposits({
                 payer: payer,
                 visitors: visitors,

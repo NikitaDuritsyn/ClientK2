@@ -44,7 +44,11 @@ export default {
   },
   methods: {
     updateVisitorInList(updatedVisitor) {
-      this.$emit("updateVisitor", { visitorData: updatedVisitor, visitorIndex: this.visitorIndex },);
+      if (this.mode == 'createBooking') {
+        this.$emit("updateVisitor", { visitorData: updatedVisitor, visitorIndex: this.visitorIndex },);
+      } else {
+        this.$emit("statusSwitch", { statusSwitch: this.statusSwitch, visitor: this.visitor });
+      }
     },
     async deleteVisitor() {
       if (this.mode == 'createBooking') {
@@ -59,8 +63,7 @@ export default {
   watch: {
     visitor: {
       handler(value) {
-          this.updateVisitorInList(value)
-          // this.$emit("statusSwitch", { statusSwitch: this.status_switch, visitor: this.visitor });
+        this.updateVisitorInList(value)
       },
     },
     selectAllClick(value) {

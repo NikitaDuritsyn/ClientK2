@@ -111,6 +111,7 @@ export default {
     },
     visitors_lsit: {
       handler(value) {
+        this.selectedVisitors = []
         this.selectAll.value = (value.length === this.selectedVisitors.length) ? true : false;
       },
       deep: true

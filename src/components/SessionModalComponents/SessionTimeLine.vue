@@ -37,33 +37,45 @@ export default {
         }
     },
     methods: {
+        // оптимизированный код с комментариями
         setEndStartTimeVisitorsBySelected(visitorList) {
+            // проверяем, есть ли в списке посетителей хотя бы один элемент
             if (visitorList.length === 1) {
+                // если есть только один элемент, то устанавливаем его время начала и конца
                 this.setEndStartTimeVisitor(visitorList)
-            } else if (visitorList.length != 0) {
+            } else if (visitorList.length > 1) {
+                // если в списке больше одного элемента
                 let start_time_identical = true
                 let end_time_identical = true
+                // проходим по всем элементам списка
                 for (let i = 0; i < visitorList.length; i++) {
+                    // проверяем, совпадает ли время начала у всех элементов
                     if (visitorList[0].start_time_visitor != visitorList[i].start_time_visitor) {
                         start_time_identical = false
                     }
+                    // проверяем, совпадает ли время конца у всех элементов
                     if (visitorList[0].end_time_visitor != visitorList[i].end_time_visitor) {
                         end_time_identical = false
                     }
                 }
+                // если время начала и конца совпадает у всех элементов
                 if (start_time_identical && end_time_identical) {
                     this.setEndStartTimeVisitor(visitorList)
                 } else if (start_time_identical) {
+                    // если время начала совпадает, но время конца различается
                     this.setEndStartTimeVisitor(visitorList, 'start_time_identical')
                 } else if (end_time_identical) {
+                    // если время конца совпадает, но время начала различается
                     this.setEndStartTimeVisitor(visitorList, 'end_time_identical')
                 } else {
-                    this.start_time = '__:__';
-                    this.end_time = '__:__';
+                    // если время начала и конца различается у всех элементов
+                    this.start_time = ':';
+                    this.end_time = ':';
                 }
             } else {
-                this.start_time = '__:__';
-                this.end_time = '__:__';
+                // если список пустой
+                this.start_time = ':';
+                this.end_time = ':';
             }
         },
         setEndStartTimeVisitor(visitorList, _mode) {
