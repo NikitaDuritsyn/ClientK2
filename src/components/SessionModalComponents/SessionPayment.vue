@@ -1,9 +1,10 @@
 <template>
     <div class="p-2 w-100 h-100 payment_container">
-        <ResultsPayments :visitor-list="visitorList" :price-for-all="priceForAll"
+        <ResultsPayments :payer="payer" :visitor-list="visitorList" :price-for-all="priceForAll"
             @visitor-updated="$emit('visitorUpdated')" />
         <hr class="m-2">
-        <IntroductionPayments :visitor-list="visitorList" @visitor-updated="$emit('visitorUpdated')" />
+        <IntroductionPayments @set-payer="setPayer" :visitor-list="visitorList"
+            @visitor-updated="$emit('visitorUpdated')" />
     </div>
 </template>
 
@@ -17,8 +18,15 @@ export default {
     props: ['visitorList', 'priceForAll'],
     components: { ResultsPayments, IntroductionPayments },
     data() {
-        return {};
+        return {
+            payer: null
+        };
     },
+    methods: {
+        setPayer(value) {
+            this.payer = value
+        }
+    }
 }
 </script>
 

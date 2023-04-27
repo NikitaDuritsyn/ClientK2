@@ -26,7 +26,7 @@ class KamekaApi extends BaseApi {
             data: { visitorUpdateData, visitorsId: visitorsId }
         })
     }
-    useDeponent(data) {
+    useDeponents(data) {
         let url = `/api/use_deponent`
         return this._request({
             method: 'post',

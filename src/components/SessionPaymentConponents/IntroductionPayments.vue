@@ -29,12 +29,13 @@ import MySelect from '../UI/MySelect.vue';
 export default {
     name: "introduction-payments",
     components: { MyInput, MyButton, MySelect },
-    emits: ["visitorUpdated"],
+    emits: ["visitorUpdated", 'setPayer'],
     props: ["visitorList"],
     data() {
         return {
             dataCreationDeposits: [],
-            payerId: null
+            payerId: null,
+            payer: null
         };
     },
     computed: {
@@ -70,6 +71,13 @@ export default {
             handler(value) {
                 this.setDataCreationDeposits();
                 this.payerId = (value[0]?.id) ? value[0].id : null
+            },
+            deep: true
+        },
+        payerId: {
+            handler(value) {
+                this.payer = this.visitorList.map(item => { return { id: item.id, client_id: item.client_id } }).find(item => item.id === value)
+                this.$emit('setPayer', this.payer)
             },
             deep: true
         }
