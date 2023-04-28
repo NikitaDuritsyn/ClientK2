@@ -9,8 +9,8 @@
         {{ glb.formatPhoneForShow(visitor?.number_phone) }}
       </div>
       <div class="d-flex">
-        <MyButton v-if="mode == 'createBooking'" @click="$refs.update_visitor.open()" class="m-1 mt-0 mb-0"
-          :cls="'btn_second'">
+        <MyButton  @click="$refs.update_visitor.open()"
+          class="m-1 mt-0 mb-0" :cls="'btn_second'">
           <i class="bi bi-pen"></i>
         </MyButton>
         <MyButton :disabled="(visitor.start_time_visitor) ? true : false" @click="deleteVisitor" class="m-1 mt-0 mb-0"
@@ -21,7 +21,7 @@
     </div>
   </div>
   <MyModal :mode-flex-center="true" ref="update_visitor">
-    <VisitorForm :mode="mode + 'Update'" :visitor-object="this.visitor" @visitor-updated="updateVisitorInList"
+    <VisitorForm :mode="mode + 'Update'" :visitor-object="this.visitor" @visitor-updated="updateVisitorInList" @update-visitor-list="$emit('updateVisitorList')"
       @close="$refs.update_visitor.close()" />
   </MyModal>
 </template>
@@ -44,11 +44,7 @@ export default {
   },
   methods: {
     updateVisitorInList(updatedVisitor) {
-      if (this.mode == 'createBooking') {
-        this.$emit("updateVisitor", { visitorData: updatedVisitor, visitorIndex: this.visitorIndex },);
-      } else {
-        this.$emit("statusSwitch", { statusSwitch: this.statusSwitch, visitor: this.visitor });
-      }
+      this.$emit("updateVisitor", { visitorData: updatedVisitor, visitorIndex: this.visitorIndex },);
     },
     async deleteVisitor() {
       if (this.mode == 'createBooking') {
@@ -63,7 +59,11 @@ export default {
   watch: {
     visitor: {
       handler(value) {
-        this.updateVisitorInList(value)
+        if (this.mode == 'createBooking') {
+          this.updateVisitorInList(value)
+        } else {
+          this.$emit("statusSwitch", { statusSwitch: this.statusSwitch, visitor: this.visitor });
+        }
       },
     },
     selectAllClick(value) {

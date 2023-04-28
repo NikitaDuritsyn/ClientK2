@@ -2,7 +2,7 @@
     <div class=" d-flex justify-content-center">
         <div class="visitor_form_container">
             <div class="d-flex justify-content-end">
-                <MyButton :cls="'btn_second'" @click="createVisitor()">Сохранить</MyButton>
+                <MyButton :cls="'btn_second'" @click="updateVisitors()">Сохранить</MyButton>
             </div>
             <MyInput class="m-auto w-100" v-model:modelValue="visitor.name" :label="'Имя:'" />
             <MySelect class="m-auto w-100" :label="'Тариф:'" v-model:modelValue="visitor.tariff_id"
@@ -38,6 +38,7 @@ import MySelect from '@/components/UI/MySelect.vue';
 export default {
     name: "visitor-form-vue",
     components: { MyInput, MyButton, MySelect },
+    emits: ['visitorUpdated', 'visitorUpdatedDataBase', 'visitorCreated', 'updateVisitorList', 'close'],
     props: {
         mode: { type: String, default: '' },
         sessionId: { type: Number, default: null },
@@ -48,14 +49,14 @@ export default {
         return {
             visitor: {
                 ...this.visitorObject,
-                tariff_id: this.sessionTariff,
+                tariff_id: (this.visitorObject.tariff_id) ? this.visitorObject.tariff_id : this.sessionTariff,
                 deposit: this.visitorObject.deposit || {},
                 deponent: this.visitorObject.deponent || {},
             },
         };
     },
     methods: {
-        createVisitor() {
+        updateVisitors() {
             const vm = this
 
             if (!vm.visitor.name) {
@@ -80,6 +81,12 @@ export default {
                     vm.visitor = null
                     vm.$emit('close')
                 }
+            } else if (vm.mode === 'Update') {
+                vm.$api.updateVisitors(vm.visitor, vm.visitor.id).then(() => {
+                    vm.$emit('updateVisitorList')
+                    vm.visitor = null
+                    vm.$emit('close')
+                })
             } else {
                 vm.$api.createVisitor(vm.visitor, vm.sessionId).then(() => {
                     vm.$emit('visitorCreated')

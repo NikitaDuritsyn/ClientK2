@@ -23,8 +23,7 @@
           </MyButton>
         </div>
 
-        <MyButton :cls="'btn_second'" :disabled="(sessionStatus === 'close') ? true : false"
-          @click="$refs.create_visitor.open()">
+        <MyButton :cls="'btn_second'" :disabled="addVisitorsDisabled" @click="$refs.create_visitor.open()">
           ДОБАВИТЬ
         </MyButton>
       </div>
@@ -59,6 +58,17 @@ export default {
       selectAll: { value: true, click: false },
       selectedVisitors: [],
     };
+  },
+  computed: {
+    addVisitorsDisabled() {
+      let disabled = false
+      if (this.mode === "createBooking") {
+        disabled = (this.visitors_lsit.length > 0) ? true : false;
+      } else {
+        disabled = (this.sessionStatus === 'close') ? true : false;
+      }
+      return disabled
+    }
   },
   methods: {
     updateVisitorByIndex(updatedVisitor) {
