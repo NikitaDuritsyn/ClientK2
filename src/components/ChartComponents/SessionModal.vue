@@ -5,6 +5,7 @@
             <SessionRooms v-if="mode !== 'createBooking'" v-model:session-rooms="session.session_rooms" />
             <MyButton :cls="'close_btn'" @click="$emit('close')"></MyButton>
         </div>
+        <SessionTimeShift v-if="(mode !== 'createBooking' && session.status === 'booked') ? true : false" :session="session"/>
         <div v-if="mode === 'createBooking'" class="d-flex w-100 justify-content-between flex-wrap">
             <div class="">
                 <div class="text_label_name">Время:</div>
@@ -36,8 +37,9 @@
             @update-visitor-list="setVisitorsBySession($event), getSessionData()"
             @visitors-selected="setSelectedVisitors" />
 
-        <SessionTimeLine v-if="mode !== 'createBooking'" @time-updated="setVisitorsBySession($event), getSessionData()"
-            @session-updated="$emit('sessionUpdated')" v-model:visitor-list="selectedVisitors" :session="session" />
+        <SessionTimeLine :startSession="startSession" v-if="mode !== 'createBooking'"
+            @time-updated="setVisitorsBySession($event), getSessionData()" @session-updated="$emit('sessionUpdated')"
+            v-model:visitor-list="selectedVisitors" :session="session" />
 
         <SessionService v-if="mode !== 'createBooking'" @price-for-all="setPriceForAll"
             @visitors-updated="setVisitorsBySession($event), getSessionData()" v-model:visitor-list="selectedVisitors"
@@ -64,16 +66,18 @@ import MyMultiSelect from '@/components/UI/MyMultiSelect.vue';
 import MySelect from '@/components/UI/MySelect.vue';
 import VueTimepicker from 'vue3-timepicker'
 import 'vue3-timepicker/dist/VueTimepicker.css'
+import SessionTimeShift from '../SessionModalComponents/SessionTimeShift.vue';
 
 export default {
     name: "session-modal-vue",
-    components: { VueTimepicker, SessionVisitorsList, SessionTimeLine, SessionService, SessionPayment, SessionDate, MyButton, MyInput, MyMultiSelect, SessionRooms, MySelect },
+    components: { VueTimepicker, SessionVisitorsList, SessionTimeLine, SessionService, SessionPayment, SessionDate, MyButton, MyInput, MyMultiSelect, SessionRooms, MySelect, SessionTimeShift },
     emits: ['sessionUpdated', 'close', 'bookingCreated'],
     props: {
         sessionId: { type: Number, default: null },
         mode: { type: String, default: '' },
         bookingDay: { default: new Date() },
         bookingRoom: { type: Object, default: {} },
+        startSession: { type: Boolean, default: false },
     },
     data() {
         return {
@@ -90,6 +94,12 @@ export default {
             rooms: [],
             priceForAll: 0
         };
+    },
+    watch: {
+        startSession(value) {
+            console.log(value);
+            this.setVisitorsBySession()
+        }
     },
     methods: {
         async getSessionData() {

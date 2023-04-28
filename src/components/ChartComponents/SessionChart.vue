@@ -16,7 +16,7 @@
                 <canvas ref="canvasChart" class="canvas"></canvas>
                 <div v-for="(item, index) in sessionsArray" :key="index">
                     <Session @session-updated="getSessions" :rooms-number="rooms.length" :session="item"
-                        v-model:currentTime="setTimeCurrent" />
+                        v-model:currentTime="setTimeCurrent" v-model:today="today"/>
                 </div>
             </div>
             <div class="dateLine" :style="{ width: 1440 * this.days + 'px' }">

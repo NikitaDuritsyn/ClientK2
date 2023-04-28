@@ -1,7 +1,15 @@
 import BaseApi from './BaseApi'
 
 class KamekaApi extends BaseApi {
-    createVisitorsDeposits(data){
+    updateSession(data) {
+        let url = `/api/update_session/${data.id}`
+        return this._request({
+            method: 'post',
+            url: url,
+            data: data
+        })
+    }
+    createVisitorsDeposits(data) {
         let url = `/api/create_visitors_deposits`
         return this._request({
             method: 'post',

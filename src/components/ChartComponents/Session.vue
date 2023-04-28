@@ -1,20 +1,21 @@
 <template>
     <div ref="session_blocks" v-for="room in session.roomsByIndex" class="session"
         @click.stop.prevent="$refs.session_modal.open()" :style="{
-            borderColor: borderSessionColor,
-            width: setWidthSessionBlock + 'px',
-            height: `calc((100%)/${Number(roomsNumber)})`,
-            top: `calc((100%)/${Number(roomsNumber)}*${room.index})`,
-            left: startSessionBlock + 'px',
-            backgroundColor: `${room.color_room}`
-        }">
+                borderColor: borderSessionColor,
+                width: setWidthSessionBlock + 'px',
+                height: `calc((100%)/${Number(roomsNumber)})`,
+                top: `calc((100%)/${Number(roomsNumber)}*${room.index})`,
+                left: startSessionBlock + 'px',
+                backgroundColor: `${room.color_room}`
+            }">
         <strong>
             {{ setWidthSessionBlock }}
             {{ (session.status === 'active') ? session.visitors.length : session.estimate_visitors_num }}
         </strong>
     </div>
     <MyModal @close="$emit('sessionUpdated')" ref="session_modal">
-        <SessionModal @close="$refs.session_modal.close(), $emit('sessionUpdated')" :session-id="session.id" />
+        <SessionModal v-model:startSession="startSession" @close="$refs.session_modal.close(), $emit('sessionUpdated')"
+            :session-id="session.id" />
     </MyModal>
 </template>
 
@@ -25,12 +26,13 @@ import SessionModal from '@/components/ChartComponents/SessionModal.vue';
 export default {
     name: "session-vue",
     emits: ['sessionUpdated'],
-    props: ["session", "roomsNumber", "currentTime"],
+    props: ["session", "roomsNumber", "currentTime", 'today'],
     components: { MyModal, SessionModal },
     data() {
         return {
             borderSessionColor: '',
-            startSessionBlock: 0            // endSessionBlock: 1440 * this.session.index_day + new Date((this.session.end_time_session) ? this.session.end_time_session : this.session.booked_date).getHours() * 60 + new Date((this.session.end_time_session) ? this.session.end_time_session : this.session.booked_date).getMinutes() + 60,
+            startSessionBlock: 0,
+            startSession: false
         }
     },
     computed: {
@@ -50,9 +52,32 @@ export default {
         session(value) {
             this.setColorSession(value.status);
             this.setStartSession();
+        },
+        async today(value) {
+            const currentHour = new Date(value).setMilliseconds(0);
+            const bookedHour = new Date(this.session.booked_date).setMilliseconds(0);
+            if (new Date(currentHour).toISOString() === new Date(bookedHour).toISOString()) {
+                await this.updateStartTime()
+                this.startSession = !this.startSession
+                
+                // Данное не реализовано, браузер блокирует уведомления и не дает вопроизвести музыку без действий пользователя
+                // this.glb.sendNotificationAboutStartSession(date)
+                // const audio = new Audio(require('@/assets/audioTriggers/alarm-clock.mp3'));
+                // audio.play();
+            }
         }
     },
     methods: {
+        async updateStartTime() {
+            let currentDateTime = new Date()
+            await this.$api.updateStartTimeVisitors({
+                visitorUpdateData: { start_time_visitor: currentDateTime },
+                visitorsId: this.session.visitors.map((item) => { return item.id }),
+            })
+            await this.$api.updateStartTimeSession(this.session.id)
+            this.$emit('sessionUpdated')
+        },
+
         setStartSession() {
             this.startSessionBlock = 1440 * this.session.index_day + new Date((this.session.start_time_session) ? this.session.start_time_session : this.session.booked_date).getHours() * 60 + new Date((this.session.start_time_session) ? this.session.start_time_session : this.session.booked_date).getMinutes() + 60;
         },

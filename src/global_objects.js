@@ -1,4 +1,26 @@
 export const global_objects = {
+    // sendNotificationAboutStartSession(sessionData) {
+    //     console.log('Notification');
+    //     // Запрос разрешения на отправку уведомлений
+    //     Notification.requestPermission().then(function (permission) {
+    //         console.log('Notification');
+    //         if (permission === "granted") {
+    //             const audio = new Audio(require('@/assets/audioTriggers/alarm-clock.mp3'));
+    //             audio.play();
+
+    //             const notificationOptions = {
+    //                 body: `Началась сессия: ${sessionData}`,
+    //                 icon: "", // Опционально: указать путь к иконке уведомления
+    //                 silent: false, // Опционально: воспроизводить звуковое оповещение (если true, уведомление будет без звука)
+    //             };
+
+    //             // Создание и отправка уведомления
+    //             const notification = new Notification("Оповещение", notificationOptions);
+    //             setTimeout(() => notification.close(), 5000); // Закрыть уведомление через 5 секунд
+    //         }
+    //     });
+    // },
+
     formatPhoneForShow: (phone) => {
         if (phone) {
             phone = '+' + phone.slice(0, 1) + ' (' + phone.slice(1, 4) + ')' + ' ' + phone.slice(4, 7) + '-' + phone.slice(7, 9) + '-' + phone.slice(9, 11)
