@@ -5,7 +5,8 @@
             <SessionRooms v-if="mode !== 'createBooking'" v-model:session-rooms="session.session_rooms" />
             <MyButton :cls="'close_btn'" @click="$emit('close')"></MyButton>
         </div>
-        <SessionTimeShift v-if="(mode !== 'createBooking' && session.status === 'booked') ? true : false" :session="session"/>
+        <SessionTimeShift v-if="(mode !== 'createBooking' && session.status === 'booked') ? true : false"
+            :session="session" />
         <div v-if="mode === 'createBooking'" class="d-flex w-100 justify-content-between flex-wrap">
             <div class="">
                 <div class="text_label_name">Время:</div>
@@ -121,10 +122,10 @@ export default {
                 visitors: vm.visitors,
                 rooms: vm.rooms
             }
-            await vm.$api.createBookingSession(createBookingData).then(() => {
-                this.$emit('bookingCreated')
-                this.$emit('close')
-            })
+            const result = await vm.$api.createBookingSession(createBookingData)
+            this.$toast.info(result.massage, { position: "top" });
+            this.$emit('bookingCreated')
+            this.$emit('close')
         },
         async setVisitorsBySession(visitor) {
             const vm = this

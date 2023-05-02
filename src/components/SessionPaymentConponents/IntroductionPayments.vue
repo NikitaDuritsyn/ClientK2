@@ -55,15 +55,21 @@ export default {
             })
         },
         async addDepositByVisitor() {
-            const visitorDeposits = this.dataCreationDeposits.filter(item => (item.value && item.value > 0) ? true : false)
-            const payer = this.visitorList.map(item => { return { id: item.id, client_id: item.client_id } }).find(item => item.id === this.payerId)
-            const visitors = this.visitorList.map(item => { return { id: item.id, client_id: item.client_id } }).filter(item => item.id !== this.payerId)
-            await this.$api.createVisitorsDeposits({
-                payer: payer,
-                visitors: visitors,
-                deposits: visitorDeposits,
-            })
-            this.$emit('visitorUpdated')
+            try {
+                const visitorDeposits = this.dataCreationDeposits.filter(item => (item.value && item.value > 0) ? true : false)
+                const payer = this.visitorList.find(item => item.id === this.payerId)
+                const visitors = this.visitorList.map(item => { return { id: item.id, client_id: item.client_id } }).filter(item => item.id !== this.payerId)
+                await this.$api.createVisitorsDeposits({
+                    payer: payer,
+                    visitors: visitors,
+                    deposits: visitorDeposits,
+                })
+                this.$emit('visitorUpdated')
+                this.$toast.info(`${visitorDeposits.reduce((acc, item) => acc + item.value, 0) + '₽'} внесено посетителю ${payer.name}`)
+
+            } catch (e) {
+                this.$toast.error(`${e.massage}`)
+            }
         }
     },
     watch: {
@@ -76,7 +82,7 @@ export default {
         },
         payerId: {
             handler(value) {
-                this.payer = this.visitorList.map(item => { return { id: item.id, client_id: item.client_id } }).find(item => item.id === value)
+                this.payer = this.visitorList.find(item => item.id === value)
                 this.$emit('setPayer', this.payer)
             },
             deep: true

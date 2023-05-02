@@ -1,7 +1,7 @@
 <template>
     <div>
-        Сместить время:
-        <div class="d-flex  w-100">
+        Сместить время
+        <div class="d-flex w-100">
             <vue-timepicker v-model="shiftTime" :minute-interval="5"></vue-timepicker>
             <!-- <MyInput :type="'number'" v-model:modelValue="shiftTimeByMinutes" /> -->
             <MyButton :cls="'btn_second'" @click="updateSessionBookedTime">сместить</MyButton>
@@ -12,7 +12,7 @@
 <script>
 import MyButton from '../UI/MyButton.vue';
 import MyInput from '../UI/MyInput.vue';
-import VueTimepicker, { data } from 'vue3-timepicker'
+import VueTimepicker from 'vue3-timepicker'
 
 export default {
     name: "session-time-shift",
@@ -25,14 +25,20 @@ export default {
         };
     },
     methods: {
-        updateSessionBookedTime() {
-            //Если нужно смещать по минутам
-            // const newBookedDate = new Date(new Date(this.session.booked_date).setTime(new Date(this.session.booked_date).getTime() + this.shiftTimeByMinutes * 60000));
-            //Если нужно менять время полностью
-            const [hours, minutes] = this.shiftTime.split(':');
-            const newBookedDate = new Date(new Date().setHours(hours, minutes, 0, 0));
-            // console.log(newBookedDate.toLocaleTimeString());
-            this.$api.updateSession({ ...this.session, booked_date: newBookedDate })
+        async updateSessionBookedTime() {
+            try {
+                // Если нужно смещать по минутам
+                // const newBookedDate = new Date(new Date(this.session.booked_date).setTime(new Date(this.session.booked_date).getTime() + this.shiftTimeByMinutes * 60000));
+                // Если нужно менять время полностью
+                const [hours, minutes] = this.shiftTime.split(':');
+                const newBookedDate = new Date(new Date().setHours(hours, minutes, 0, 0));
+                // console.log(newBookedDate.toLocaleTimeString());
+                await this.$api.updateSession({ ...this.session, booked_date: newBookedDate })
+                this.$toast.info(`Время было смещено на ${newBookedDate.toLocaleTimeString()}, ${newBookedDate.toLocaleDateString()}`, { position: "top" });
+
+            } catch (error) {
+                console.log(error);
+            }
         },
         setShiftTime() {
             const hours = new Date(this.session.booked_date).getHours().toString().padStart(2, '0');

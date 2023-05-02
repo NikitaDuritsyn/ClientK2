@@ -56,14 +56,19 @@ export default {
         async today(value) {
             const currentHour = new Date(value).setMilliseconds(0);
             const bookedHour = new Date(this.session.booked_date).setMilliseconds(0);
+            const estimateTimeEnd = new Date(new Date(this.session.start_time_session).setTime(new Date(this.session.start_time_session).getTime() + this.session.estimate_session_duration * 60000)).setMilliseconds(0);
             if (new Date(currentHour).toISOString() === new Date(bookedHour).toISOString()) {
                 await this.updateStartTime()
                 this.startSession = !this.startSession
-                
                 // Данное не реализовано, браузер блокирует уведомления и не дает вопроизвести музыку без действий пользователя
                 // this.glb.sendNotificationAboutStartSession(date)
-                // const audio = new Audio(require('@/assets/audioTriggers/alarm-clock.mp3'));
-                // audio.play();
+            } else if (new Date(currentHour).toISOString() === new Date(estimateTimeEnd).toISOString() && this.session.status === 'active') {
+                this.$refs.session_modal.open()
+                const audio = new Audio(require('@/assets/audioTriggers/alarm-clock.mp3'));
+                audio.play();
+                this.$toast.info('Сессия подошла к концу!')
+                // Данное не реализовано, браузер блокирует уведомления и не дает вопроизвести музыку без действий пользователя
+                // this.glb.sendNotificationAboutStartSession(date)
             }
         }
     },

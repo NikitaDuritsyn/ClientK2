@@ -78,14 +78,20 @@ export default {
             this.$emit('visitorUpdated')
         },
         async moneyToVisitor() {
-            const paymentTypeId = this.$store.state.paymentTypes.filter(item => item.type === 'cash')[0].id
-            await this.$api.createVisitorDeposits([{
-                visitor_id: this.payer.id,
-                payment_type_id: paymentTypeId,
-                client_id: this.payer.client_id,
-                value: (this.priceForAll - this.depositsSum < 0) ? this.priceForAll - this.depositsSum : 0,
-            }])
-            this.$emit('visitorUpdated')
+            try {
+                const paymentTypeId = this.$store.state.paymentTypes.filter(item => item.type === 'cash')[0].id
+                const change = (this.priceForAll - this.depositsSum < 0) ? this.priceForAll - this.depositsSum : 0
+                await this.$api.createVisitorDeposits([{
+                    visitor_id: this.payer.id,
+                    payment_type_id: paymentTypeId,
+                    client_id: this.payer.client_id,
+                    value: change
+                }])
+                this.$emit('visitorUpdated')
+                this.$toast.info(`Посетителю ${this.payer.name}, выдано ${change * (-1)}₽`)
+            } catch (e) {
+                this.$toast.error(`${e.massage}`)
+            }
         },
         async setVisitorsDepositDeponent(visitorList) {
             if (visitorList.length > 0) {
@@ -104,7 +110,7 @@ export default {
                     this.depositsByTypesSum.push({
                         title: paymentType.title,
                         depositValue: this.visitorsDeposits
-                            .filter(deposit => deposit.payment_type_id === paymentType.id)
+                            .filter(deposit => deposit.payment_type_id === paymentType.id && deposit.value > 0)
                             .reduce((acc, deposit) => acc + deposit.value, 0)
                     })
                 }
