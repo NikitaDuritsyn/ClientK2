@@ -22,7 +22,6 @@ app.config.globalProperties.glb = global_objects
 app.use(store)
 app.use(router)
 app.use(Toaster, {
-    // One of the options
     position: "top",
 });
 

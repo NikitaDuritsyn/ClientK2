@@ -33,8 +33,12 @@ export default {
                 const [hours, minutes] = this.shiftTime.split(':');
                 const newBookedDate = new Date(new Date().setHours(hours, minutes, 0, 0));
                 // console.log(newBookedDate.toLocaleTimeString());
-                await this.$api.updateSession({ ...this.session, booked_date: newBookedDate })
-                this.$toast.info(`Время было смещено на ${newBookedDate.toLocaleTimeString()}, ${newBookedDate.toLocaleDateString()}`, { position: "top" });
+                const res = await this.$api.updateSession({ ...this.session, booked_date: newBookedDate })
+                if(res.massage){
+                    this.$toast.error(`${res.massage}`, { position: "top" });
+                }else{
+                    this.$toast.info(`Время было смещено на ${newBookedDate.toLocaleTimeString()}, ${newBookedDate.toLocaleDateString()}`, { position: "top" });
+                }
 
             } catch (error) {
                 console.log(error);
