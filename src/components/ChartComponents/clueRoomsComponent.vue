@@ -1,8 +1,8 @@
 <template>
     <div class="clue_rooms_container">
         <div v-show="visible" class="clue_rooms">
-            <div v-for="(room, index_room) in $store.state.rooms" @click="visible = !visible" :key="index_room" class="room_name"
-                :style="{ height: `calc(100%/${$store.state.rooms.length})` }">
+            <div v-for="(room, index_room) in $store.state.rooms" @click="visible = !visible" :key="index_room"
+                class="room_name" :style="{ height: `calc(100%/${$store.state.rooms.length})` }">
                 <div>
                     {{ room.title }}
                 </div>
@@ -23,11 +23,7 @@ export default {
         return {
             visible: false,
         }
-    },
-    methods: {
-    },
-    mounted() {
-    },
+    }
 }
 </script>
 

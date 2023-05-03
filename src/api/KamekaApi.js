@@ -1,6 +1,14 @@
 import BaseApi from './BaseApi'
 
 class KamekaApi extends BaseApi {
+    updateTodo(data) {
+        let url = `/api/update_todo/${data.id}`
+        return this._request({
+            method: 'post',
+            url: url,
+            data: data
+        })
+    }
     updateSession(data) {
         let url = `/api/update_session/${data.id}`
         return this._request({
@@ -184,7 +192,12 @@ class KamekaApi extends BaseApi {
             url: url
         })
     }
-
+    getTodos() {
+        let url = `/api/get_todos`
+        return this._request({
+            url: url
+        })
+    }
     //deletes
     deleteVisitorService(serviceId) {
         let url = `/api/delete_visitor_service/${serviceId}`

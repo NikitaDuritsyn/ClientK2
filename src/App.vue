@@ -18,6 +18,9 @@ export default {
 </script>
 
 <style>
+.pointer{
+  cursor: pointer;
+}
 .text_label_name {
   font-size: 16px;
   padding: 0 10px 0 0;

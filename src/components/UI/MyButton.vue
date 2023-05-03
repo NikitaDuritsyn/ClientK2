@@ -28,6 +28,7 @@ export default {
       validator: value => {
         return [
           'btn_second',
+          'btn_white',
           'pink',
           'hollow',
           'blue',
@@ -217,6 +218,32 @@ export default {
   background-color: rgb(70, 70, 70);
 }
 
+.btn_white{
+  background-color: whitesmoke;
+  border: 1px solid whitesmoke;
+  padding: 3px 5px;
+  border-radius: 0px;
+  /* border-top-left-radius: -50% !important; */
+  /* border-top-right-radius: -50% !important; */
+  border-bottom-left-radius: 50%;
+  border-bottom-right-radius: 50%;
+
+  cursor: pointer;
+  min-width: 50px;
+  text-align: center;
+  color: black;
+}
+.btn_white:focus {
+  border-color: rgb(0, 99, 136);
+}
+
+.btn_white:hover {
+  border-color: rgb(0, 255, 255);
+}
+.btn_white:disabled{
+  background-color: rgb(70, 70, 70);
+}
+
 .close_btn {
     display: flex;
     justify-content: center;
@@ -237,4 +264,5 @@ export default {
     cursor: pointer;
     margin: 0 0 0 5px;
 }
+
 </style>
