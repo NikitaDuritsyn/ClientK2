@@ -1,5 +1,6 @@
 <template>
-    <div ref="session_blocks" v-for="room in session.roomsByIndex" class="session"
+    <div ref="session_blocks" v-for="room in session.roomsByIndex"
+        :class="{ 'session': true, 'opacity-25': session.status === 'delete' }"
         @click.stop.prevent="$refs.session_modal.open()" :style="{
                 borderColor: borderSessionColor,
                 width: setWidthSessionBlock + 'px',
@@ -8,9 +9,17 @@
                 left: startSessionBlock + 'px',
                 backgroundColor: `${room.color_room}`
             }">
-        <strong>
-            {{ setWidthSessionBlock }}
-            {{ (session.status === 'active') ? session.visitors.length : session.estimate_visitors_num }}
+        <strong class="w-100 text-center">
+            <div>
+                {{ `${new Date(session.booked_date).getHours().toString().padStart(2, '0')}:${new
+                    Date(session.booked_date).getMinutes().toString().padStart(2, '0')}` }}
+            </div>
+            <div>
+                {{ session.visitors[0].name }}
+            </div>
+            <div>
+                {{ (session.status === 'booked') ? session.estimate_visitors_num : session.visitors.length }}
+            </div>
         </strong>
     </div>
     <MyModal @close="$emit('sessionUpdated')" ref="session_modal">

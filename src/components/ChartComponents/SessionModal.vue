@@ -48,9 +48,11 @@
 
         <SessionPayment v-model:price-for-all="priceForAll" :visitor-list="selectedVisitors"
             @visitor-updated="setVisitorsBySession($event), getSessionData()" v-if="mode !== 'createBooking'" />
-        <div class="d-flex justify-content-end">
+        <div class="mt-2 d-flex justify-content-end">
             <MyButton v-if="mode === 'createBooking'" :cls="'btn_second'" @click="createBooking">СОЗДАТЬ</MyButton>
+            <MyButton v-if="mode !== 'createBooking'" :cls="'btn_second'" @click="deleteSession">Удалить сессию</MyButton>
         </div>
+
     </div>
 </template>
 
@@ -134,6 +136,10 @@ export default {
             } else {
                 (visitor) ? vm.visitors.push(visitor) : false;
             }
+        },
+        async deleteSession() {
+            const res = await this.$api.updateSession({ ...this.session, status: 'delete' })
+            this.$toast.info(res.massage)
         },
         setPriceForAll(value) {
             this.priceForAll = value
