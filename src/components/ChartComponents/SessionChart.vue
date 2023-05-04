@@ -16,16 +16,25 @@
                 <canvas ref="canvasChart" class="canvas"></canvas>
                 <div v-for="(item, index) in sessionsArray" :key="index">
                     <Session @session-updated="getSessions" :rooms-number="rooms.length" :session="item"
-                        v-model:currentTime="setTimeCurrent" v-model:today="today"/>
+                        v-model:currentTime="setTimeCurrent" v-model:today="today" />
                 </div>
             </div>
             <div class="dateLine" :style="{ width: 1440 * this.days + 'px' }">
                 <div class="date" v-for="(date, index) in days">
-                    <div
+
+                    <div class="date-content" ref="dateContents">
+                        <div
+                            v-if="today.toLocaleDateString() === new Date(new Date().setDate(new Date().getDate() + index - 2)).toLocaleDateString()">
+                            Сегодня:_
+                        </div>
+                        {{ new Date(new Date().setDate(new Date().getDate() + index - 2)).toLocaleDateString() }}
+                    </div>
+
+                    <!-- <div
                         v-if="today.toLocaleDateString() === new Date(new Date().setDate(new Date().getDate() + index - 2)).toLocaleDateString()">
                         Сегодня:_
                     </div>
-                    {{ new Date(new Date().setDate(new Date().getDate() + index - 2)).toLocaleDateString() }}
+                    {{ new Date(new Date().setDate(new Date().getDate() + index - 2)).toLocaleDateString() }} -->
                 </div>
             </div>
         </div>
@@ -73,6 +82,26 @@ export default {
         },
     },
     methods: {
+        updateDatesPosition() {
+            if (!this.$refs.dateContents) return;
+
+            const scrollLeft = this.$refs.scrollToDay.scrollLeft;
+            const dateWidth = 1440;
+
+            for (let i = 0; i < this.$refs.dateContents.length; i++) {
+                const dateContent = this.$refs.dateContents[i];
+                const dateStart = i * dateWidth;
+                const dateEnd = dateStart + dateWidth;
+
+                if (scrollLeft >= dateStart && scrollLeft <= dateEnd - dateContent.clientWidth) {
+                    dateContent.style.left = `${scrollLeft - dateStart}px`;
+                } else if (scrollLeft > dateEnd - dateContent.clientWidth && scrollLeft < dateEnd) {
+                    dateContent.style.left = `${dateWidth - dateContent.clientWidth}px`;
+                } else {
+                    dateContent.style.left = '0px';
+                }
+            }
+        },
         mouseСhipped(event) {
             const vm = this
             const currentMinutesToday = new Date().getHours() * 60 + new Date().getMinutes()
@@ -182,16 +211,27 @@ export default {
         }
     },
     mounted() {
+        this.$refs.scrollToDay.addEventListener('scroll', this.updateDatesPosition);
+
         this.setTimeLine()
         this.setCanvasChartBlock(this.days);
         setInterval(() => { this.setToday() }, 1000);
         this.functionScrollToDay();
         this.getSessions()
+    },
+    beforeDestroy() {
+        this.$refs.scrollToDay.removeEventListener('scroll', this.updateDatesPosition);
     }
 }
 </script>
 
 <style scoped>
+.date-content {
+    display: flex;
+    position: relative;
+    white-space: nowrap;
+}
+
 .current_time {
     padding: 0 2px;
 }
@@ -214,7 +254,7 @@ export default {
 
 .date {
     display: flex;
-    justify-content: center;
+    justify-content: left;
     align-items: center;
     font-size: 15px;
     color: rgb(175, 175, 175);
