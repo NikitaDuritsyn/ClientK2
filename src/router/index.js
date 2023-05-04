@@ -13,6 +13,16 @@ const routes = [
       { path: 'payment', name: 'payment', component: () => import('@/views/Payment.vue') },
     ]
   },
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import('@/views/Login.vue'),
+  },
+  {
+    path: '/Control',
+    name: 'Control',
+    component: () => import('@/views/Control.vue'),
+  },
 ]
 
 const router = createRouter({
