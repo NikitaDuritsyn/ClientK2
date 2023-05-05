@@ -1,8 +1,6 @@
 <template>
     <div class="w-100 h-100 position-relative d-flex align-items-center">
-        <div :style="{ height: this.chartHeight + 'px' }" class="clue">
-            <ClueRoomsComponent />
-        </div>
+        <ClueRoomsComponent ref="clueRoomsComponent" />
         <div ref="scrollToDay" class="MyChartCanvas overflow-scroll">
             <div class="timeLine">
                 <div class="time" v-for="time in timeArray">{{ time }}</div>
@@ -14,10 +12,9 @@
                     </div>
                 </div>
                 <canvas ref="canvasChart" class="canvas"></canvas>
-                <div v-for="(item, index) in sessionsArray" :key="index">
-                    <Session @session-updated="getSessions" :rooms-number="rooms.length" :session="item"
-                        v-model:currentTime="setTimeCurrent" v-model:today="today" />
-                </div>
+                <Session v-for="(item, index) in sessionsArray" :key="index" @session-updated="getSessions"
+                    :rooms-number="rooms.length" :session="item" v-model:currentTime="setTimeCurrent"
+                    v-model:today="today" />
             </div>
             <div class="dateLine" :style="{ width: 1440 * this.days + 'px' }">
                 <div class="date" v-for="(date, index) in days">
@@ -29,12 +26,6 @@
                         </div>
                         {{ new Date(new Date().setDate(new Date().getDate() + index - 2)).toLocaleDateString() }}
                     </div>
-
-                    <!-- <div
-                        v-if="today.toLocaleDateString() === new Date(new Date().setDate(new Date().getDate() + index - 2)).toLocaleDateString()">
-                        Сегодня:_
-                    </div>
-                    {{ new Date(new Date().setDate(new Date().getDate() + index - 2)).toLocaleDateString() }} -->
                 </div>
             </div>
         </div>
@@ -52,7 +43,7 @@ import ClueRoomsComponent from '@/components/ChartComponents/clueRoomsComponent.
 import Session from '@/components/ChartComponents/Session.vue'
 import SessionModal from '@/components/ChartComponents/SessionModal.vue';
 export default {
-    name: "my-chart-canvas",
+    name: "session-chart",
     props: ["days"],
     components: { MyModal, Session, ClueRoomsComponent, SessionModal },
     data() {
@@ -82,6 +73,11 @@ export default {
         },
     },
     methods: {
+        updateClueRoomsComponentHeight() {
+            if (this.$refs.canvas_container && this.$refs.clueRoomsComponent) {
+                this.$refs.clueRoomsComponent.$el.style.height = this.$refs.canvas_container.offsetHeight + 'px';
+            }
+        },
         updateDatesPosition() {
             if (!this.$refs.dateContents) return;
 
@@ -212,6 +208,8 @@ export default {
     },
     mounted() {
         this.$refs.scrollToDay.addEventListener('scroll', this.updateDatesPosition);
+        this.updateClueRoomsComponentHeight();
+        window.addEventListener('resize', this.updateClueRoomsComponentHeight);
 
         this.setTimeLine()
         this.setCanvasChartBlock(this.days);
@@ -220,6 +218,8 @@ export default {
         this.getSessions()
     },
     beforeDestroy() {
+        this.$refs.scrollToDay.removeEventListener('scroll', this.updateDatesPosition);
+        window.removeEventListener('resize', this.updateClueRoomsComponentHeight);
         this.$refs.scrollToDay.removeEventListener('scroll', this.updateDatesPosition);
     }
 }

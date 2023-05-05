@@ -21,12 +21,10 @@ export default {
   },
   data: () => ({
     isVisible: false,
-    isVoted: false
   }),
   methods: {
     open() {
       this.isVisible = true
-      this.isVoted = true
     },
     close() {
       this.isVisible = false

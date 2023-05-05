@@ -4,7 +4,7 @@
             <div class="w-100">
                 <MyInput class="m-3" :label="'login'" :model-value="login" />
                 <MyInput class="m-3" :label="'password'" :model-value="password" />
-                <MyButton class="m-3" :cls="'btn_second'">Войти</MyButton>
+                <MyButton class="m-3" :cls="'btn_second'" @click="$router.push({ name: 'adminPanel' })">Войти</MyButton>
             </div>
         </div>
     </div>

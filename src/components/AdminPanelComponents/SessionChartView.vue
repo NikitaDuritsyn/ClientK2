@@ -8,7 +8,7 @@
 import SessionChart from '@/components/ChartComponents/SessionChart.vue';
 
 export default {
-    name: "session-chart",
+    name: "session-chart-view",
     data() {
         return {};
     },

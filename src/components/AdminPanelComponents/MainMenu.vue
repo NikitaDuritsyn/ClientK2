@@ -1,17 +1,9 @@
 <template>
     <div class="main_menu ">
         <div class="overflow-scroll">
-            <div class="d-flex justify-content-center" style="width: max-content; min-width: 100vw">
-                <MyButton :cls="'darknessButton'" class="my_button" @click="$router.push({ name: 'stock' })">Склад
-                </MyButton>
-                <MyButton :cls="'darknessButton'" class="my_button" @click="$router.push({ name: 'checkout' })">Касса
-                </MyButton>
-                <MyButton :cls="'darknessButton'" class="my_button" @click="$router.push({ name: 'booking' })">Бронь
-                </MyButton>
-                <MyButton :cls="'darknessButton'" class="my_button" @click="$router.push({ name: 'search' })">Поиск
-                </MyButton>
-                <MyButton :cls="'darknessButton'" class="my_button" @click="$router.push({ name: 'payment' })">Расчет
-                </MyButton>
+            <div class="d-flex justify-content-center align-items-center h-100"
+                style="width: max-content; min-width: 100vw">
+                <MenuBar :menu-bar-items="menuBarItems" />
             </div>
         </div>
         <div class="class_setting">
@@ -20,16 +12,28 @@
     </div>
 </template>
 <script>
+import MenuBar from '../UI/MenuBar.vue';
 import MyButton from '../UI/MyButton.vue';
 
 export default {
     name: "main-menu",
-    data() { return {} },
+    data() {
+        return {
+            menuBarItems: [
+                { title: 'Гл. панель', name: 'control' },
+                { title: 'Склад', name: 'stock' },
+                { title: 'Касса', name: 'checkout' },
+                { title: 'Бронь', name: 'booking' },
+                { title: 'Поиск', name: 'search' },
+                { title: 'Расчет', name: 'payment' },
+            ]
+        }
+    },
     methods: {},
     mounted() {
         this.$router.push({ name: 'booking' })
     },
-    components: { MyButton }
+    components: { MyButton, MenuBar }
 }
 </script>
 
@@ -44,10 +48,6 @@ export default {
 .class_setting {
     height: 100%;
     background-color: rgb(20, 20, 20);
-}
-
-.my_button {
-    margin: 5px;
 }
 
 .overflow-scroll {

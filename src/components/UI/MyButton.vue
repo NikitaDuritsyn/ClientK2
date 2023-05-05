@@ -13,9 +13,9 @@ export default {
       default: 'btn_second',
       validator: value => {
         return [
+          'link_btn',
           'btn_second',
           'btn_white',
-          'darknessButton',
           'close_btn',
         ].includes(value)
       }
@@ -39,24 +39,9 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #E32289;
-  border: 0.15rem solid #E32289;
+  background: black;
+  border: 0.15rem solid black;
   max-width: 28rem;
-}
-
-.darknessButton {
-  border: 0.15rem solid rgb(20, 20, 20);
-  background-color: rgb(20, 20, 20);
-  color: rgb(120, 120, 120);
-}
-
-.darknessButton:disabled {
-  border: 0.15rem solid rgb(60, 60, 60);
-  background-color: rgb(35, 35, 35);
-}
-
-.darknessButton:focus {
-  border-color: rgb(0, 255, 255);
 }
 
 .btn_second {
@@ -104,6 +89,31 @@ export default {
 }
 
 .btn_white:disabled {
+  background-color: rgb(70, 70, 70);
+}
+
+.link_btn {
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: rgb(200, 200, 200);
+  background-color: rgb(0, 0, 0);
+  border: 1px solid rgb(0, 0, 0);
+  padding: 3px 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  min-width: 50px;
+  text-align: center;
+}
+
+.link_btn:focus {
+  border-color: rgb(0, 99, 136);
+}
+
+.link_btn:hover {
+  border-color: rgb(0, 255, 255);
+}
+
+.link_btn:disabled {
   background-color: rgb(70, 70, 70);
 }
 

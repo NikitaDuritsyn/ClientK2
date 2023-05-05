@@ -1,25 +1,34 @@
 <template>
-    <div class="row justify-content-center vh-100 m-0 p-0">
-        <div class="col-md-4 d-flex align-items-center">
-            <div class="w-100" style="text-align: center;">
-                ЭТО СТРАНИЦА В КОТОРОЙ МОЖНО ПРОВОДИТЬ НАСТРОЙКИ В ПРИЛОЖЕНИИ
-                И РЕГИСТРИРОВАТЬ ПОЛЬЗОВАТЕЛЕЙ СЛЕВА СДЕЛАТЬ МЕНЮ И РЕАЛИЗОВАТЬ
-                ТАМ ВКЛАДКИ: регистрация, пользователи, создание (комнаты, услуги) и т.п.
-            </div>
+    <div class="vh-100 d-flex flex-column">
+        <MenuBar :menuBarItems="menuBarItems" />
+        <div class="h-100" :style="{ color: 'red' }">
+            <router-view />
         </div>
     </div>
 </template>
 
 <script>
+import MenuBar from '@/components/UI/MenuBar.vue';
+
 
 export default {
     name: "Control",
-    components: {},
+    components: { MenuBar },
     data() {
-        return {};
+        return {
+            menuBarItems: [
+                { title: 'Админ. панель', name: 'adminPanel' },
+                { title: 'Регистрация', name: 'registration' },
+                { title: 'Комнаты', name: 'rooms' },
+                { title: 'Услуги', name: 'services' },
+                { title: 'Тарифы', name: 'tariffs' },
+                { title: 'Типы оплаты', name: 'paymentTypes' },
+            ]
+        };
     },
-    methods: {},
-    mounted() { },
+    mounted() {
+        this.$router.push({ name: 'registration' })
+    },
 }
 </script>
 

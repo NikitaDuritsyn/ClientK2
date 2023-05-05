@@ -43,6 +43,7 @@ export default {
 }
 
 .clue_rooms_container {
+    z-index: 101;
     display: flex;
     height: 100%;
 }
