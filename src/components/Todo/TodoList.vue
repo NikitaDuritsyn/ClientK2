@@ -43,11 +43,8 @@ export default {
 
 <style scoped>
 .todo_lsit {
-    height: 50vh;
     background-color: whitesmoke;
     max-width: 500px;
     width: 100%;
-    border-bottom-left-radius: 1rem;
-    border-bottom-right-radius: 1rem;
 }
 </style>

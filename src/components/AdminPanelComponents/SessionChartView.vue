@@ -1,5 +1,5 @@
 <template>
-    <div class="session_chart">
+    <div class="d-flex justify-content-center h-100 w-100 p-0">
         <SessionChart :days="Number(12)" />
     </div>
 </template>
@@ -20,15 +20,3 @@ export default {
     }
 }
 </script>
-
-<style scoped>
-.session_chart {
-    display: flex;
-    justify-content: center;
-    height: 100%;
-    width: 100%;
-    padding: 0;
-}
-</style>
-
-

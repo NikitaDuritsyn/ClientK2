@@ -18,9 +18,19 @@ export default {
 </script>
 
 <style>
-.pointer{
+body {
+  overflow: hidden;
+  background-color: rgb(15, 15, 15) !important;
+}
+
+.admin_panel {
+  color: rgb(209, 209, 209)
+}
+
+.pointer {
   cursor: pointer;
 }
+
 .text_label_name {
   font-size: 16px;
   padding: 0 10px 0 0;
@@ -30,9 +40,6 @@ export default {
   height: fit-content;
 }
 
-body {
-  background-color: rgb(0, 0, 0) !important;
-}
 
 .timepicker {
   background: none;

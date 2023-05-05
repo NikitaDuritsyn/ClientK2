@@ -82,7 +82,7 @@ export default {
             if (!this.$refs.dateContents) return;
 
             const scrollLeft = this.$refs.scrollToDay.scrollLeft;
-            const dateWidth = 1440;
+            const dateWidth = 1438;
 
             for (let i = 0; i < this.$refs.dateContents.length; i++) {
                 const dateContent = this.$refs.dateContents[i];
@@ -208,14 +208,13 @@ export default {
     },
     mounted() {
         this.$refs.scrollToDay.addEventListener('scroll', this.updateDatesPosition);
-        this.updateClueRoomsComponentHeight();
         window.addEventListener('resize', this.updateClueRoomsComponentHeight);
-
         this.setTimeLine()
         this.setCanvasChartBlock(this.days);
         setInterval(() => { this.setToday() }, 1000);
         this.functionScrollToDay();
         this.getSessions()
+        this.updateClueRoomsComponentHeight();
     },
     beforeDestroy() {
         this.$refs.scrollToDay.removeEventListener('scroll', this.updateDatesPosition);
@@ -261,8 +260,9 @@ export default {
     font-weight: 600;
     width: 1440px;
     height: 100%;
-    background-color: rgb(20, 20, 20);
-    border: 1px solid black;
+    background-color: transparent;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
     box-sizing: border-box;
 }
 
@@ -289,11 +289,6 @@ export default {
     position: absolute;
     width: 100%;
     height: 100%;
-}
-
-.clue {
-    position: absolute;
-    z-index: 101;
 }
 
 .canvas_container {

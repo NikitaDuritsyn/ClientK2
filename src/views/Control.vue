@@ -1,6 +1,6 @@
 <template>
     <div class="vh-100 d-flex flex-column">
-        <MenuBar :menuBarItems="menuBarItems" />
+        <MenuBar :scroll-bar="true" :menu-bar-items="menuBarItems" />
         <div class="h-100" :style="{ color: 'red' }">
             <router-view />
         </div>

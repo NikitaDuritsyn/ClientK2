@@ -8,7 +8,7 @@
                 </div>
             </div>
         </div>
-        <div class="clue_btn" @click="visible = !visible">
+        <div class="d-flex align-items-center" @click="visible = !visible">
             <i v-show="!visible" class="bi bi-caret-right" style="font-size: 30px; color: cornflowerblue;"></i>
             <i v-show="visible" class="bi bi-caret-left" style="font-size: 30px; color: cornflowerblue;"></i>
         </div>
@@ -28,29 +28,22 @@ export default {
 </script>
 
 <style scoped>
-.clue_btn {
-    height: 100%;
-    min-width: 30px;
-    border-radius: 0 20px 20px 0;
-    background-color: rgb(20, 20, 20);
-    display: flex;
-    align-items: center;
-}
-
 .clue_rooms {
     white-space: nowrap;
-    background-color: rgb(20, 20, 20);
 }
 
 .clue_rooms_container {
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
     z-index: 101;
     display: flex;
     height: 100%;
 }
 
 .room_name {
-    border: 1px solid rgb(0, 0, 0);
-    background-color: transparent;
+    background-color: rgba(0, 0, 0, 0.342);
+    border-top: 1px solid rgb(0, 0, 0);
+    border-bottom: 1px solid rgb(0, 0, 0);
     padding: 5px;
     display: flex;
     justify-content: center;

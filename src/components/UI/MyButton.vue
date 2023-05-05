@@ -98,6 +98,7 @@ export default {
   color: rgb(200, 200, 200);
   background-color: rgb(0, 0, 0);
   border: 1px solid rgb(0, 0, 0);
+  box-shadow: 0px 0px 4px black;
   padding: 3px 5px;
   border-radius: 5px;
   cursor: pointer;

@@ -36,9 +36,3 @@ export default {
   }
 }
 </script>
-<style scoped>
-.admin_panel {
-  background-color: rgb(30, 30, 30);
-  color: rgb(175, 175, 175);
-}
-</style>

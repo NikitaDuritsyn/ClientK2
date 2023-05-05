@@ -2,10 +2,10 @@
     <div class="todo_container d-flex flex-column w-100">
         <TodoList v-if="visible" class="m-auto" @close="visible = false" />
         <div class="m-auto">
-            <MyButton :cls="'btn_white'" @click="visible = !visible">
-                <i v-show="!visible" class="bi bi-caret-down" style="font-size: 30px; color: cornflowerblue;"></i>
-                <i v-show="visible" class="bi bi-caret-up" style="font-size: 30px; color: cornflowerblue;"></i>
-            </MyButton>
+            <div @click="visible = !visible">
+                <i v-show="!visible" class="bi bi-caret-down-fill" style="font-size: 30px; color: whitesmoke;"></i>
+                <i v-show="visible" class="bi bi-caret-up-fill" style="font-size: 30px; color: whitesmoke"></i>
+            </div>
         </div>
     </div>
 </template>
