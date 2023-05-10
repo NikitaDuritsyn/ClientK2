@@ -13,6 +13,7 @@ export default {
     this.$store.dispatch('GET_TARIFFS');
     this.$store.dispatch('GET_SERVICES');
     this.$store.dispatch('GET_PAYMENTTYPES');
+    this.$store.dispatch('GET_ROLES');
   }
 }
 </script>

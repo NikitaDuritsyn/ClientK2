@@ -48,6 +48,9 @@ export default {
       this.$refs.input.focus()
     }
   },
+  mounted() {
+    this.glb.phoneInputFormatter()
+  }
 }
 </script>
 

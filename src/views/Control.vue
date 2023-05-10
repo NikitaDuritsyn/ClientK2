@@ -18,7 +18,7 @@ export default {
         return {
             menuBarItems: [
                 { title: 'Админ. панель', name: 'adminPanel' },
-                { title: 'Регистрация', name: 'registration' },
+                { title: 'Регистрация', name: 'users' },
                 { title: 'Комнаты', name: 'rooms' },
                 { title: 'Услуги', name: 'services' },
                 { title: 'Тарифы', name: 'tariffs' },
@@ -27,7 +27,7 @@ export default {
         };
     },
     mounted() {
-        this.$router.push({ name: 'registration' })
+        this.$router.push({ name: 'users' })
     },
 }
 </script>

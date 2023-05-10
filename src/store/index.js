@@ -6,6 +6,7 @@ export default createStore({
     rooms: [],
     tariffs: [],
     services: [],
+    roles: [],
     paymentTypes: []
   },
   getters: {},
@@ -17,6 +18,12 @@ export default createStore({
     }
   },
   actions: {
+    GET_ROLES({ commit }) {
+      kamekaApi.getRoles()
+        .then(data => {
+          commit('SET_DATA_ON_STATE', { roles: data })
+        })
+    },
     GET_ROOMS({ commit }) {
       kamekaApi.getRooms()
         .then(data => {

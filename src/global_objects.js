@@ -23,26 +23,19 @@ export const global_objects = {
 
     formatPhoneForShow: (phone) => {
         if (phone) {
-            phone = '+' + phone.slice(0, 1) + ' (' + phone.slice(1, 4) + ')' + ' ' + phone.slice(4, 7) + '-' + phone.slice(7, 9) + '-' + phone.slice(9, 11)
+            phone = phone.replace(/^(\d)(\d{3})(\d{3})(\d{2})(\d{2})$/, '+$1 ($2) $3-$4-$5');
         }
         return phone
     },
     formatPhone: (phone) => {
-        phone = phone.replaceAll('-', '');
-        phone = phone.replaceAll('(', '');
-        phone = phone.replaceAll(')', '');
-        phone = phone.replaceAll('+', '');
-        phone = phone.replaceAll(' ', '');
+        phone = phone.replace(/\D/g, '');
         if (phone.length > 11) {
-            phone = phone.slice(0, 11)
+            phone = phone.slice(0, 11);
         }
-        if (phone.slice(0, 2) === '89') {
-            phone = '79' + phone.slice(2)
+        if (/^89/.test(phone)) {
+            phone = '7' + phone.slice(1);
         }
-        if (phone.slice(0, 2) === '79') {
-            phone = '79' + phone.slice(2)
-        }
-        return phone
+        return phone;
     },
     phoneInputFormatter: () => {
         var phoneInputs = document.querySelectorAll('input[data-tel-input]');

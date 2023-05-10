@@ -1,6 +1,14 @@
 import BaseApi from './BaseApi'
 
 class KamekaApi extends BaseApi {
+    createUser(data) {
+        let url = `/api/create_user`
+        return this._request({
+            method: 'post',
+            url: url,
+            data: data
+        })
+    }
     updateTodo(data) {
         let url = `/api/update_todo/${data.id}`
         return this._request({
@@ -158,6 +166,12 @@ class KamekaApi extends BaseApi {
     }
     getRooms() {
         let url = `/api/get_rooms`
+        return this._request({
+            url: url
+        })
+    }
+    getRoles() {
+        let url = `/api/roles`
         return this._request({
             url: url
         })

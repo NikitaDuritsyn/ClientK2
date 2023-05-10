@@ -23,7 +23,7 @@ const routes = [
     name: 'control',
     component: () => import('@/views/Control.vue'),
     children: [
-      { path: 'registration', name: 'registration', component: () => import('@/PagesControl/Registration.vue') },
+      { path: 'users', name: 'users', component: () => import('@/PagesControl/Users.vue') },
       { path: 'payment_types', name: 'paymentTypes', component: () => import('@/PagesControl/PaymentTypes.vue') },
       { path: 'rooms', name: 'rooms', component: () => import('@/PagesControl/Rooms.vue') },
       { path: 'services', name: 'services', component: () => import('@/PagesControl/Services.vue') },

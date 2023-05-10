@@ -95,9 +95,6 @@ export default {
                 })
             }
         }
-    },
-    mounted() {
-        this.glb.phoneInputFormatter()
     }
 }
 </script>
