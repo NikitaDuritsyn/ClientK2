@@ -19,6 +19,19 @@ export default {
 </script>
 
 <style>
+.overflow-scroll {
+  -ms-overflow-style: none;
+  /* IE и Edge */
+  scrollbar-width: none;
+  /* scrollbar-height: none; */
+  /* Firefox */
+}
+
+.overflow-scroll::-webkit-scrollbar {
+  height: 0px;
+  display: none;
+}
+
 body {
   overflow: hidden;
   background-color: rgb(15, 15, 15) !important;

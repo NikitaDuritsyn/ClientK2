@@ -9,8 +9,8 @@
             </div>
         </div>
         <div class="d-flex align-items-center" @click="visible = !visible">
-            <i v-show="!visible" class="bi bi-caret-right" style="font-size: 30px; color: cornflowerblue;"></i>
-            <i v-show="visible" class="bi bi-caret-left" style="font-size: 30px; color: cornflowerblue;"></i>
+            <i v-show="!visible" class="bi bi-caret-right pointer" style="font-size: 30px; color: cornflowerblue;"></i>
+            <i v-show="visible" class="bi bi-caret-left pointer" style="font-size: 30px; color: cornflowerblue;"></i>
         </div>
     </div>
 </template>

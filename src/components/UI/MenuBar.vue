@@ -41,16 +41,6 @@ export default {
 
 .overflow-scroll {
     height: calc(50px + 10px);
-    -ms-overflow-style: none;
-    /* IE и Edge */
-    scrollbar-width: none;
-    /* scrollbar-height: none; */
-    /* Firefox */
-}
-
-.overflow-scroll::-webkit-scrollbar {
-    height: 0px;
-    display: none;
 }
 </style>
 

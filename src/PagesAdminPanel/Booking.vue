@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="d-flex h-100 w-100 align-items-end">
         Форма добавления брони
     </div>
 </template>

@@ -1,5 +1,5 @@
 <template>
-    <div class="todo_lsit">
+    <div class="todo_lsit overflow-scroll" :style="{ height: windowVH - 45 + 'px' }">
         <Todo @todo-updated="setTodos" v-for="todo in todoList" :key="todo.id" :todo="todo" />
     </div>
 </template>
@@ -14,10 +14,14 @@ export default {
     data() {
         return {
             visible: false,
-            todoList: []
+            todoList: [],
+            windowVH: Number(window.innerHeight) - 1,
         };
     },
     methods: {
+        updateHeight() {
+            this.windowVH = window.innerHeight;
+        },
         async setTodos() {
             try {
                 this.todoList = await this.$api.getTodos()
@@ -35,9 +39,13 @@ export default {
         this.setTodos(),
             addEventListener('keyup', this.listener);
     },
+    created() {
+        window.addEventListener('resize', this.updateHeight);
+    },
     beforeUnmount() {
         removeEventListener('keyup', this.listener);
-    },
+        removeEventListener('resize', this.updateHeight)
+    }
 }
 </script>
 

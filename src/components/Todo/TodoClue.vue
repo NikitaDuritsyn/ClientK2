@@ -2,7 +2,7 @@
     <div class="todo_container d-flex flex-column w-100">
         <TodoList v-if="visible" class="m-auto" @close="visible = false" />
         <div class="m-auto">
-            <div @click="visible = !visible">
+            <div class="pointer" @click="visible = !visible">
                 <i v-show="!visible" class="bi bi-caret-down-fill" style="font-size: 30px; color: whitesmoke;"></i>
                 <i v-show="visible" class="bi bi-caret-up-fill" style="font-size: 30px; color: whitesmoke"></i>
             </div>
