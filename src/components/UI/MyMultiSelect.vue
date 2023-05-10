@@ -63,6 +63,7 @@ label {
     padding: 5px 10px;
     width: 100%;
     max-height: 100px;
+    max-width: 28rem;
 }
 
 select::-webkit-scrollbar {

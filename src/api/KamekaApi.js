@@ -152,6 +152,13 @@ class KamekaApi extends BaseApi {
             url: url
         })
     }
+    
+    getUsers() {
+        let url = `/api/users`
+        return this._request({
+            url: url
+        })
+    }
     getVisitors() {
         let url = `/api/get_visitors`
         return this._request({

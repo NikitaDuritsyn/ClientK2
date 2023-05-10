@@ -4,17 +4,18 @@
             <RegistrationForm />
         </div>
         <div class="col-md-6">
-            USER TABLE
+            <UsersTable />
         </div>
     </div>
 </template>
 
 <script>
-import RegistrationForm from '@/components/RegistrationComponents/RegistrationForm.vue';
+import RegistrationForm from '@/components/UsersComponents/RegistrationForm.vue';
+import UsersTable from '@/components/UsersComponents/UsersTable.vue';
 
 export default {
     name: "Registration",
-    components: { RegistrationForm },
+    components: { RegistrationForm, UsersTable },
     data() {
         return {};
     },
