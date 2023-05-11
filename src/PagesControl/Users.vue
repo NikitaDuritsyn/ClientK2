@@ -1,23 +1,40 @@
 <template>
-    <div class="row justify-content-center h-100 m-0 p-0 registration">
-        <div class="col-md-4">
-            <RegistrationForm />
+    <div class="d-flex h-100 flex-column m-2">
+        <div class="mt-2 mb-2">
+            <my-button @click="$refs.create_user.open()" :cls="'btn_second'">
+                Доб. Пользователя
+            </my-button>
         </div>
-        <div class="col-md-6">
-            <UsersTable />
+        <div class="overflow-scroll">
+            <UsersTable @update-user-table="getUsers()" :users="users" />
         </div>
     </div>
+    <MyModal :mode-flex-center="true" ref="create_user">
+        <UserForm @update-user-table="getUsers()" @close="$refs.create_user.close()" />
+    </MyModal>
 </template>
 
 <script>
-import RegistrationForm from '@/components/UsersComponents/RegistrationForm.vue';
+import MyButton from '@/components/UI/MyButton.vue';
+import MyModal from '@/components/UI/MyModal.vue';
+import UserForm from '@/components/UsersComponents/UserForm.vue';
 import UsersTable from '@/components/UsersComponents/UsersTable.vue';
 
 export default {
-    name: "Registration",
-    components: { RegistrationForm, UsersTable },
+    name: "Users",
+    components: { UserForm, UsersTable, MyButton, MyModal },
     data() {
-        return {};
+        return {
+            users: []
+        };
     },
+    methods: {
+        async getUsers() {
+            this.users = await this.$api.getUsers()
+        }
+    },
+    mounted() {
+        this.getUsers()
+    }
 }
 </script>

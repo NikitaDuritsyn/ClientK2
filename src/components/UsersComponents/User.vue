@@ -1,73 +1,36 @@
 <template>
-    <div class="w-100 p-2 mt-1 mb-1">
-        <div class="d-flex flex-wrap justify-content-between">
-            <div class="d-flex flex-column">
-                <div class="td p-1">
-                    Имя
-                </div>
-                <div class="td p-1">
-                    {{ user.name }}
-                </div>
-            </div>
-            <div class="d-flex flex-column">
-                <div class="td p-1">
-                    Фамилиия
-                </div>
-                <div class="td p-1">
-                    {{ user.lastname }}
-                </div>
-            </div>
-            <div class="d-flex flex-column">
-                <div class="td p-1">
-                    Email
-                </div>
-                <div class="td p-1">
-                    {{ user.email }}
-                </div>
-            </div>
-            <div class="d-flex flex-column">
-                <div class="td p-1">
-                    Телефон
-                </div>
-                <div class="td p-1">
-                    {{ user.phone }}
-                </div>
-            </div>
-
-            <div class="td">
-                <div>
-                    <MyButton @click="$refs.update_visitor.open()" class="m-1 mt-0 mb-0" :cls="'btn_second'">
-                        <i class="bi bi-pen"></i>
-                    </MyButton>
-                </div>
-            </div>
-            <div class="d-flex td">
-                <div class="td d-flex justify-content-center align-items-center p-1">Роли </div>
-                <user-role class="m-2" v-for="role in user.Roles" :key="role.id" :role="role" />
-            </div>
-
-        </div>
-
-    </div>
+    <tr>
+        <th scope="row">{{ user.name }}</th>
+        <td>{{ user.lastname }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.phone }}</td>
+        <td><user-roles :roles="user.Roles" /></td>
+        <td>
+            <MyButton @click="$refs.update_user.open()" class="m-auto" :cls="'btn_second'">
+                <i class="bi bi-pen"></i>
+            </MyButton>
+        </td>
+    </tr>
+    <MyModal :mode-flex-center="true" ref="update_user">
+        <UserForm @close="$refs.update_user.close()" @update-user-table="$emit('updateUserTable')" :user-data="user"
+            :mode="'update'" />
+    </MyModal>
 </template>
 
 <script>
-import UserRole from '@/components/UsersComponents/UserRole.vue'
-import MyButton from '../UI/MyButton.vue';
+import UserRoles from '@/components/UsersComponents/UserRoles.vue'
+import MyButton from '@/components/UI/MyButton.vue';
+import MyModal from '@/components/UI/MyModal.vue';
+import UserForm from '@/components/UsersComponents/UserForm.vue';
 
 export default {
     name: 'user',
     props: ['user'],
-    components: { UserRole, MyButton },
+    emits: ['updateUserTable'],
+    components: { UserRoles, MyButton, MyModal, UserForm },
     data() {
         return {}
     },
     methods: {},
 }
 </script>
-<style>
-.td {
-    color: white;
-    border: 1px solid rgb(40, 40, 40);
-}
-</style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="admin_panel" :style="{ height: windowVH + 'px' }">
+  <div class="admin_panel">
     <TodoClue />
     <div class="row h-50 m-0">
       <SessionChartView />
@@ -20,19 +20,8 @@ export default {
   components: { MainMenu, SessionChartView, TodoClue },
   data() {
     return {
-      windowVH: Number(window.innerHeight) - 1,
     }
   },
-  methods: {
-    updateHeight() {
-      this.windowVH = window.innerHeight;
-    },
-  },
-  created() {
-    window.addEventListener('resize', this.updateHeight);
-  },
-  beforeUnmount() {
-    removeEventListener('resize', this.updateHeight)
-  }
+
 }
 </script>

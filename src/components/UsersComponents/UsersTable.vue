@@ -1,7 +1,20 @@
 <template>
-    <div class="">
-        <div class="text-center">ТАБЛИЦА ПОЛЬЗОВАТЕЛЕЙ</div>
-        <User v-for="user in users" :key="user.id" :user="user" />
+    <div class="table-responsive overflow-scroll">
+        <table class="table .table-striped">
+            <thead>
+                <tr>
+                    <th>Имя</th>
+                    <th>Фамилиия</th>
+                    <th>Email</th>
+                    <th>Телефон</th>
+                    <th>Роли</th>
+                    <th>Редактировать/+</th>
+                </tr>
+            </thead>
+            <tbody>
+                <User @update-user-table="$emit('updateUserTable')" v-for="user in users" :key="user.id" :user="user" />
+            </tbody>
+        </table>
     </div>
 </template>
 
@@ -10,19 +23,16 @@ import User from './User.vue';
 
 export default {
     name: 'users-table',
+    emits: ['updateUserTable'],
+    props: ['users'],
     components: { User },
     data() {
-        return {
-            users: []
-        }
-    },
-    methods: {
-        async getUsers() {
-            this.users = await this.$api.getUsers()
-        }
-    },
-    mounted() {
-        this.getUsers()
+        return {}
     }
 }
 </script>
+<style scoped>
+.table {
+    color: rgb(255, 255, 255);
+}
+</style>

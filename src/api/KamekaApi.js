@@ -17,6 +17,14 @@ class KamekaApi extends BaseApi {
             data: data
         })
     }
+    updateUser(data) {
+        let url = `/api/update_user/${data.id}`
+        return this._request({
+            method: 'post',
+            url: url,
+            data: data
+        })
+    }
     updateSession(data) {
         let url = `/api/update_session/${data.id}`
         return this._request({
@@ -152,7 +160,7 @@ class KamekaApi extends BaseApi {
             url: url
         })
     }
-    
+
     getUsers() {
         let url = `/api/users`
         return this._request({
@@ -220,6 +228,13 @@ class KamekaApi extends BaseApi {
         })
     }
     //deletes
+    deleteUser(userId) {
+        let url = `/api/delete_user/${userId}`
+        return this._request({
+            method: 'delete',
+            url: url,
+        })
+    }
     deleteVisitorService(serviceId) {
         let url = `/api/delete_visitor_service/${serviceId}`
         return this._request({

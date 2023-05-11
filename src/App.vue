@@ -1,12 +1,19 @@
 <template>
-  <router-view />
+  <router-view :style="{ height: windowVH + 'px' }" />
 </template>
 
 <script>
 export default {
   name: "App",
   data: () => {
-    return {}
+    return {
+      windowVH: Number(window.innerHeight) - 1,
+    }
+  },
+  methods: {
+    updateHeight() {
+      this.windowVH = window.innerHeight;
+    },
   },
   mounted() {
     this.$store.dispatch('GET_ROOMS');
@@ -14,6 +21,12 @@ export default {
     this.$store.dispatch('GET_SERVICES');
     this.$store.dispatch('GET_PAYMENTTYPES');
     this.$store.dispatch('GET_ROLES');
+  },
+  created() {
+    window.addEventListener('resize', this.updateHeight);
+  },
+  beforeUnmount() {
+    removeEventListener('resize', this.updateHeight)
   }
 }
 </script>

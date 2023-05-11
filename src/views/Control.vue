@@ -1,7 +1,9 @@
 <template>
-    <div class="vh-100 d-flex flex-column">
-        <MenuBar :scroll-bar="true" :menu-bar-items="menuBarItems" />
-        <div class="h-100" :style="{ color: 'red' }">
+    <div class="d-flex flex-column">
+        <div class="">
+            <MenuBar :scroll-bar="true" :menu-bar-items="menuBarItems" />
+        </div>
+        <div :style="{ height: 'calc(100% - 60px)' }">
             <router-view />
         </div>
     </div>
@@ -31,5 +33,3 @@ export default {
     },
 }
 </script>
-
-<style scoped></style>

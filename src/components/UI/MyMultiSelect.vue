@@ -12,20 +12,22 @@
 export default {
     name: "VueMultiSelect",
     props: {
-        disabled: {
-            type: Boolean,
-            default: false
-        },
-        modelValue: {
-            type: Array,
-            default: []
-        },
-        options: {},
-        label: {},
+        disabled: { type: Boolean, default: false },
+        modelValue: { type: Array, default: [] },
+        options: { type: Array, default: [] },
+        label: { type: String, default: '' },
     },
     data() {
         return {
             modelVal: this.modelValue
+        }
+    },
+    watch: {
+        modelValue: {
+            handler(newValue) {
+                this.modelVal = newValue;
+            },
+            deep: true
         }
     },
     methods: {
