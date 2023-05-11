@@ -1,5 +1,5 @@
 <template>
-    <div class="row justify-content-center vh-100 m-0 p-0">
+    <div class="row justify-content-center m-0 p-0">
         <div class="col-md-4 d-flex align-items-center">
             <div class="w-100">
                 <MyInput class="m-3" :label="'login'" :model-value="login" />

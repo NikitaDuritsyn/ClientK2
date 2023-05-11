@@ -17,6 +17,7 @@ export default {
           'btn_second',
           'btn_white',
           'close_btn',
+          'log_out',
         ].includes(value)
       }
     },
@@ -115,6 +116,34 @@ export default {
 }
 
 .link_btn:disabled {
+  background-color: rgb(70, 70, 70);
+}
+
+.log_out {
+  top: 5px;
+  right: 10px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: rgb(200, 200, 200);
+  background-color: rgb(0, 0, 0);
+  border: 1px solid rgb(0, 0, 0);
+  box-shadow: 0px 0px 4px black;
+  padding: 3px 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  min-width: 50px;
+  text-align: center;
+}
+
+.log_out:focus {
+  border-color: rgb(0, 99, 136);
+}
+
+.log_out:hover {
+  border-color: rgb(0, 255, 255);
+}
+
+.log_out:disabled {
   background-color: rgb(70, 70, 70);
 }
 

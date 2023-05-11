@@ -3,9 +3,11 @@
         <div class="">
             <MenuBar :scroll-bar="true" :menu-bar-items="menuBarItems" />
         </div>
-        <div :style="{ height: 'calc(100% - 60px)' }">
+        <div class="h-100 overflow-hidden">
             <router-view />
         </div>
+        <!-- <div :style="{ height: 'calc(100% - 60px)' }">
+        </div> -->
     </div>
 </template>
 
@@ -19,7 +21,6 @@ export default {
     data() {
         return {
             menuBarItems: [
-                { title: 'Админ. панель', name: 'adminPanel' },
                 { title: 'Регистрация', name: 'users' },
                 { title: 'Комнаты', name: 'rooms' },
                 { title: 'Услуги', name: 'services' },

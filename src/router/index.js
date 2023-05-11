@@ -5,6 +5,7 @@ const routes = [
     path: '/admin_panel',
     name: 'adminPanel',
     component: () => import('@/views/AdminPanel.vue'),
+    meta: { layout: 'main' },
     children: [
       { path: 'stock', name: 'stock', component: () => import('@/PagesAdminPanel/Stock.vue') },
       { path: 'checkout', name: 'checkout', component: () => import('@/PagesAdminPanel/Checkout.vue') },
@@ -14,13 +15,9 @@ const routes = [
     ]
   },
   {
-    path: '/',
-    name: 'login',
-    component: () => import('@/views/Login.vue'),
-  },
-  {
     path: '/control',
     name: 'control',
+    meta: { layout: 'main' },
     component: () => import('@/views/Control.vue'),
     children: [
       { path: 'users', name: 'users', component: () => import('@/PagesControl/Users.vue') },
@@ -29,6 +26,12 @@ const routes = [
       { path: 'services', name: 'services', component: () => import('@/PagesControl/Services.vue') },
       { path: 'tariffs', name: 'tariffs', component: () => import('@/PagesControl/Tariffs.vue') },
     ]
+  },
+  {
+    path: '/',
+    name: 'login',
+    meta: { layout: 'empty' },
+    component: () => import('@/views/Login.vue'),
   },
 ]
 

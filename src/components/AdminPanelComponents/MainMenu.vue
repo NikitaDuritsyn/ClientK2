@@ -15,7 +15,6 @@ export default {
     data() {
         return {
             menuBarItems: [
-                { title: 'Гл. панель', name: 'control' },
                 { title: 'Склад', name: 'stock' },
                 { title: 'Касса', name: 'checkout' },
                 { title: 'Бронь', name: 'booking' },

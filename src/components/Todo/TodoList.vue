@@ -1,5 +1,6 @@
 <template>
-    <div class="todo_lsit overflow-scroll" :style="{ height: windowVH - 45 + 'px' }">
+    <!-- :style="{ height: windowVH - 69 + 'px' }" -->
+    <div class="todo_lsit overflow-scroll h-100">
         <Todo @todo-updated="setTodos" v-for="todo in todoList" :key="todo.id" :todo="todo" />
     </div>
 </template>

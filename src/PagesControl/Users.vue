@@ -1,11 +1,11 @@
 <template>
-    <div class="d-flex h-100 flex-column m-2">
+    <div class="d-flex h-100 flex-column ms-2 me-2">
         <div class="mt-2 mb-2">
             <my-button @click="$refs.create_user.open()" :cls="'btn_second'">
                 Доб. Пользователя
             </my-button>
         </div>
-        <div class="overflow-scroll">
+        <div class="overflow-scroll h-100">
             <UsersTable @update-user-table="getUsers()" :users="users" />
         </div>
     </div>

@@ -1,13 +1,24 @@
 <template>
-  <router-view :style="{ height: windowVH + 'px' }" />
+  <component :is="layout" :style="{ height: windowVH + 'px' }">
+    <router-view class="h-100" />
+  </component>
 </template>
 
 <script>
+import EmptyLayout from '@/Layouts/EmptyLayout.vue'
+import MainLayout from '@/Layouts/MainLayout.vue'
+
 export default {
   name: "App",
+  components: { EmptyLayout, MainLayout },
   data: () => {
     return {
       windowVH: Number(window.innerHeight) - 1,
+    }
+  },
+  computed: {
+    layout() {
+      return (this.$route.meta.layout || 'empty') + '-layout'
     }
   },
   methods: {
@@ -46,7 +57,7 @@ export default {
 }
 
 body {
-  overflow: hidden;
+  /* overflow: hidden; */
   background-color: rgb(15, 15, 15) !important;
 }
 
