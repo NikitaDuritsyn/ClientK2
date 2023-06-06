@@ -31,6 +31,7 @@ export default {
 
 <style scoped>
 .button {
+  white-space: nowrap;
   border-radius: 1rem;
   font-weight: 400;
   font-size: 0.875rem;

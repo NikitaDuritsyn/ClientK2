@@ -7,17 +7,8 @@
 <script>
 export default {
     name: 'search-page',
-    data() {
-        return {}
-    },
-    methods: {
-    },
-    mounted() {
-    }
-
+    data() { return {} },
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

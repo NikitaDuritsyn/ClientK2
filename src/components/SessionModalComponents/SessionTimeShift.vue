@@ -31,12 +31,12 @@ export default {
                 // const newBookedDate = new Date(new Date(this.session.booked_date).setTime(new Date(this.session.booked_date).getTime() + this.shiftTimeByMinutes * 60000));
                 // Если нужно менять время полностью
                 const [hours, minutes] = this.shiftTime.split(':');
-                const newBookedDate = new Date(new Date().setHours(hours, minutes, 0, 0));
+                const newBookedDate = new Date(new Date(this.session.booked_date).setHours(hours, minutes, 0, 0));
                 // console.log(newBookedDate.toLocaleTimeString());
                 const res = await this.$api.updateSession({ ...this.session, booked_date: newBookedDate })
-                if(res.error){
+                if (res.error) {
                     this.$toast.error(`${res.error}`, { position: "top" });
-                }else{
+                } else {
                     this.$toast.info(`Время было смещено на ${newBookedDate.toLocaleTimeString()}, ${newBookedDate.toLocaleDateString()}`, { position: "top" });
                 }
 

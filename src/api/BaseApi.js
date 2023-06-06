@@ -1,12 +1,12 @@
 import axios from 'axios'
-// import store from '@/store'
+import store from '@/store'
 class BaseApi {
     constructor(BASE_URL = "") {
         this.BASE_URL = BASE_URL
     }
     _request(params) {
         if (!params.method) params.method = 'get'
-        // if (store.state.authToken) params.headers = {'Authorization': `Token ${store.state.authToken}`}
+        if (store.state.authToken) params.headers = { 'Authorization': `Token ${store.state.authToken}` }
         params.baseURL = this.BASE_URL
         return new Promise((resolve, reject) => {
             axios(params)
@@ -31,5 +31,4 @@ class BaseApi {
         })
     }
 }
-
 export default BaseApi

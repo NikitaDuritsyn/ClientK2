@@ -9,7 +9,6 @@ const routes = [
     children: [
       { path: 'stock', name: 'stock', component: () => import('@/PagesAdminPanel/Stock.vue') },
       { path: 'checkout', name: 'checkout', component: () => import('@/PagesAdminPanel/Checkout.vue') },
-      { path: 'booking', name: 'booking', component: () => import('@/PagesAdminPanel/Booking.vue') },
       { path: 'search', name: 'search', component: () => import('@/PagesAdminPanel/Search.vue') },
       { path: 'payment', name: 'payment', component: () => import('@/PagesAdminPanel/Payment.vue') },
     ]

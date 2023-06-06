@@ -43,5 +43,3 @@ export default {
     height: calc(50px + 10px);
 }
 </style>
-
-

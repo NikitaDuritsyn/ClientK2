@@ -1,16 +1,23 @@
 <template>
   <div class="wrapInput">
     <label v-show="label">{{ label }}</label>
-    <input ref="input" :type="type" :maxlength="maxlength" :max="type === 'number' && max ? max : undefined"
-      :min="type === 'number' && min ? min : undefined" :autocomplete="autocomplete" :placeholder=placeholder
-      :pattern="pattern" @input="updateInput" :value="modelValue" :data-tel-input="phoneInput ? true : undefined"
-      :disabled="disabled">
+    <div :class="{ 'd-flex': serch }">
+      <input ref="input" :class="{ 'serch': serch }" :type="type" :maxlength="maxlength"
+        :max="type === 'number' && max ? max : undefined" :min="type === 'number' && min ? min : undefined"
+        :autocomplete="autocomplete" :placeholder=placeholder :pattern="pattern" @input="updateInput" :value="modelValue"
+        :data-tel-input="phoneInput ? true : undefined" :disabled="disabled">
+      <MyButton @click="$emit('serch')" v-if="serch" class="serch_btn"><i class="bi bi-search"></i>
+      </MyButton>
+    </div>
   </div>
 </template>
 
 <script>
+import MyButton from './MyButton.vue'
+
 export default {
   name: "MyInput",
+  components: { MyButton },
   props: {
     label: { type: String, default: "", required: false },
     placeholder: { type: String, default: "", required: false },
@@ -25,36 +32,48 @@ export default {
     withIcon: { type: Boolean, default: false },
     phoneInput: { type: Boolean, default: false },
     disabled: { type: Boolean, default: false },
+    serch: { type: Boolean, default: false },
   },
-
   data: () => ({
-    input: '',
-    topRight: '250px',
-    topLeft: '150px'
+    input: "",
+    topRight: "250px",
+    topLeft: "150px"
   }),
   methods: {
     updateInput(event) {
-      if (this.type != 'number' || this.type == '') {
+      if (this.type != "number" || this.type == "") {
         if (this.phoneInput) {
-          this.$emit('update:modelValue', this.glb.formatPhone(event.target.value))
-        } else {
-          this.$emit('update:modelValue', event.target.value)
+          this.$emit("update:modelValue", this.glb.formatPhone(event.target.value));
         }
-      } else if (this.type === 'number') {
-        this.$emit('update:modelValue', Number(event.target.value))
+        else {
+          this.$emit("update:modelValue", event.target.value);
+        }
+      }
+      else if (this.type === "number") {
+        this.$emit("update:modelValue", Number(event.target.value));
       }
     },
     focus() {
-      this.$refs.input.focus()
+      this.$refs.input.focus();
     }
   },
   mounted() {
-    this.glb.phoneInputFormatter()
-  }
+    this.glb.phoneInputFormatter();
+  },
 }
 </script>
 
 <style scoped>
+.serch_btn {
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+}
+
+.serch {
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
 input {
   font-size: 16px;
   background: transparent;
@@ -67,6 +86,7 @@ input {
 
 .wrapInput {
   max-width: 28rem;
+  min-width: 14rem;
 }
 
 input:active,

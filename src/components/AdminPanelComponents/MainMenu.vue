@@ -1,7 +1,7 @@
 <template>
     <div class="p-0 d-flex flex-column h-100">
         <MenuBar :scroll-bar="true" :menu-bar-items="menuBarItems" />
-        <div class="h-100">
+        <div class="h-100 overflow-hidden">
             <router-view />
         </div>
     </div>
@@ -17,7 +17,6 @@ export default {
             menuBarItems: [
                 { title: 'Склад', name: 'stock' },
                 { title: 'Касса', name: 'checkout' },
-                { title: 'Бронь', name: 'booking' },
                 { title: 'Поиск', name: 'search' },
                 { title: 'Расчет', name: 'payment' },
             ]
@@ -25,7 +24,7 @@ export default {
     },
     methods: {},
     mounted() {
-        this.$router.push({ name: 'booking' })
+        this.$router.push({ name: 'stock' })
     },
     components: { MyButton, MenuBar }
 }

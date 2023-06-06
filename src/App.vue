@@ -43,6 +43,10 @@ export default {
 </script>
 
 <style>
+.maxw-fit {
+  max-width: fit-content !important;
+}
+
 .overflow-scroll {
   -ms-overflow-style: none;
   /* IE и Edge */

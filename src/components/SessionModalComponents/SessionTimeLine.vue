@@ -104,6 +104,7 @@ export default {
         },
         async updateStartTime() {
             let currentDateTime = new Date()
+            console.log(currentDateTime);
             await this.$api.updateStartTimeVisitors({
                 visitorUpdateData: { start_time_visitor: currentDateTime },
                 visitorsId: this.visitorList.map((item) => { return item.id }),

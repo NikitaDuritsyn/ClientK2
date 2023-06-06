@@ -26,7 +26,7 @@ export default {
     },
     methods: {
         update() {
-            this.$emit('update:modelValue', Number(this.$refs.select.value))
+            this.$emit('update:modelValue', this.$refs.select.value)
         }
     }
 }
@@ -58,6 +58,7 @@ label {
 .select-wrap {
     width: 100%;
     max-width: 28rem;
+    min-width: 14rem;
 }
 
 select:focus-visible {

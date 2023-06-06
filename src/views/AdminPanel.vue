@@ -19,12 +19,7 @@ import MyButton from '@/components/UI/MyButton.vue';
 export default {
   name: 'admin-panel',
   components: { MainMenu, SessionChartView, TodoClue, MyButton },
-  data() {
-    return {
-    }
-  },
-  methods: {
-  }
-
+  data() { return {} },
+  
 }
 </script>

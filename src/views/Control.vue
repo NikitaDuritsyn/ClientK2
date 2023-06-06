@@ -6,8 +6,6 @@
         <div class="h-100 overflow-hidden">
             <router-view />
         </div>
-        <!-- <div :style="{ height: 'calc(100% - 60px)' }">
-        </div> -->
     </div>
 </template>
 

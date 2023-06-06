@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <div class="popup-modal" :class="{ 'popup-modal-center': modeFlexCenter }" v-if="isVisible"
+    <div class="popup-modal p-2" :class="{ 'popup-modal-center': modeFlexCenter }" v-if="isVisible"
       @click.stop.pervent.self="close()">
       <div class="window">
         <slot></slot>

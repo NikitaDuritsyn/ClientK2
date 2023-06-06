@@ -7,7 +7,7 @@ export default createStore({
     tariffs: [],
     services: [],
     roles: [],
-    paymentTypes: []
+    paymentTypes: [],
   },
   getters: {},
   mutations: {
@@ -48,6 +48,7 @@ export default createStore({
           commit('SET_DATA_ON_STATE', { paymentTypes: data })
         })
     },
+
   },
   modules: {
   }

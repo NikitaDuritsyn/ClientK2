@@ -16,7 +16,7 @@
                 v-if="mode === 'createBooking' || mode === 'createBookingUpdate'"
                 :label="(visitor.number_phone?.length < 11 || !visitor.number_phone) ? 'Депонент: нужен номер' : 'Депонент:'"
                 :disabled="(visitor.number_phone?.length < 11 || !visitor.number_phone) ? true : false" />
-            <div class="d-flex " v-if="mode === 'createBooking' || mode === 'createBookingUpdate'">
+            <div class="d-flex flex-wrap" v-if="mode === 'createBooking' || mode === 'createBookingUpdate'">
                 <MyInput class="m-auto w-100" :type="'number'" v-model:modelValue="visitor.deposit.value"
                     :label="(visitor.number_phone?.length < 11 || !visitor.number_phone) ? 'Депозит: нужен номер' : 'Депозит:'"
                     :disabled="(visitor.number_phone?.length < 11 || !visitor.number_phone) ? true : false" />

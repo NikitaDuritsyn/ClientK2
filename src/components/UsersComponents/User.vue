@@ -28,9 +28,6 @@ export default {
     props: ['user'],
     emits: ['updateUserTable'],
     components: { UserRoles, MyButton, MyModal, UserForm },
-    data() {
-        return {}
-    },
-    methods: {},
+    data() { return {} },
 }
 </script>

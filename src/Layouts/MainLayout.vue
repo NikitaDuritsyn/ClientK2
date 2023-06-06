@@ -1,7 +1,6 @@
 <template>
     <div class="d-flex flex-column">
         <div class="d-flex justify-content-between align-items-center">
-            <!-- <MenuBar :menu-bar-items="menuBarItems" /> -->
             <div v-if="linkAdminPanel">
                 <my-button class="m-2" :cls="'link_btn'"
                     @click="$router.push({ name: 'control' }), linkAdminPanel = !linkAdminPanel">
@@ -32,10 +31,6 @@ export default {
     data() {
         return {
             linkAdminPanel: true
-            // menuBarItems: [
-            //     { title: 'Гл. панель', name: 'control' },
-            //     { title: 'Админ. панель', name: 'adminPanel' },
-            // ]
         };
     },
     methods: {
