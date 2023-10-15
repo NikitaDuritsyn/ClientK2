@@ -21,8 +21,6 @@ app.config.globalProperties.glb = global_objects
 
 app.use(store)
 app.use(router)
-app.use(Toaster, {
-    position: "top",
-});
+app.use(Toaster, { position: "top" });
 
 app.mount('#app')

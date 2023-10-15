@@ -244,8 +244,63 @@ class KamekaApi extends BaseApi {
             url: url,
         })
     }
-}
 
-const BASE_URL = process.env.NODE_ENV === 'development' ? process.env.MAIN_URL_KAMENKA2 : 'https://croospost.pro100quiz.ru'
+
+
+    ///////////
+    // Rooms //
+    ///////////
+    getRooms() {
+        let url = `/api/get_rooms`
+        return this._request({
+            method: 'get',
+            url: url
+        })
+    }
+    createRoom(data) {
+        let url = `/api/create_room`
+        return this._request({
+            method: 'post',
+            url: url,
+            data: data
+        })
+    }
+    deleteRoom(item_id) {
+        let url = `/api/delete_room/${item_id}`
+        return this._request({
+            method: 'delete',
+            url: url
+        })
+    }
+    
+    ///////////
+    // Rooms //
+    ///////////
+    getTariffs() {
+        let url = `/api/get_tariffs`
+        return this._request({
+            method: 'get',
+            url: url
+        })
+    }
+    createTariff(data) {
+        let url = `/api/create_tariff`
+        return this._request({
+            method: 'post',
+            url: url,
+            data: data
+        })
+    }
+    deleteTariff(item_id) {
+        let url = `/api/delete_tariff/${item_id}`
+        return this._request({
+            method: 'delete',
+            url: url
+        })
+    }
+}
+// MAIN_URL_KAMENKA2 = http://127.0.0.1:1234
+
+const BASE_URL = process.env.NODE_ENV === 'development' ? process.env.MAIN_URL_KAMENKA2 : 'http://127.0.0.1:1234' || process.env.MAIN_URL_KAMENKA2
 const KamekaAPI = new KamekaApi(BASE_URL)
 export default KamekaAPI
