@@ -53,9 +53,7 @@ const deleteTariff = async () => {
 
 onMounted(() => {
   if (props.tariffData && props.mode === "update") {
-    console.log(props.tariffData);
     tariff.value = { ...this.tariffData };
-    console.log(tariff.value);
   }
 });
 </script>

@@ -7,14 +7,14 @@ import { mapState } from "vuex";
 import { API } from "@/api";
 import { inject } from 'vue'
 
-const props = defineProps(["roomData", "mode"]);
+const props = defineProps(["serviceData", "mode"]);
 const emit = defineEmits(["close", "updateTable", "delete"]);
 
-const room = ref({ title: null, color: null });
+const service = ref({ title: null, price: null });
 
-const createRoom = async () => {
+const createService = async () => {
   try {
-    const res = await API.createRoom(room.value);
+    const res = await API.createService(service.value);
     // toast.info(res.massage);
     emit("updateTable");
     emit("close");
@@ -23,9 +23,9 @@ const createRoom = async () => {
   }
 };
 
-const deleteRoom = async () => {
+const deleteService = async () => {
   try {
-    const res = await API.deleteRoom(room.value.id);
+    const res = await API.deleteService(service.value.id);
     // toast.info(res.massage);
     emit("updateTable");
     emit("close");
@@ -35,28 +35,28 @@ const deleteRoom = async () => {
 };
 
 onMounted(() => {
-  if (props.roomData && props.mode === "update") {
-    room.value = { ...this.roomData };
+  if (props.serviceData && props.mode === "update") {
+    service.value = { ...this.serviceData };
   }
 });
 </script>
 <template>
-  <div class="room_form_container m-auto">
+  <div class="service_form_container m-auto">
     <div class="d-flex justify-content-end">
       <my-button :cls="'close_btn'" @click="$emit('close')"></my-button>
     </div>
-    <my-input class="mt-2" v-model:model-value="room.title" :label="'Название'" />
-    <my-input class="mt-2" v-model:model-value="room.color" :label="'Цвет'" />
+    <my-input class="mt-2" v-model:model-value="service.title" :label="'Название'" />
+    <my-input class="p-0" :type="'number'" :min="0" :label="'Цена'" v-model:model-value="service.price" />
     <div v-if="mode !== 'update'" class="d-flex justify-content-end mt-2">
-      <my-button @click="createRoom">СОЗДАТЬ</my-button>
+      <my-button @click="createService">СОЗДАТЬ</my-button>
     </div>
     <div v-else class="d-flex justify-content-end mt-2">
-      <my-button class="ms-1" @click="deleteRoom">Удалить</my-button>
+      <my-button class="ms-1" @click="deleteService">Удалить</my-button>
     </div>
   </div>
 </template>
 <style>
-.room_form_container {
+.service_form_container {
   width: 400px;
 }
 </style>

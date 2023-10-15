@@ -273,9 +273,9 @@ class KamekaApi extends BaseApi {
         })
     }
     
-    ///////////
-    // Rooms //
-    ///////////
+    /////////////
+    // Tariffs //
+    /////////////
     getTariffs() {
         let url = `/api/get_tariffs`
         return this._request({
@@ -298,6 +298,47 @@ class KamekaApi extends BaseApi {
             url: url
         })
     }
+    
+    //////////////
+    // Services //
+    //////////////
+    createService(data) {
+        let url = `/api/create_service`
+        return this._request({
+            method: 'post',
+            url: url,
+            data: data
+        })
+    }
+    deleteService(item_id) {
+        let url = `/api/delete_service/${item_id}`
+        return this._request({
+            method: 'delete',
+            url: url
+        })
+    }
+    
+    //////////////
+    // Services //
+    //////////////
+    createPaymentType(data) {
+        let url = `/api/create_payment_type`
+        return this._request({
+            method: 'post',
+            url: url,
+            data: data
+        })
+    }
+    deletePaymentType(item_id) {
+        let url = `/api/delete_payment_type/${item_id}`
+        return this._request({
+            method: 'delete',
+            url: url
+        })
+    }
+
+    
+
 }
 // MAIN_URL_KAMENKA2 = http://127.0.0.1:1234
 

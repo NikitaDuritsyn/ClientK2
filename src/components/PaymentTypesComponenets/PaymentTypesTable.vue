@@ -1,8 +1,8 @@
 <script setup>
-import Room from "@/components/RoomsComponents/Room.vue";
+import PaymentType from "@/components/PaymentTypesComponenets/PaymentType.vue";
 import { ref } from "vue";
 
-const props = defineProps(["rooms"]);
+const props = defineProps(["paymentTypes"]);
 const emit = defineEmits(["updateTable"]);
 </script>
 <template>
@@ -11,16 +11,16 @@ const emit = defineEmits(["updateTable"]);
       <thead>
         <tr>
           <th>Название</th>
-          <th>Цвет</th>
+          <th>Тип</th>
           <th></th>
         </tr>
       </thead>
       <tbody>
-        <room
+        <payment-type
           @update-table="$emit('updateTable')"
-          v-for="room in rooms"
-          :key="room.id"
-          :room="room"
+          v-for="paymentType in paymentTypes"
+          :key="paymentType.id"
+          :paymentType="paymentType"
         />
       </tbody>
     </table>

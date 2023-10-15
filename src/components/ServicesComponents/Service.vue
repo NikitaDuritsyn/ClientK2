@@ -2,20 +2,20 @@
 import MyButton from "@/components/UI/MyButton.vue";
 import MyModal from "@/components/UI/MyModal.vue";
 import { API } from "@/api";
-const props = defineProps(["room"]);
+const props = defineProps(["service"]);
 const emit = defineEmits(['updateTable'])
 
-const deleteRoom = async () => {
-  await API.deleteRoom(props.room.id);
+const deleteService = async () => {
+  await API.deleteService(props.service.id);
   emit('updateTable')
 };
 </script>
 <template>
   <tr>
-    <th scope="row">{{ room?.title }}</th>
-    <td>{{ room?.color }}</td>
+    <th scope="row">{{ service?.title }}</th>
+    <td>{{ service?.price }}</td>
     <td>
-      <my-button @click="deleteRoom()" class="m-auto" :cls="'btn_second'">
+      <my-button @click="deleteService()" class="m-auto" :cls="'btn_second'">
         <i class="bi bi-dash"></i>
       </my-button>
     </td>
